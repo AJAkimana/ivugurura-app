@@ -200,9 +200,9 @@ Padding _buildHeading(String title){
 Widget _buildListTopics(BuildContext context, Color color){
   return InkWell(
     onTap: () {
-      MaterialPageRoute(
-        builder: (context) => OneTopicViewPage()
-      );
+      Navigator.push(context, MaterialPageRoute(
+          builder: (context) => OneTopicViewPage()
+      ));
     },
     child: Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
