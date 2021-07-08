@@ -24,7 +24,7 @@ class _AudioPlayerState extends State<AudioPlayer>{
                        Container(
                          height: topHeight,
                          width: MediaQuery.of(context).size.width,
-                         child: Image.asset('/assets/audio.jpg', fit: BoxFit.cover),
+                         child: Image.asset('assets/audio.jpeg', fit: BoxFit.cover),
                        ),
                        IconButton(
                            onPressed: (){
@@ -70,11 +70,11 @@ class _AudioPlayerState extends State<AudioPlayer>{
                                        style: TextStyle(color: Colors.white, fontSize: 20),
                                      ),
                                      title: Text(
-                                       '${index + 1}',
+                                       'Indirimbo ya ${index + 1}',
                                        style: TextStyle(color: Colors.white, fontSize: 20),
                                      ),
                                      subtitle: Text(
-                                       'sid',
+                                       'Author for ${index + 1}',
                                        style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w200),
                                      ),
                                      trailing: IconButton(
@@ -172,7 +172,7 @@ Widget _progress(){
         child: Divider(height: 5, color: Colors.white),
       ),
       SizedBox(width: 3,),
-      Text('00:00', style: new TextStyle(fontSize: 15.0, color: Colors.white))
+      Text('05:24', style: new TextStyle(fontSize: 15.0, color: Colors.white))
     ],
   );
 }
