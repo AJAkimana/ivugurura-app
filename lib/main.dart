@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ivugurura_app/core/page_layout.dart';
 import 'package:ivugurura_app/pages/one_topic_view.dart';
 import 'package:ivugurura_app/pages/popular_topics.dart';
 
@@ -26,9 +27,10 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.indigo,
         accentColor: Colors.red
       ),
-      home: PopularTopicsPage(),
+      home: PageLayout(),
       routes: {
-        'home': (_) => PopularTopicsPage(),
+        'home': (_) => PageLayout(),
+        'popular_topics': (_) => PopularTopicsPage(),
         'view_one_topic': (_) => OneTopicViewPage()
       },
     );
