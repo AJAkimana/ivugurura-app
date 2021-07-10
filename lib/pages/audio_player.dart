@@ -26,15 +26,6 @@ class _AudioPlayerState extends State<AudioPlayer>{
                          width: MediaQuery.of(context).size.width,
                          child: Image.asset('assets/audio.jpeg', fit: BoxFit.cover),
                        ),
-                       IconButton(
-                           onPressed: (){
-                             Navigator.pop(context);
-                           },
-                           icon:Icon(
-                               Icons.arrow_back,
-                               color: Colors.white
-                           )
-                       )
                      ],
                    ),
                    Container(
