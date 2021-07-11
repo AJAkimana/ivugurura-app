@@ -121,7 +121,7 @@ RoundedContainer _buildFeacturedTopics(){
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Text(
-          'Featured Topics',
+          'Most Read Posts',
           style: TextStyle(
             fontSize: 28.0,
             color: Colors.white,
@@ -154,11 +154,12 @@ RoundedContainer _buildFeacturedTopics(){
                         flex: 2,
                         child: Container(
                           color: Colors.red,
-                          child: PNetworkImage(
-                            images[0],
-                            fit: BoxFit.cover,
-                            height: 210,
-                          ),
+                          child: Image.asset('assets/reformation.jpg', fit: BoxFit.cover, height: 210),
+                          // child: PNetworkImage(
+                          //   images[0],
+                          //   fit: BoxFit.cover,
+                          //   height: 210,
+                          // ),
                         ),
                       )
                     ],
