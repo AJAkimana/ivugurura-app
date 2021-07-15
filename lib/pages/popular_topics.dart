@@ -12,7 +12,6 @@ class PopularTopicsPage extends StatefulWidget{
 }
 
 class _PopularTopicsPageState extends State<PopularTopicsPage>{
-  static final String path = 'lib/pages/popular_topics.dart';
 
   @override
   Widget build(BuildContext context) {

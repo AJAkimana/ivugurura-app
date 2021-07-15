@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.indigo,
         accentColor: Colors.red
       ),
-      home: PageLayout(page: PopularTopicsPage(), title: 'Audios'),
+      home: PageLayout(page: PopularTopicsPage(), title: 'Recent topics'),
       routes: {
         'home': (_) => PageLayout(page: PopularTopicsPage(), title: 'Audios'),
         'popular_topics': (_) => PopularTopicsPage(),
