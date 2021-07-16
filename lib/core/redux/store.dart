@@ -23,15 +23,21 @@ class AppState{
   });
 
   AppState copyWith({
-    required TopicsState topicsState
+    TopicsState? topicsState,
   }){
-    return AppState(topicsState: topicsState);
+    return AppState(
+        topicsState: topicsState??this.topicsState
+    );
   }
 }
 
 
 class AppStore{
-  static Store<AppState> _store;
+  static Store<AppState> _store = Store<AppState>(
+      appReducer,
+      middleware: [],
+      initialState:AppState(topicsState: TopicsState.initial())
+  );
 
   static Store<AppState> get store{
     return _store;

@@ -8,9 +8,9 @@ class TopicsState{
   final List<Topic> topics;
 
   TopicsState({
-    required this.isLoading,
-    required this.errorMessage,
-    required this.topics,
+    this.isLoading = false,
+    this.errorMessage = '',
+    this.topics = const <Topic>[],
   });
 
   factory TopicsState.initial() => TopicsState(isLoading: false, errorMessage: '', topics: []);
@@ -25,5 +25,5 @@ class TopicsState{
       isLoading: isLoading,
       topics: topics
     );
-}
+  }
 }
