@@ -22,7 +22,8 @@ class _OneTopicViewPageState extends State<OneTopicViewPage>{
                Container(
                  height: 300,
                  width: double.infinity,
-                 child: PNetworkImage(images[0], fit: BoxFit.cover),
+                 // child: PNetworkImage(images[0], fit: BoxFit.cover),
+                 child: Image.asset('assets/reformation.jpg', fit: BoxFit.cover),
                ),
                Positioned(
                  bottom: 20.0,
