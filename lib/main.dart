@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_redux/flutter_redux.dart';
 import 'package:ivugurura_app/core/page_layout.dart';
-import 'package:ivugurura_app/core/redux/store.dart';
 import 'package:ivugurura_app/pages/audio_player.dart';
 import 'package:ivugurura_app/pages/one_topic_view.dart';
 import 'package:ivugurura_app/pages/popular_topics.dart';
 
-void main() async {
-  await AppStore.init();
-
+void main() {
   runApp(MyApp());
 }
 
@@ -32,10 +28,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.indigo,
         accentColor: Colors.red
       ),
-      home: StoreProvider<AppState>(
-        store: AppStore.store,
-        child: PageLayout(page: PopularTopicsPage(), title: 'Recent topics'),
-      ),
+      home: PageLayout(page: PopularTopicsPage(), title: 'Recent topics'),
       routes: {
         'home': (_) => PageLayout(page: PopularTopicsPage(), title: 'Audios'),
         'popular_topics': (_) => PopularTopicsPage(),
