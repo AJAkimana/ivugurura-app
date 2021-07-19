@@ -20,8 +20,14 @@ class User{
 @JsonSerializable()
 class Topic{
   String title, slug, coverImage, description;
-  Language language;
-  Topic(this.title, this.slug, this.coverImage, this.description, this.language);
+  Language? language;
+  Topic({
+    this.title = '',
+    this.slug = '',
+    this.coverImage = '',
+    this.description = '',
+    this.language
+  });
 
   factory Topic.fromJson(Map<String, dynamic> json) => _$TopicFromJson(json);
 
@@ -31,10 +37,8 @@ class Topic{
 @JsonSerializable()
 class Language{
   String name;
-  @JsonKey(name:'short_name')
-  String shortName;
 
-  Language(this.name, this.shortName);
+  Language({this.name = ''});
   factory Language.fromJson(Map<String, dynamic> json) => _$LanguageFromJson(json);
 
   Map<String, dynamic> toJson() => _$LanguageToJson(this);

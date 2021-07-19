@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_swiper_null_safety/flutter_swiper_null_safety.dart';
+import 'package:ivugurura_app/core/models.dart';
+import 'package:ivugurura_app/core/redux/actions/topic_actions.dart';
+import 'package:ivugurura_app/core/redux/states/topics_states.dart';
+import 'package:ivugurura_app/core/redux/store.dart';
 import 'package:ivugurura_app/core/res/assets.dart';
 import 'package:ivugurura_app/core/res/text_styles.dart';
 import 'package:ivugurura_app/core/rounded_container.dart';
+import 'package:ivugurura_app/core/utils/constants.dart';
 import 'package:ivugurura_app/pages/one_topic_view.dart';
 import 'package:ivugurura_app/widget/network_image.dart';
 
@@ -128,45 +134,69 @@ RoundedContainer _buildFeacturedTopics(){
           ),
         ),
         Expanded(
-          child: Swiper(
-            pagination: SwiperPagination(margin: const EdgeInsets.only()),
-            viewportFraction: 0.9,
-            itemCount: 4,
-            loop: false,
-            itemBuilder: (context, index){
-              return Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: RoundedContainer(
-                  borderRadius: BorderRadius.circular(4.0),
-                  margin: const EdgeInsets.only(bottom: 20),
-                  child: Row(
-                    children: <Widget>[
-                      Expanded(
-                        flex: 3,
-                        child: Text(
-                          'The Danger In Flesh Foods.',
-                          style: Theme.of(context).textTheme.bodyText1,
+          child: StoreConnector<AppState, TopicsState>(
+            distinct: true,
+            onInit: (store){
+              appStore.dispatch(fetchTopics(store));
+            },
+            converter: (store) => store.state.topicsState,
+            builder: (context, topicsState){
+              List<Topic> allTopics = topicsState.topics!;
+              if(topicsState.loading!){
+                return CircularProgressIndicator();
+              }
+              if(topicsState.error != null){
+                return Text(
+                  'An error happened.',
+                  style: Theme.of(context).textTheme.bodyText1,
+                );
+              }
+              if(topicsState.topics!.length < 1){
+                return Text('No data to display', style: TextStyle(color: Colors.white),);
+              }else{
+                return Swiper(
+                  pagination: SwiperPagination(margin: const EdgeInsets.only()),
+                  viewportFraction: 0.9,
+                  itemCount: topicsState.topics!.length,
+                  loop: false,
+                  itemBuilder: (context, index){
+                    Topic topic = allTopics[index];
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: RoundedContainer(
+                        borderRadius: BorderRadius.circular(4.0),
+                        margin: const EdgeInsets.only(bottom: 20),
+                        child: Row(
+                          children: <Widget>[
+                            Expanded(
+                              flex: 3,
+                              child: Text(
+                                topic.title,
+                               style: Theme.of(context).textTheme.bodyText1,
+                              ),
+                            ),
+                            const SizedBox(width: 10.0),
+                            Expanded(
+                              flex: 2,
+                              child: Container(
+                                color: Colors.red,
+                                // child: Image.asset('assets/reformation.jpg', fit: BoxFit.cover, height: 210),
+                                child: PNetworkImage(
+                                  "$IMAGE_PATH/${topic.coverImage}",
+                                  fit: BoxFit.cover,
+                                  height: 210,
+                                ),
+                              ),
+                            )
+                          ],
                         ),
                       ),
-                      const SizedBox(width: 10.0),
-                      Expanded(
-                        flex: 2,
-                        child: Container(
-                          color: Colors.red,
-                          child: Image.asset('assets/reformation.jpg', fit: BoxFit.cover, height: 210),
-                          // child: PNetworkImage(
-                          //   images[0],
-                          //   fit: BoxFit.cover,
-                          //   height: 210,
-                          // ),
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-              );
+                    );
+                  },
+                );
+              }
             },
-          ),
+          )
         )
       ],
     ),

@@ -28,11 +28,13 @@ Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
 
 Topic _$TopicFromJson(Map<String, dynamic> json) {
   return Topic(
-    json['title'] as String,
-    json['slug'] as String,
-    json['coverImage'] as String,
-    json['description'] as String,
-    Language.fromJson(json['language'] as Map<String, dynamic>),
+    title: json['title'] as String,
+    slug: json['slug'] as String,
+    coverImage: json['coverImage'] as String,
+    description: json['description'] as String,
+    language: json['language'] == null
+        ? null
+        : Language.fromJson(json['language'] as Map<String, dynamic>),
   );
 }
 
@@ -46,12 +48,10 @@ Map<String, dynamic> _$TopicToJson(Topic instance) => <String, dynamic>{
 
 Language _$LanguageFromJson(Map<String, dynamic> json) {
   return Language(
-    json['name'] as String,
-    json['short_name'] as String,
+    name: json['name'] as String,
   );
 }
 
 Map<String, dynamic> _$LanguageToJson(Language instance) => <String, dynamic>{
       'name': instance.name,
-      'short_name': instance.shortName,
     };
