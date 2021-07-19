@@ -136,14 +136,14 @@ RoundedContainer _buildFeacturedTopics(){
         Expanded(
           child: StoreConnector<AppState, TopicsState>(
             distinct: true,
-            onInit: (store){
-              appStore.dispatch(fetchTopics(store));
+            onInitialBuild: (store){
+              appStore.dispatch(fetchTopics);
             },
             converter: (store) => store.state.topicsState,
             builder: (context, topicsState){
               List<Topic> allTopics = topicsState.topics!;
               if(topicsState.loading!){
-                return CircularProgressIndicator();
+                return CircularProgressIndicator(backgroundColor: Colors.white, strokeWidth: 1.0,);
               }
               if(topicsState.error != null){
                 return Text(
