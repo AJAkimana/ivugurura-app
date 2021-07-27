@@ -10,6 +10,8 @@ import 'package:ivugurura_app/core/res/text_styles.dart';
 import 'package:ivugurura_app/core/rounded_container.dart';
 import 'package:ivugurura_app/core/utils/constants.dart';
 import 'package:ivugurura_app/pages/one_topic_view.dart';
+import 'package:ivugurura_app/widget/display_error.dart';
+import 'package:ivugurura_app/widget/display_loading.dart';
 import 'package:ivugurura_app/widget/network_image.dart';
 
 class PopularTopicsPage extends StatefulWidget{
@@ -128,7 +130,7 @@ RoundedContainer _buildFeacturedTopics(){
         Text(
           'Most Read Posts',
           style: TextStyle(
-            fontSize: 28.0,
+            fontSize: 22.0,
             color: Colors.white,
             fontWeight: FontWeight.bold
           ),
@@ -137,19 +139,16 @@ RoundedContainer _buildFeacturedTopics(){
           child: StoreConnector<AppState, TopicsState>(
             distinct: true,
             onInitialBuild: (store){
-              appStore.dispatch(fetchTopics);
+              fetchTopics();
             },
             converter: (store) => store.state.topicsState,
             builder: (context, topicsState){
               List<Topic> allTopics = topicsState.topics!;
               if(topicsState.loading!){
-                return CircularProgressIndicator(backgroundColor: Colors.white, strokeWidth: 1.0,);
+                return DisplayLoading();
               }
               if(topicsState.error != null){
-                return Text(
-                  'An error happened.',
-                  style: Theme.of(context).textTheme.bodyText1,
-                );
+                return DisplayError();
               }
               if(topicsState.topics!.length < 1){
                 return Text('No data to display', style: TextStyle(color: Colors.white),);
@@ -179,7 +178,7 @@ RoundedContainer _buildFeacturedTopics(){
                             Expanded(
                               flex: 2,
                               child: Container(
-                                color: Colors.red,
+                                color: Colors.blueAccent,
                                 // child: Image.asset('assets/reformation.jpg', fit: BoxFit.cover, height: 210),
                                 child: PNetworkImage(
                                   "$IMAGE_PATH/${topic.coverImage}",
