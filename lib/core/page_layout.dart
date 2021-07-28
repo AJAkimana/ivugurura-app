@@ -2,15 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:ivugurura_app/core/keep_alive.dart';
 import 'package:ivugurura_app/pages/audio_player.dart';
 import 'package:ivugurura_app/pages/popular_topics.dart';
+import 'package:ivugurura_app/pages/topics_page.dart';
 import 'package:ivugurura_app/utils/oval_right_clipper.dart';
 
 class PageLayout extends StatefulWidget{
   final String title;
   final Widget page;
+  final bool useLayout;
   const PageLayout({
     Key? key,
     required this.title,
     required this.page,
+    this.useLayout = true
   }):super(key: key);
   @override
   _PageLayoutState createState() => _PageLayoutState();
@@ -62,7 +65,7 @@ class _PageLayoutState extends State<PageLayout>{
             child: SingleChildScrollView(
               child: Column(
                 children: <Widget>[
-                  _buildRow(PopularTopicsPage(), Icons.home, "Home"),
+                  _buildRow(TopicsPage(), Icons.home, "Home", useLayout: false),
                   _buildDivider(),
                   _buildRow(PopularTopicsPage(), Icons.read_more, "Christianity"),
                   _buildDivider(),
@@ -91,7 +94,7 @@ class _PageLayoutState extends State<PageLayout>{
     return Divider(color: active);
   }
 
-  Widget _buildRow(Widget page, IconData icon, String title){
+  Widget _buildRow(Widget page, IconData icon, String title, {bool useLayout=true}){
     final TextStyle textStyle = TextStyle(color: active, fontSize: 16.0);
     return InkWell(
       child: Container(
@@ -107,7 +110,9 @@ class _PageLayoutState extends State<PageLayout>{
       onTap: (){
         Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => PageLayout(title: title, page: page))
+            MaterialPageRoute(
+                builder: (context) => useLayout? PageLayout(title: title, page: page):page
+            )
         );
       },
     );
