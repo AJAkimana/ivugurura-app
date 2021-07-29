@@ -1,65 +1,68 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:ivugurura_app/core/keep_alive.dart';
+import 'package:ivugurura_app/core/redux/store.dart';
 import 'package:ivugurura_app/pages/audio_player.dart';
 import 'package:ivugurura_app/pages/popular_topics.dart';
 import 'package:ivugurura_app/pages/topics_page.dart';
 import 'package:ivugurura_app/utils/oval_right_clipper.dart';
 
-class PageLayout extends StatefulWidget{
+class PageLayout extends StatefulWidget {
   final String title;
   final Widget page;
   final bool useLayout;
-  const PageLayout({
-    Key? key,
-    required this.title,
-    required this.page,
-    this.useLayout = true
-  }):super(key: key);
+  const PageLayout(
+      {Key? key,
+      required this.title,
+      required this.page,
+      this.useLayout = true})
+      : super(key: key);
   @override
   _PageLayoutState createState() => _PageLayoutState();
 }
 
-class _PageLayoutState extends State<PageLayout>{
+class _PageLayoutState extends State<PageLayout> {
   final GlobalKey<ScaffoldState> _key = GlobalKey<ScaffoldState>();
   final Color primary = Color(0xff172347);
   final Color active = Color(0xffcdd2d7);
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: _key,
-      appBar: AppBar(
-        title: Text(widget.title),
-        automaticallyImplyLeading: false,
-        leading: IconButton(
-          icon: Icon(Icons.menu),
-          onPressed: (){
-            _key.currentState!.openDrawer();
-          },
-        ),
-      ),
-      drawer: _buildDrawer(),
-      body: Stack(
-        fit: StackFit.expand,
-        children: <Widget>[
-          AlwaysAliveWidget(
-            child: widget.page,
-          )
-        ],
-      ),
+    return StoreProvider(
+        store: appStore,
+        child: Scaffold(
+          key: _key,
+          appBar: AppBar(
+            title: Text(widget.title),
+            automaticallyImplyLeading: false,
+            leading: IconButton(
+              icon: Icon(Icons.menu),
+              onPressed: () {
+                _key.currentState!.openDrawer();
+              },
+            ),
+          ),
+          drawer: _buildDrawer(),
+          body: Stack(
+            fit: StackFit.expand,
+            children: <Widget>[
+              AlwaysAliveWidget(
+                child: widget.page,
+              )
+            ],
+          ),
+        )
     );
   }
 
-  _buildDrawer(){
+  _buildDrawer() {
     return ClipPath(
       clipper: OverRightBorderClipper(),
       child: Drawer(
         child: Container(
           padding: const EdgeInsets.only(left: 16.0, right: 40),
           decoration: BoxDecoration(
-            color: primary,
-            boxShadow: [BoxShadow(color: Colors.black45)]
-          ),
+              color: primary, boxShadow: [BoxShadow(color: Colors.black45)]),
           width: 300,
           child: SafeArea(
             child: SingleChildScrollView(
@@ -67,11 +70,14 @@ class _PageLayoutState extends State<PageLayout>{
                 children: <Widget>[
                   _buildRow(TopicsPage(), Icons.home, "Home", useLayout: false),
                   _buildDivider(),
-                  _buildRow(PopularTopicsPage(), Icons.read_more, "Christianity"),
+                  _buildRow(
+                      PopularTopicsPage(), Icons.read_more, "Christianity"),
                   _buildDivider(),
-                  _buildRow(PopularTopicsPage(), Icons.read_more, "People well-being"),
+                  _buildRow(PopularTopicsPage(), Icons.read_more,
+                      "People well-being"),
                   _buildDivider(),
-                  _buildRow(PopularTopicsPage(), Icons.read_more, "The prophecy"),
+                  _buildRow(
+                      PopularTopicsPage(), Icons.read_more, "The prophecy"),
                   _buildDivider(),
                   _buildRow(PopularTopicsPage(), Icons.read_more, "Healthy"),
                   _buildDivider(),
@@ -79,7 +85,8 @@ class _PageLayoutState extends State<PageLayout>{
                   _buildDivider(),
                   _buildRow(AudioPlayer(), Icons.music_note, "Audio"),
                   _buildDivider(),
-                  _buildRow(PopularTopicsPage(), Icons.contact_mail, "Contact us"),
+                  _buildRow(
+                      PopularTopicsPage(), Icons.contact_mail, "Contact us"),
                   _buildDivider(),
                 ],
               ),
@@ -90,11 +97,12 @@ class _PageLayoutState extends State<PageLayout>{
     );
   }
 
-  Divider _buildDivider(){
+  Divider _buildDivider() {
     return Divider(color: active);
   }
 
-  Widget _buildRow(Widget page, IconData icon, String title, {bool useLayout=true}){
+  Widget _buildRow(Widget page, IconData icon, String title,
+      {bool useLayout = true}) {
     final TextStyle textStyle = TextStyle(color: active, fontSize: 16.0);
     return InkWell(
       child: Container(
@@ -107,13 +115,12 @@ class _PageLayoutState extends State<PageLayout>{
           ],
         ),
       ),
-      onTap: (){
+      onTap: () {
         Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-                builder: (context) => useLayout? PageLayout(title: title, page: page):page
-            )
-        );
+                builder: (context) =>
+                    useLayout ? PageLayout(title: title, page: page) : page));
       },
     );
   }

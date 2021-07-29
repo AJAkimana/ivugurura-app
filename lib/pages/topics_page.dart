@@ -23,8 +23,8 @@ class TopicsPageState extends State<TopicsPage>{
             textTheme: TextTheme(
               headline6: titleHeadingStyle
             ),
-            iconTheme: IconThemeData(color: secondaryColor),
-            actionsIconTheme: IconThemeData(color: secondaryColor),
+            iconTheme: IconThemeData(color: bgColor),
+            actionsIconTheme: IconThemeData(color: bgColor),
           )
         ),
         child: Scaffold(

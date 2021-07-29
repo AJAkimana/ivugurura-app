@@ -30,10 +30,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.indigo,
         accentColor: Colors.red
       ),
-      home: StoreProvider<AppState>(
-        store: appStore,
-        child: TopicsPage(),
-      ),
+      home: PageLayout(page: PopularTopicsPage(), title: 'Topics'),
       routes: {
         'home': (_) => PageLayout(page: PopularTopicsPage(), title: 'Topics'),
         'popular_topics': (_) => PopularTopicsPage(),

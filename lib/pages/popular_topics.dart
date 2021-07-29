@@ -3,7 +3,7 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_swiper_null_safety/flutter_swiper_null_safety.dart';
 import 'package:ivugurura_app/core/models.dart';
 import 'package:ivugurura_app/core/redux/actions/topic_actions.dart';
-import 'package:ivugurura_app/core/redux/states/topics_states.dart';
+import 'package:ivugurura_app/core/redux/base_state.dart';
 import 'package:ivugurura_app/core/redux/store.dart';
 import 'package:ivugurura_app/core/res/assets.dart';
 import 'package:ivugurura_app/core/res/text_styles.dart';
@@ -136,27 +136,28 @@ RoundedContainer _buildFeacturedTopics(){
           ),
         ),
         Expanded(
-          child: StoreConnector<AppState, TopicsState>(
+          child: StoreConnector<AppState, BaseState<Topic>>(
             distinct: true,
             onInitialBuild: (store){
               fetchTopics();
             },
-            converter: (store) => store.state.topicsState,
+            converter: (store) => store.state.carouselTopicState,
             builder: (context, topicsState){
-              List<Topic> allTopics = topicsState.topics!;
-              if(topicsState.loading!){
+              print(topicsState.error);
+              List<Topic> allTopics = topicsState.theList!;
+              if(topicsState.loading){
                 return DisplayLoading();
               }
-              if(topicsState.error != null){
+              if(topicsState.error != ''){
                 return DisplayError();
               }
-              if(topicsState.topics!.length < 1){
+              if(topicsState.theList!.length < 1){
                 return Text('No data to display', style: TextStyle(color: Colors.white),);
               }else{
                 return Swiper(
                   pagination: SwiperPagination(margin: const EdgeInsets.only()),
                   viewportFraction: 0.9,
-                  itemCount: topicsState.topics!.length,
+                  itemCount: topicsState.theList!.length,
                   loop: false,
                   itemBuilder: (context, index){
                     Topic topic = allTopics[index];
@@ -227,7 +228,7 @@ Padding _buildHeading(String title){
 }
 
 Widget _buildListTopics(BuildContext context, Color color){
-  return InkWell(
+  Widget topicsWidget = InkWell(
     onTap: () {
       Navigator.push(context, MaterialPageRoute(
           builder: (context) => OneTopicViewPage()
@@ -262,4 +263,13 @@ Widget _buildListTopics(BuildContext context, Color color){
       ),
     ),
   );
+  Widget topicsWithStore = StoreConnector<AppState, BaseState<Topic>>(
+    distinct: true,
+    onInitialBuild: (store){},
+    converter: (store) => store.state.carouselTopicState,
+    builder: (context, topicsState){
+      return Text('data');
+    },
+  );
+  return topicsWidget;
 }
