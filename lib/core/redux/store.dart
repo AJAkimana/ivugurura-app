@@ -1,33 +1,34 @@
 import 'package:flutter/cupertino.dart';
-import 'package:ivugurura_app/core/redux/reducers/topics_reducer.dart';
+import 'package:ivugurura_app/core/redux/base_action.dart';
+import 'package:ivugurura_app/core/redux/base_reducer.dart';
+import 'package:ivugurura_app/core/redux/base_state.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
 
-import 'actions/topic_actions.dart';
-import 'states/topics_states.dart';
+import '../models.dart';
 
 AppState appReducer(AppState state, dynamic action){
-  if(action is TopicsActions){
-    final nextTopicsState = topicsReducer(state.topicsState, action);
+  if(action is BaseAction<Topic>){
+    final nextCarouselTopicState = baseReducer(state.carouselTopicState, action);
 
-    return state.copyWith(topicsState: nextTopicsState);
+    return state.copyWith(carouselTopicState: nextCarouselTopicState);
   }
   return state;
 }
 
 @immutable
 class AppState{
-  final TopicsState topicsState;
+  final BaseState<Topic> carouselTopicState;
 
   AppState({
-    required this.topicsState
+    required this.carouselTopicState
   });
 
   AppState copyWith({
-    TopicsState? topicsState,
+    BaseState<Topic>? carouselTopicState
   }){
     return AppState(
-        topicsState: topicsState?? this.topicsState
+      carouselTopicState: carouselTopicState?? this.carouselTopicState
     );
   }
 }
@@ -35,12 +36,15 @@ class AppState{
 
 class ReduxStore{
   static Store<AppState> store() {
-    final topicsInitialState = TopicsState.initial();
+    final carouselTopicInitialState = BaseState<Topic>.initial();
+
 
     return Store<AppState>(
         appReducer,
         middleware: [thunkMiddleware],
-        initialState: AppState(topicsState: topicsInitialState)
+        initialState: AppState(
+          carouselTopicState: carouselTopicInitialState
+        )
     );
   }
 }
