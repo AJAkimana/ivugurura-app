@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:ivugurura_app/core/models.dart';
+import 'package:ivugurura_app/core/models/topic.dart';
 import 'package:ivugurura_app/core/utils/constants.dart';
 
 class TopicItem extends StatelessWidget{

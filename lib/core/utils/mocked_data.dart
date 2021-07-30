@@ -1,4 +1,4 @@
-import 'package:ivugurura_app/core/models.dart';
+import 'package:ivugurura_app/core/models/topic.dart';
 
 List<Topic> mockedTopics = [
   Topic(title: 'How to Seem Like You Always Have Your Shot Together'),

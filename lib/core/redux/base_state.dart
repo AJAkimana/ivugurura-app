@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 @immutable
-class BaseState<Modal>{
+class BaseState<Modal, AcType>{
   final bool loading, loaded;
   final String error;
   final List<Modal>? theList;
@@ -16,14 +16,14 @@ class BaseState<Modal>{
   });
 
   factory BaseState.initial({String dataType = 'list'}){
-    BaseState<Modal> listState = BaseState(theList: <Modal>[]) ;
+    BaseState<Modal, AcType> listState = BaseState(theList: <Modal>[]) ;
     if(dataType=='object'){
       listState = BaseState(theObject: listState.theObject);
     }
     return listState;
   }
 
-  BaseState<Modal> copyWith({
+  BaseState<Modal, AcType> copyWith({
     bool? loading,
     bool? loaded,
     String? error,

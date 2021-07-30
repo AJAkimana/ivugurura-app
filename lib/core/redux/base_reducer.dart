@@ -1,7 +1,7 @@
 import 'package:ivugurura_app/core/redux/base_action.dart';
 import 'package:ivugurura_app/core/redux/base_state.dart';
 
-baseReducer(BaseState<dynamic> prevState, BaseAction<dynamic> action){
+baseReducer(BaseState<dynamic, dynamic> prevState, BaseAction<dynamic, dynamic> action){
   final payload = action.state;
   return prevState.copyWith(
     loading: payload.loading,
