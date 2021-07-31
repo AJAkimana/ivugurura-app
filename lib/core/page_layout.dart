@@ -119,8 +119,14 @@ class _PageLayoutState extends State<PageLayout> {
         Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-                builder: (context) =>
-                    useLayout ? PageLayout(title: title, page: page) : page));
+                builder: (context) {
+                  if(widget.useLayout){
+                    return PageLayout(title: title, page: page);
+                  }
+                  return page;
+                }
+            )
+        );
       },
     );
   }

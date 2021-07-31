@@ -8,14 +8,19 @@ import 'package:redux_thunk/redux_thunk.dart';
 
 AppState appReducer(AppState state, dynamic action){
   if(action is BaseAction<Topic, CarouselTopic>){
-    final nextCarouselTopicState = baseReducer(state.carouselTopicState, action);
-
-    return state.copyWith(carouselTopicState: nextCarouselTopicState);
+    return state.copyWith(
+        carouselTopicState: baseReducer(state.carouselTopicState, action)
+    );
   }
   if(action is BaseAction<Topic, RecentTopic>){
-    final nextRecentTopicState = baseReducer(state.recentTopicState, action);
-
-    return state.copyWith(recentTopicState: nextRecentTopicState);
+    return state.copyWith(
+        recentTopicState: baseReducer(state.recentTopicState, action)
+    );
+  }
+  if(action is BaseAction<Topic, TopicDetail>){
+    return state.copyWith(
+        topicDetailState: baseReducer(state.topicDetailState, action)
+    );
   }
   return state;
 }
@@ -24,36 +29,39 @@ AppState appReducer(AppState state, dynamic action){
 class AppState{
   final BaseState<Topic, CarouselTopic> carouselTopicState;
   final BaseState<Topic, RecentTopic> recentTopicState;
+  final BaseState<Topic, TopicDetail> topicDetailState;
 
   AppState({
     required this.carouselTopicState,
-    required this.recentTopicState
+    required this.recentTopicState,
+    required this.topicDetailState
   });
 
   AppState copyWith({
     BaseState<Topic, CarouselTopic>? carouselTopicState,
     BaseState<Topic, RecentTopic>? recentTopicState,
+    BaseState<Topic, TopicDetail>? topicDetailState
   }){
     return AppState(
       carouselTopicState: carouselTopicState?? this.carouselTopicState,
-      recentTopicState: recentTopicState?? this.recentTopicState
+      recentTopicState: recentTopicState?? this.recentTopicState,
+      topicDetailState: topicDetailState?? this.topicDetailState
     );
   }
 }
 
 
 class ReduxStore{
+  Topic topic() => new Topic();
   static Store<AppState> store() {
-    final carouselTopicInitialState = BaseState<Topic, CarouselTopic>.initial();
-    final recentTopicInitialState = BaseState<Topic, RecentTopic>.initial();
-
-
+    // final topic = new Topic();
     return Store<AppState>(
         appReducer,
         middleware: [thunkMiddleware],
         initialState: AppState(
-          carouselTopicState: carouselTopicInitialState,
-          recentTopicState: recentTopicInitialState
+          carouselTopicState: BaseState<Topic, CarouselTopic>.initial(()=>new Topic()),
+          recentTopicState: BaseState<Topic, RecentTopic>.initial(()=>new Topic()),
+          topicDetailState: BaseState<Topic, TopicDetail>.initial(()=>new Topic(),dataType: 'object'),
         )
     );
   }

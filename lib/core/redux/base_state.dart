@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+
+typedef ItemCreator<Model> = Model Function();
+
 @immutable
 class BaseState<Modal, AcType>{
   final bool loading, loaded;
@@ -15,12 +18,19 @@ class BaseState<Modal, AcType>{
     this.theObject
   });
 
-  factory BaseState.initial({String dataType = 'list'}){
-    BaseState<Modal, AcType> listState = BaseState(theList: <Modal>[]) ;
+  factory BaseState.initial(Modal Function() creator, {String dataType = 'list'}){
+    BaseState<Modal, AcType> listState;
     if(dataType=='object'){
-      listState = BaseState(theObject: listState.theObject);
+      listState = new BaseState(theObject: creator());
+    }else{
+      listState = BaseState(theList: <Modal>[]);
     }
     return listState;
+  }
+
+  Modal modelInstance(Modal Function() creator){
+    final model = creator();
+    return model;
   }
 
   BaseState<Modal, AcType> copyWith({

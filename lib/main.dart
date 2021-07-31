@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_redux/flutter_redux.dart';
 import 'package:ivugurura_app/core/page_layout.dart';
-import 'package:ivugurura_app/core/redux/store.dart';
 import 'package:ivugurura_app/pages/one_topic_view.dart';
 import 'package:ivugurura_app/pages/popular_topics.dart';
-import 'package:ivugurura_app/pages/topics_page.dart';
 
 void main() {
   runApp(MyApp());
@@ -34,7 +31,7 @@ class MyApp extends StatelessWidget {
       routes: {
         'home': (_) => PageLayout(page: PopularTopicsPage(), title: 'Topics'),
         'popular_topics': (_) => PopularTopicsPage(),
-        'view_one_topic': (_) => OneTopicViewPage()
+        // 'view_one_topic': (context) => OneTopicViewPage()
       },
     );
   }

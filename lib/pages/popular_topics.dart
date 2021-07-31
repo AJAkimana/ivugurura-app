@@ -30,7 +30,7 @@ class _PopularTopicsPageState extends State<PopularTopicsPage>{
         children: <Widget>[
           _buildFeacturedTopics(),
           const SizedBox(height: 10.0),
-          _buildHeading("Popular topics"),
+          _buildHeading("Recent topics"),
           _buildListTopics(context, Colors.blue.shade300),
           // _buildListTopics(context, Colors.red.shade300),
           _buildHeading("Browse by category"),

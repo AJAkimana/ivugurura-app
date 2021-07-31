@@ -6,13 +6,14 @@ part 'topic.g.dart';
 
 @JsonSerializable()
 class Topic{
-  String title, slug, coverImage, description;
+  String title, slug, coverImage, description, content;
   Language? language;
   Topic({
     this.title = '',
     this.slug = '',
     this.coverImage = '',
     this.description = '',
+    this.content = '',
     this.language
   });
 
@@ -24,3 +25,5 @@ class Topic{
 class RecentTopic{}
 
 class CarouselTopic{}
+
+class TopicDetail{}

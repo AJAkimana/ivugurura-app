@@ -22,19 +22,22 @@ class DispatchedAction<Modal, AcType>{
   }
   fulfilled(dynamic newValue, {dataType = 'list'}){
     this.actionValue = newValue;
-    dynamic data = BaseAction<Modal, AcType>(
-        BaseState<Modal, AcType>(
-            loading: false,
-            loaded: true,
-            theList: this.actionValue
-        )
-    );
+    dynamic data;
     if(dataType=='object'){
       data = BaseAction<Modal, AcType>(
           BaseState<Modal, AcType>(
               loading: false,
               loaded: true,
               theObject: this.actionValue
+          )
+      );
+    }
+    else{
+      data = BaseAction<Modal, AcType>(
+          BaseState<Modal, AcType>(
+              loading: false,
+              loaded: true,
+              theList: this.actionValue
           )
       );
     }
