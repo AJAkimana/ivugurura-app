@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_redux/flutter_redux.dart';
 import 'package:ivugurura_app/core/keep_alive.dart';
-import 'package:ivugurura_app/core/redux/store.dart';
 import 'package:ivugurura_app/pages/audio_player.dart';
 import 'package:ivugurura_app/pages/popular_topics.dart';
 import 'package:ivugurura_app/pages/topics_page.dart';
@@ -15,7 +13,7 @@ class PageLayout extends StatefulWidget {
       {Key? key,
       required this.title,
       required this.page,
-      this.useLayout = true})
+      this.useLayout = false})
       : super(key: key);
   @override
   _PageLayoutState createState() => _PageLayoutState();
@@ -28,30 +26,27 @@ class _PageLayoutState extends State<PageLayout> {
 
   @override
   Widget build(BuildContext context) {
-    return StoreProvider(
-        store: appStore,
-        child: Scaffold(
-          key: _key,
-          appBar: AppBar(
-            title: Text(widget.title),
-            automaticallyImplyLeading: false,
-            leading: IconButton(
-              icon: Icon(Icons.menu),
-              onPressed: () {
-                _key.currentState!.openDrawer();
-              },
-            ),
-          ),
-          drawer: _buildDrawer(),
-          body: Stack(
-            fit: StackFit.expand,
-            children: <Widget>[
-              AlwaysAliveWidget(
-                child: widget.page,
-              )
-            ],
-          ),
-        )
+    return Scaffold(
+      key: _key,
+      appBar: AppBar(
+        title: Text(widget.title),
+        automaticallyImplyLeading: false,
+        leading: IconButton(
+          icon: Icon(Icons.menu),
+          onPressed: () {
+            _key.currentState!.openDrawer();
+          },
+        ),
+      ),
+      drawer: _buildDrawer(),
+      body: Stack(
+        fit: StackFit.expand,
+        children: <Widget>[
+          AlwaysAliveWidget(
+            child: widget.page,
+          )
+        ],
+      ),
     );
   }
 
@@ -68,25 +63,25 @@ class _PageLayoutState extends State<PageLayout> {
             child: SingleChildScrollView(
               child: Column(
                 children: <Widget>[
-                  _buildRow(TopicsPage(), Icons.home, "Home", useLayout: false),
+                  _buildRow(TopicsPage(), Icons.home, "Home"),
                   _buildDivider(),
                   _buildRow(
-                      PopularTopicsPage(), Icons.read_more, "Christianity"),
+                      PopularTopicsPage(), Icons.read_more, "Christianity", useLayout: true),
                   _buildDivider(),
                   _buildRow(PopularTopicsPage(), Icons.read_more,
-                      "People well-being"),
+                      "People well-being", useLayout: true),
                   _buildDivider(),
                   _buildRow(
-                      PopularTopicsPage(), Icons.read_more, "The prophecy"),
+                      PopularTopicsPage(), Icons.read_more, "The prophecy", useLayout: true),
                   _buildDivider(),
-                  _buildRow(PopularTopicsPage(), Icons.read_more, "Healthy"),
+                  _buildRow(PopularTopicsPage(), Icons.read_more, "Healthy", useLayout: true),
                   _buildDivider(),
-                  _buildRow(AudioPlayer(), Icons.radio, "Radio"),
+                  _buildRow(AudioPlayer(), Icons.radio, "Radio", useLayout: true),
                   _buildDivider(),
-                  _buildRow(AudioPlayer(), Icons.music_note, "Audio"),
+                  _buildRow(AudioPlayer(), Icons.music_note, "Audio", useLayout: true),
                   _buildDivider(),
                   _buildRow(
-                      PopularTopicsPage(), Icons.contact_mail, "Contact us"),
+                      PopularTopicsPage(), Icons.contact_mail, "Contact us", useLayout: true),
                   _buildDivider(),
                 ],
               ),
@@ -102,7 +97,7 @@ class _PageLayoutState extends State<PageLayout> {
   }
 
   Widget _buildRow(Widget page, IconData icon, String title,
-      {bool useLayout = true}) {
+      {bool useLayout = false}) {
     final TextStyle textStyle = TextStyle(color: active, fontSize: 16.0);
     return InkWell(
       child: Container(
@@ -120,7 +115,8 @@ class _PageLayoutState extends State<PageLayout> {
             context,
             MaterialPageRoute(
                 builder: (context) {
-                  if(widget.useLayout){
+                  if(widget.useLayout || useLayout){
+                    print('The code executed');
                     return PageLayout(title: title, page: page);
                   }
                   return page;

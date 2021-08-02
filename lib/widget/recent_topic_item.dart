@@ -22,11 +22,7 @@ class RecentTopicItem extends StatelessWidget{
         Navigator.push(
           context,
           MaterialPageRoute(
-              builder:(context)=>  PageLayout(
-                  title: topic.title,
-                  page: OneTopicViewPage(topicSlug: topic.slug),
-                  useLayout: false,
-              ),
+              builder:(context)=>  OneTopicViewPage(topicSlug: topic.slug),
           )
         );
       },
@@ -56,7 +52,7 @@ class RecentTopicItem extends StatelessWidget{
                   ),
                   const SizedBox(height: 10.0),
                   Html(
-                    data: truncate(topic.content, 150, omission: '...'),
+                    data: truncate(topic.content as String, 150, omission: '...'),
                   )
                 ],
               ),

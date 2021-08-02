@@ -21,7 +21,7 @@ class TopicsPageState extends State<TopicsPage>{
           appBarTheme: AppBarTheme(
             color: primaryColor,
             textTheme: TextTheme(
-              headline6: titleHeadingStyle
+              headline6: titleHeadingStyle()
             ),
             iconTheme: IconThemeData(color: bgColor),
             actionsIconTheme: IconThemeData(color: bgColor),
