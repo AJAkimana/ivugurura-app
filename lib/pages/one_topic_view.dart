@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:intl/intl.dart';
 import 'package:ivugurura_app/core/models/topic.dart';
 import 'package:ivugurura_app/core/redux/actions/topic_actions.dart';
 import 'package:ivugurura_app/core/redux/base_state.dart';
 import 'package:ivugurura_app/core/redux/store.dart';
-import 'package:ivugurura_app/core/res/assets.dart';
 import 'package:ivugurura_app/core/utils/constants.dart';
 import 'package:ivugurura_app/widget/display_error.dart';
 import 'package:ivugurura_app/widget/display_loading.dart';
 import 'package:ivugurura_app/widget/network_image.dart';
+import 'package:ivugurura_app/core/extensions/string_cap_extension.dart';
 
 class OneTopicViewPage extends StatefulWidget{
   final String topicSlug;
@@ -19,85 +20,123 @@ class OneTopicViewPage extends StatefulWidget{
     required this.topicSlug
   }):super(key: key);
   @override
-  _OneTopicViewPageState createState() => _OneTopicViewPageState();
+  OneTopicViewPageState createState() => OneTopicViewPageState();
 }
 
-class _OneTopicViewPageState extends State<OneTopicViewPage>{
-
+class OneTopicViewPageState extends State<OneTopicViewPage>{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Topic details')),
       body: StoreConnector<AppState, BaseState<Topic, TopicDetail>>(
         distinct: true,
         onInitialBuild: (store){
           fetchTopicDetail(widget.topicSlug);
         },
         converter: (store) => store.state.topicDetailState,
-        builder: (context, topicDetail){
-          if(topicDetail.loading){
+        builder: (context, topicDetail) {
+          if (topicDetail.loading) {
             return DisplayLoading();
           }
-          if(topicDetail.error!=''){
+          if (topicDetail.error != '') {
             return DisplayError();
           }
-          if(topicDetail.theObject!.title.isEmpty){
+          if (topicDetail.theObject!.title.isEmpty) {
             return Text('Nothing to display');
           }
-          else{
+          else {
             Topic topic = topicDetail.theObject!;
-            return SingleChildScrollView(
-              child: Column(
-                children: <Widget>[
-                  Stack(
-                    children: <Widget>[
-                      Container(
-                        height: 300,
-                        width: double.infinity,
-                        child: PNetworkImage(
-                            '$IMAGE_PATH/${topic.coverImage}',
-                            fit: BoxFit.cover),
+            DateTime dateTime = DateTime.parse(topic.createdAt as String);
+            return CustomScrollView(
+              slivers: <Widget>[
+                SliverAppBar(
+                  expandedHeight: 150.0,
+                  pinned: true,
+                  flexibleSpace: FlexibleSpaceBar(
+                    title: Text(topic.title),
+                    background: PNetworkImage(
+                        '$IMAGE_PATH/${topic.coverImage}',
+                        fit: BoxFit.cover),
+                    ),
+                  actions: <Widget>[
+                    IconButton(onPressed: (){}, icon: const Icon(Icons.category))
+                  ],
+                ),
+                SliverToBoxAdapter(
+                  child: Container(
+                    color: Colors.indigoAccent,
+                    child: Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Icon(Icons.category, color: Colors.white),
+                          Text(topic.category!.name as String, style: TextStyle(color: Colors.white))
+                        ],
                       ),
-                      Positioned(
-                        bottom: 20.0,
-                        left: 20.0,
-                        right: 20.0,
-                        child: Row(
-                          children: <Widget>[
-                            Icon(Icons.slideshow, color: Colors.white),
-                            Text('Prophecy', style: TextStyle(color: Colors.white))
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 16.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Row(
-                          children: <Widget>[
-                            Expanded(child: Text('10/07/2021')),
-                            IconButton(onPressed: () {}, icon: Icon(Icons.access_time))
-                          ],
-                        ),
-                        Text(topic.title, style: Theme.of(context).textTheme.headline4),
-                        Divider(),
-                        SizedBox(height: 10.0),
-                        Html(data: topic.content)
-                        // Text(
-                        //   textAlign: TextAlign.justify,
-                        // )
-                      ],
                     ),
                   ),
-                ],
-              ),
+                ),
+                SliverToBoxAdapter(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Row(
+                        children: <Widget>[
+                          Expanded(child: Text(DateFormat.yMMMMEEEEd().format(dateTime))),
+                          IconButton(onPressed: () {}, icon: Icon(Icons.access_time))
+                        ],
+                      ),
+                      Text(topic.title.inCaps, style: Theme.of(context).textTheme.headline4),
+                      Divider(),
+                      SizedBox(height: 10.0),
+                      Html(data: topic.content),
+                      Divider(),
+                    ],
+                  ),
+                ),
+                SliverToBoxAdapter(
+                  child: Container(
+                      padding: EdgeInsets.all(20.0),
+                      color: Colors.indigoAccent,
+                      child: Text(
+                          "Related topics",
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold
+                          )
+                      )
+                  ),
+                ),
+                SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                    (BuildContext context, int index) {
+                      Topic catTopic = topic.category!.relatedTopics![index];
+                      return ListTile(
+                        title: Text(
+                            catTopic.title.toLowerCase().capitalizeFirstOfEach,
+                            style: titleHeadingStyle(color: Colors.black87)
+                        ),
+                        subtitle: Text(catTopic.description.toLowerCase().inCaps),
+                        trailing: Container(
+                          width: 80.0,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10.0),
+                              image: DecorationImage(
+                                  image: NetworkImage('$IMAGE_PATH/${catTopic.coverImage}'),
+                                  fit: BoxFit.cover
+                              )
+                          ),
+                        ),
+                      );
+                    },
+                    childCount: topic.category!.relatedTopics!.length
+                  ),
+                ),
+              ],
             );
           }
-        },
-      )
+        }
+      ),
     );
   }
 }

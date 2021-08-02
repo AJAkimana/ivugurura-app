@@ -48,7 +48,7 @@ Future<void> fetchTopicDetail(String topicSlug) async {
     appStore.dispatch(dispatchedAction.fulfilled(topicData, dataType: 'object'));
   } catch (error){
     print('{=======================');
-    print(error);
+    print(error.toString());
     print('=========================}');
     appStore.dispatch(dispatchedAction.rejected(error.toString()));
   }

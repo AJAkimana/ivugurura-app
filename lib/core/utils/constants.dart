@@ -13,8 +13,8 @@ const String topicsUrl = "$REMOTE_API_URL/topics";
 const Color primaryColor = Colors.indigo;
 const Color secondaryColor = Color(0xfff12bb8);
 const Color bgColor = Color(0xffF9E0E3);
-const TextStyle titleHeadingStyle = TextStyle(
-  color: secondaryColor,
+TextStyle titleHeadingStyle({Color color = secondaryColor}) => TextStyle(
+  color: color,
   fontSize: 20.0,
   fontWeight: FontWeight.bold,
 );
