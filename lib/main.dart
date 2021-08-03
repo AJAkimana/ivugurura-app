@@ -11,10 +11,11 @@ void main() {
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
+  final String appTitle = 'Reformation Voice';
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Reformation Voice',
+      title: appTitle,
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -29,9 +30,9 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.indigo,
         accentColor: Colors.red
       ),
-      home: PageLayout(page: PopularTopicsPage(), title: 'Topics'),
+      home: PageLayout(page: PopularTopicsPage(), title: appTitle),
       routes: {
-        'home': (_) => PageLayout(page: PopularTopicsPage(), title: 'Topics'),
+        'home': (_) => PageLayout(page: PopularTopicsPage(), title: appTitle),
         'popular_topics': (_) => PopularTopicsPage(),
         // 'view_one_topic': (context) => OneTopicViewPage()
       },

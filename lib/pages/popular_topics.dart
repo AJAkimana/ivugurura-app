@@ -159,7 +159,8 @@ RoundedContainer _buildFeacturedTopics(){
                   pagination: SwiperPagination(margin: const EdgeInsets.only()),
                   viewportFraction: 0.9,
                   itemCount: topicsState.theList!.length,
-                  loop: false,
+                  autoplay: true,
+                  loop: true,
                   itemBuilder: (context, index){
                     Topic topic = allTopics[index];
                     return Padding(
@@ -181,7 +182,6 @@ RoundedContainer _buildFeacturedTopics(){
                               flex: 2,
                               child: Container(
                                 color: Colors.blueAccent,
-                                // child: Image.asset('assets/reformation.jpg', fit: BoxFit.cover, height: 210),
                                 child: PNetworkImage(
                                   "$IMAGE_PATH/${topic.coverImage}",
                                   fit: BoxFit.cover,
