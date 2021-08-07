@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:ivugurura_app/core/models/category.dart';
 import 'package:ivugurura_app/core/models/topic.dart';
 import 'package:ivugurura_app/core/redux/base_action.dart';
 import 'package:ivugurura_app/core/redux/base_reducer.dart';
@@ -22,6 +23,11 @@ AppState appReducer(AppState state, dynamic action){
         topicDetailState: baseReducer(state.topicDetailState, action)
     );
   }
+  if(action is BaseAction<Category, CategoriesList>){
+    return state.copyWith(
+        categoriesState: baseReducer(state.categoriesState, action)
+    );
+  }
   return state;
 }
 
@@ -30,22 +36,26 @@ class AppState{
   final BaseState<Topic, CarouselTopic> carouselTopicState;
   final BaseState<Topic, RecentTopic> recentTopicState;
   final BaseState<Topic, TopicDetail> topicDetailState;
+  final BaseState<Category, CategoriesList> categoriesState;
 
   AppState({
     required this.carouselTopicState,
     required this.recentTopicState,
-    required this.topicDetailState
+    required this.topicDetailState,
+    required this.categoriesState
   });
 
   AppState copyWith({
     BaseState<Topic, CarouselTopic>? carouselTopicState,
     BaseState<Topic, RecentTopic>? recentTopicState,
-    BaseState<Topic, TopicDetail>? topicDetailState
+    BaseState<Topic, TopicDetail>? topicDetailState,
+    BaseState<Category, CategoriesList>? categoriesState,
   }){
     return AppState(
       carouselTopicState: carouselTopicState?? this.carouselTopicState,
       recentTopicState: recentTopicState?? this.recentTopicState,
-      topicDetailState: topicDetailState?? this.topicDetailState
+      topicDetailState: topicDetailState?? this.topicDetailState,
+      categoriesState: categoriesState?? this.categoriesState
     );
   }
 }
@@ -62,6 +72,7 @@ class ReduxStore{
           carouselTopicState: BaseState<Topic, CarouselTopic>.initial(()=>new Topic()),
           recentTopicState: BaseState<Topic, RecentTopic>.initial(()=>new Topic()),
           topicDetailState: BaseState<Topic, TopicDetail>.initial(()=>new Topic(),dataType: 'object'),
+          categoriesState: BaseState<Category, CategoriesList>.initial(() => new Category())
         )
     );
   }

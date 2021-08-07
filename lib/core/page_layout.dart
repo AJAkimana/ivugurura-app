@@ -1,20 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:ivugurura_app/core/keep_alive.dart';
+import 'package:ivugurura_app/core/redux/actions/category_actions.dart';
+import 'package:ivugurura_app/core/redux/base_state.dart';
+import 'package:ivugurura_app/core/redux/store.dart';
 import 'package:ivugurura_app/pages/audio_player.dart';
 import 'package:ivugurura_app/pages/popular_topics.dart';
+import 'package:ivugurura_app/pages/setting_page.dart';
 import 'package:ivugurura_app/pages/topics_page.dart';
 import 'package:ivugurura_app/utils/oval_right_clipper.dart';
+import 'package:ivugurura_app/widget/display_error.dart';
+import 'package:ivugurura_app/widget/display_loading.dart';
+
+import 'models/category.dart';
 
 class PageLayout extends StatefulWidget {
   final String title;
   final Widget page;
   final bool useLayout;
-  const PageLayout(
-      {Key? key,
-      required this.title,
-      required this.page,
-      this.useLayout = false})
-      : super(key: key);
+  const PageLayout({
+    Key? key,
+    required this.title,
+    required this.page,
+    this.useLayout = false
+  }) : super(key: key);
   @override
   _PageLayoutState createState() => _PageLayoutState();
 }
@@ -65,16 +74,7 @@ class _PageLayoutState extends State<PageLayout> {
                 children: <Widget>[
                   _buildRow(TopicsPage(), Icons.home, "Home"),
                   _buildDivider(),
-                  _buildRow(
-                      PopularTopicsPage(), Icons.read_more, "Christianity", useLayout: true),
-                  _buildDivider(),
-                  _buildRow(PopularTopicsPage(), Icons.read_more,
-                      "People well-being", useLayout: true),
-                  _buildDivider(),
-                  _buildRow(
-                      PopularTopicsPage(), Icons.read_more, "The prophecy", useLayout: true),
-                  _buildDivider(),
-                  _buildRow(PopularTopicsPage(), Icons.read_more, "Healthy", useLayout: true),
+                  _buildCategoriesList(context),
                   _buildDivider(),
                   _buildRow(AudioPlayer(), Icons.radio, "Radio", useLayout: true),
                   _buildDivider(),
@@ -82,6 +82,9 @@ class _PageLayoutState extends State<PageLayout> {
                   _buildDivider(),
                   _buildRow(
                       PopularTopicsPage(), Icons.contact_mail, "Contact us", useLayout: true),
+                  _buildDivider(),
+                  _buildRow(
+                      SettingPage(), Icons.settings, "Setting", useLayout: true),
                   _buildDivider(),
                 ],
               ),
@@ -94,6 +97,50 @@ class _PageLayoutState extends State<PageLayout> {
 
   Divider _buildDivider() {
     return Divider(color: active);
+  }
+
+  Widget _buildCategoriesList(BuildContext context){
+    final TextStyle textStyle = TextStyle(color: active, fontSize: 16.0);
+    return StoreConnector<AppState, BaseState<Category, CategoriesList>>(
+        distinct: true,
+        onInitialBuild: (store){
+          if(store.theList!.length<1){
+            fetchCategories();
+          }
+        },
+        converter: (store) => store.state.categoriesState,
+        builder: (context, categoriesState){
+          if(categoriesState.loading){
+            return DisplayLoading();
+          }
+          if(categoriesState.error!=''){
+            return DisplayError();
+          }
+          if(categoriesState.theList!.length < 1){
+            return Text('Not data');
+          }
+          return  ListView.builder(
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
+            itemCount: categoriesState.theList!.length,
+            itemBuilder: (BuildContext context, int index){
+              Category category = categoriesState.theList![index];
+              return InkWell(
+                child: Container(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: Row(
+                    children: <Widget>[
+                      Icon(Icons.read_more, color: active),
+                      SizedBox(width: 10),
+                      Text(category.name as String,  style: textStyle)
+                    ],
+                  ),
+                ),
+              );
+            },
+          );
+        }
+    );
   }
 
   Widget _buildRow(Widget page, IconData icon, String title,
@@ -116,7 +163,6 @@ class _PageLayoutState extends State<PageLayout> {
             MaterialPageRoute(
                 builder: (context) {
                   if(widget.useLayout || useLayout){
-                    print('The code executed');
                     return PageLayout(title: title, page: page);
                   }
                   return page;

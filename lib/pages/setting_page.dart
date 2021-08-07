@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ivugurura_app/core/res/assets.dart';
 
 class SettingPage extends StatefulWidget{
 
@@ -24,7 +25,7 @@ class SettingPageState extends State<SettingPage>{
         brightness: _getBrightness(),
       ),
       child: Scaffold(
-        backgroundColor: _dark ? null : Colors.green.shade200,
+        backgroundColor: _dark ? null : Colors.grey.shade500,
         appBar: AppBar(
           elevation: 0,
           brightness: _getBrightness(),
@@ -63,7 +64,48 @@ class SettingPageState extends State<SettingPage>{
                         color: Colors.white,
                         fontWeight: FontWeight.w500
                       ),),
-
+                      leading: CircleAvatar(
+                        backgroundImage: NetworkImage(images[0]),
+                      ),
+                      trailing: Icon(Icons.edit, color: Colors.white),
+                    ),
+                  ),
+                  const SizedBox(height: 10.0),
+                  Card(
+                    elevation: 4.0,
+                    margin: const EdgeInsets.fromLTRB(32.0, 8.0, 32.0, 16.0),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0)
+                    ),
+                    child: Column(
+                      children: <Widget>[
+                        ListTile(
+                          leading: Icon(Icons.lock_outlined, color: Colors.purple),
+                          title: Text('Language Set: Kinyarwanda'),
+                          trailing: Icon(Icons.keyboard_arrow_right),
+                          onTap: ()=>showDialog<Widget>(
+                              context: context,
+                              builder: (BuildContext context)=>AlertDialog(
+                                title: Text('Select language'),
+                                content: Text('Select'),
+                                actions: <Widget>[
+                                  TextButton(
+                                    onPressed: () => Navigator.pop(context, 'Cancel'),
+                                    child: const Text('Cancel'),
+                                  ),
+                                ],
+                              )
+                          ),
+                        ),
+                        _buildDivider(),
+                        ListTile(
+                          leading: Icon(Icons.lock_outlined, color: Colors.purple),
+                          title: Text('Change Language'),
+                          trailing: Icon(Icons.keyboard_arrow_right),
+                          onTap: (){},
+                        ),
+                        _buildDivider(),
+                      ],
                     ),
                   )
                 ],
@@ -72,6 +114,14 @@ class SettingPageState extends State<SettingPage>{
           ],
         ),
       ),
+    );
+  }
+  Container _buildDivider() {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 8.0,),
+      width: double.infinity,
+      height: 1.0,
+      color: Colors.grey.shade400,
     );
   }
 }

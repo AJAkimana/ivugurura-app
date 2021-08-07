@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 
+const bool isLocal = false;
 const String BASE_REMOTE_URL = "https://reformationvoice.org";
 const String BASE_LOCAL_URL = "http://192.168.8.100:5600";
 
-const String LOCAL_API_URL = "$BASE_LOCAL_URL/api/v1";
-const  String REMOTE_API_URL = "$BASE_REMOTE_URL/api/v1";
+const BASE_URL = isLocal ? BASE_LOCAL_URL : BASE_REMOTE_URL;
 
-const String IMAGE_PATH = "$BASE_REMOTE_URL/images";
+const String API_APP_URL = "$BASE_URL/api/v1";
 
-const String topicsUrl = "$REMOTE_API_URL/topics";
+const String IMAGE_PATH = "$BASE_URL/images";
+
+const String topicsUrl = "$API_APP_URL/topics";
+const String categoriesUrl = "$API_APP_URL/categories";
 
 const Color primaryColor = Colors.indigo;
 const Color secondaryColor = Color(0xfff12bb8);

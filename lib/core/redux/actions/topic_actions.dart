@@ -20,6 +20,7 @@ Future<void> fetchTopics({
   appStore.dispatch(dispatchedAction.pending());
   try{
     String url = '$topicsUrl?page=$page&pageSize=$pageSize&category=$category';
+    print(url);
     final res = await http.get(Uri.parse(url), headers: {'Accept-Language': 'kn'});
     assert(res.statusCode < 400);
     final jsonData = json.decode(res.body)['data'] as List;
