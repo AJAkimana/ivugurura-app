@@ -11,6 +11,7 @@ class CustomAlertDialog extends StatelessWidget {
   final AlertDialogType type;
   final String title, content, btnLabel;
   final Widget? icon;
+  final Widget widget;
   final TextStyle titleStyle = TextStyle(
     fontSize: 20.0,
     color: Colors.black,
@@ -22,6 +23,7 @@ class CustomAlertDialog extends StatelessWidget {
     this.title = "Successful",
     required this.content,
     this.icon,
+    required this.widget,
     this.type = AlertDialogType.INFO,
     this.btnLabel = "Ok"
   }): super(key: key);
@@ -51,7 +53,11 @@ class CustomAlertDialog extends StatelessWidget {
               const SizedBox(height: 10.0),
               Text(title, style: titleStyle, textAlign: TextAlign.center),
               Divider(),
-              Text(content, textAlign: TextAlign.center),
+              Container(
+                alignment: Alignment.center,
+                child: this.widget,
+              ),
+              // Text(content, textAlign: TextAlign.center),
               SizedBox(height: 40.0),
               SizedBox(
                 width: double.infinity,

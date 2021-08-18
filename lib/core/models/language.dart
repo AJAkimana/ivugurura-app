@@ -4,9 +4,9 @@ part 'language.g.dart';
 
 @JsonSerializable()
 class Language{
-  String name;
+  String name, short_name;
 
-  Language({this.name = ''});
+  Language({this.name = '', this.short_name = ''});
   factory Language.fromJson(Map<String, dynamic> json) => _$LanguageFromJson(json);
 
   Map<String, dynamic> toJson() => _$LanguageToJson(this);

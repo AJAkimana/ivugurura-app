@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ivugurura_app/core/models/language.dart';
 
 const bool isLocal = false;
 const String BASE_REMOTE_URL = "https://reformationvoice.org";
@@ -21,3 +22,9 @@ TextStyle titleHeadingStyle({Color color = secondaryColor}) => TextStyle(
   fontSize: 20.0,
   fontWeight: FontWeight.bold,
 );
+
+List<Language> systemLanguages = [
+  Language(name: 'English', short_name: 'en'),
+  Language(name: 'Kinyarwanda', short_name: 'kn'),
+  Language(name: 'Kiswahili', short_name: 'sw')
+];

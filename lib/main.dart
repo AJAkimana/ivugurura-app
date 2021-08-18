@@ -4,6 +4,7 @@ import 'package:ivugurura_app/core/page_layout.dart';
 import 'package:ivugurura_app/core/redux/store.dart';
 import 'package:ivugurura_app/pages/one_topic_view.dart';
 import 'package:ivugurura_app/pages/popular_topics.dart';
+import 'package:ivugurura_app/pages/setting_page.dart';
 
 void main() {
   runApp(StoreProvider(store: appStore, child: MyApp()));
@@ -30,7 +31,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.indigo,
         accentColor: Colors.red
       ),
-      home: PageLayout(page: PopularTopicsPage(), title: appTitle),
+      home: PageLayout(page: SettingPage(), title: 'Setting', useLayout: false,),
       routes: {
         'home': (_) => PageLayout(page: PopularTopicsPage(), title: appTitle),
         'popular_topics': (_) => PopularTopicsPage(),

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:ivugurura_app/core/custom_alert_dialog.dart';
+import 'package:ivugurura_app/core/language_selector.dart';
 import 'package:ivugurura_app/core/res/assets.dart';
 
 class SettingPage extends StatefulWidget{
@@ -85,15 +87,10 @@ class SettingPageState extends State<SettingPage>{
                           trailing: Icon(Icons.keyboard_arrow_right),
                           onTap: ()=>showDialog<Widget>(
                               context: context,
-                              builder: (BuildContext context)=>AlertDialog(
-                                title: Text('Select language'),
-                                content: Text('Select'),
-                                actions: <Widget>[
-                                  TextButton(
-                                    onPressed: () => Navigator.pop(context, 'Cancel'),
-                                    child: const Text('Cancel'),
-                                  ),
-                                ],
+                              builder: (BuildContext context)=>CustomAlertDialog(
+                                title: 'Change language',
+                                content: 'Some information',
+                                widget: LanguageSelector(),
                               )
                           ),
                         ),
