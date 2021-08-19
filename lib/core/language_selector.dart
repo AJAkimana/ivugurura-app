@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:ivugurura_app/core/models/language.dart';
 import 'package:ivugurura_app/core/utils/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -11,51 +12,44 @@ class LanguageSelector extends StatefulWidget {
 }
 
 class LanguageSelectorState extends State<LanguageSelector> {
-  late Language _lang;
+  ILanguage? _iLanguage;
 
-  _selectLanguage(Language language) {
+  void _selectLanguage(ILanguage? iLanguage) async {
+    final prefs = await SharedPreferences.getInstance();
+    Language lang = getLanguageInfo(iLang: iLanguage);
     setState(() {
-      SharedPreferences.getInstance().then((SharedPreferences sp){
-        sp.setString('shortName', language.short_name);
-        _lang = _getLanguageInfo(language.short_name);
-      });
+      _iLanguage = iLanguage;
+      prefs.setString('shortName', lang.short_name);
     });
   }
 
-  Language _getLanguageInfo(String shortName) {
-    return systemLanguages.firstWhere((lang) {
-      return lang.short_name == shortName;
+  void _loadLanguage() async {
+    final prefs = await SharedPreferences.getInstance();
+    String shortName = (prefs.getString('shortName') ?? 'kn');
+    Language lang = getLanguageInfo(shortName: shortName);
+    setState(() {
+      _iLanguage = lang.iLanguage;
     });
   }
 
   @override
   void initState() {
     super.initState();
-    SharedPreferences.getInstance().then((SharedPreferences sp) {
-      String shortName = (sp.getString('shortName') ?? 'kn');
-      _lang= _getLanguageInfo(shortName);
-    });
+    _loadLanguage();
   }
 
   @override
   Widget build(BuildContext context) {
-    return DropdownButton(
-      value: _lang,
-      icon: const Icon(Icons.arrow_downward),
-      iconSize: 24,
-      elevation: 16,
-      style: const TextStyle(color: Colors.deepPurple),
-      underline: Container(
-        height: 2,
-        color: Colors.deepPurpleAccent,
-      ),
-      items: systemLanguages
-          .map((Language lang) {
-        return DropdownMenuItem(
-          value: lang,
-          child: Text(lang.name),
-        );
-      }).toList(),
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: systemLanguages.map((language) =>ListTile(
+        title: Text(language.name),
+        leading: Radio<ILanguage>(
+          value: language.iLanguage as ILanguage,
+          groupValue: _iLanguage,
+          onChanged: _selectLanguage
+        ),
+      ) ).toList(),
     );
   }
 }

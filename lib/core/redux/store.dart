@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:ivugurura_app/core/models/category.dart';
+import 'package:ivugurura_app/core/models/setting.dart';
 import 'package:ivugurura_app/core/models/topic.dart';
 import 'package:ivugurura_app/core/redux/base_action.dart';
 import 'package:ivugurura_app/core/redux/base_reducer.dart';
@@ -28,6 +29,11 @@ AppState appReducer(AppState state, dynamic action){
         categoriesState: baseReducer(state.categoriesState, action)
     );
   }
+  if(action is BaseAction<Setting, SettingInfo>){
+    return state.copyWith(
+        settingState: baseReducer(state.settingState, action)
+    );
+  }
   return state;
 }
 
@@ -37,12 +43,14 @@ class AppState{
   final BaseState<Topic, RecentTopic> recentTopicState;
   final BaseState<Topic, TopicDetail> topicDetailState;
   final BaseState<Category, CategoriesList> categoriesState;
+  final BaseState<Setting, SettingInfo> settingState;
 
   AppState({
     required this.carouselTopicState,
     required this.recentTopicState,
     required this.topicDetailState,
-    required this.categoriesState
+    required this.categoriesState,
+    required this.settingState
   });
 
   AppState copyWith({
@@ -50,12 +58,14 @@ class AppState{
     BaseState<Topic, RecentTopic>? recentTopicState,
     BaseState<Topic, TopicDetail>? topicDetailState,
     BaseState<Category, CategoriesList>? categoriesState,
+    BaseState<Setting, SettingInfo>? settingState
   }){
     return AppState(
       carouselTopicState: carouselTopicState?? this.carouselTopicState,
       recentTopicState: recentTopicState?? this.recentTopicState,
       topicDetailState: topicDetailState?? this.topicDetailState,
-      categoriesState: categoriesState?? this.categoriesState
+      categoriesState: categoriesState?? this.categoriesState,
+        settingState:settingState??this.settingState
     );
   }
 }
@@ -72,7 +82,8 @@ class ReduxStore{
           carouselTopicState: BaseState<Topic, CarouselTopic>.initial(()=>new Topic()),
           recentTopicState: BaseState<Topic, RecentTopic>.initial(()=>new Topic()),
           topicDetailState: BaseState<Topic, TopicDetail>.initial(()=>new Topic(),dataType: 'object'),
-          categoriesState: BaseState<Category, CategoriesList>.initial(() => new Category())
+          categoriesState: BaseState<Category, CategoriesList>.initial(() => new Category()),
+          settingState: BaseState<Setting, SettingInfo>.initial(() => Setting(), dataType: 'object')
         )
     );
   }

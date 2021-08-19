@@ -1,7 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:ivugurura_app/core/custom_alert_dialog.dart';
 import 'package:ivugurura_app/core/language_selector.dart';
+import 'package:ivugurura_app/core/models/language.dart';
+import 'package:ivugurura_app/core/models/setting.dart';
+import 'package:ivugurura_app/core/redux/actions/setting_actions.dart';
+import 'package:ivugurura_app/core/redux/base_state.dart';
+import 'package:ivugurura_app/core/redux/store.dart';
 import 'package:ivugurura_app/core/res/assets.dart';
+import 'package:ivugurura_app/core/utils/constants.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingPage extends StatefulWidget{
 
@@ -10,14 +19,23 @@ class SettingPage extends StatefulWidget{
 }
 
 class SettingPageState extends State<SettingPage>{
-  late bool _dark;
+  late bool _dark = false;
+  late Language _language = getLanguageInfo(shortName: 'kn');
 
   @override
   void initState() {
     super.initState();
-    _dark = false;
+    // _loadSettings();
   }
 
+  void _loadSettings() async {
+    final prefs = await SharedPreferences.getInstance();
+    String shortName = (prefs.getString('shortName') ?? 'kn');
+    _dark = (prefs.getBool('theme') ?? false);
+    setState(() {
+      _language = getLanguageInfo(shortName: shortName);
+    });
+  }
   Brightness _getBrightness() => _dark ? Brightness.dark: Brightness.light;
 
   @override
@@ -46,70 +64,84 @@ class SettingPageState extends State<SettingPage>{
             }, icon: Icon(Icons.mood)),
           ],
         ),
-        body: Stack(
-          fit: StackFit.expand,
-          children: <Widget>[
-            SingleChildScrollView(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Card(
-                    elevation: 8.0,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0)
-                    ),
-                    color: Colors.purple,
-                    child: ListTile(
-                      onTap: (){},
-                      title: Text('Ivugurura n Ubugorozi',style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w500
-                      ),),
-                      leading: CircleAvatar(
-                        backgroundImage: NetworkImage(images[0]),
-                      ),
-                      trailing: Icon(Icons.edit, color: Colors.white),
-                    ),
-                  ),
-                  const SizedBox(height: 10.0),
-                  Card(
-                    elevation: 4.0,
-                    margin: const EdgeInsets.fromLTRB(32.0, 8.0, 32.0, 16.0),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0)
-                    ),
-                    child: Column(
-                      children: <Widget>[
-                        ListTile(
-                          leading: Icon(Icons.lock_outlined, color: Colors.purple),
-                          title: Text('Language Set: Kinyarwanda'),
-                          trailing: Icon(Icons.keyboard_arrow_right),
-                          onTap: ()=>showDialog<Widget>(
-                              context: context,
-                              builder: (BuildContext context)=>CustomAlertDialog(
-                                title: 'Change language',
-                                content: 'Some information',
-                                widget: LanguageSelector(),
-                              )
-                          ),
+        body: StoreConnector<AppState, BaseState<Setting, SettingInfo>>(
+          distinct: true,
+          onInitialBuild: (store){
+            loadSettings();
+          },
+          converter: (store)=>store.state.settingState,
+          builder: (context, settingState){
+            Setting setting = settingState.theObject as Setting;
+            return Stack(
+              fit: StackFit.expand,
+              children: <Widget>[
+                SingleChildScrollView(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Card(
+                        elevation: 8.0,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0)
                         ),
-                        _buildDivider(),
-                        ListTile(
-                          leading: Icon(Icons.lock_outlined, color: Colors.purple),
-                          title: Text('Change Language'),
-                          trailing: Icon(Icons.keyboard_arrow_right),
+                        color: Colors.purple,
+                        child: ListTile(
                           onTap: (){},
+                          title: Text('Ivugurura n Ubugorozi',style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w500
+                          ),),
+                          leading: CircleAvatar(
+                            backgroundImage: NetworkImage(images[0]),
+                          ),
+                          trailing: Icon(Icons.edit, color: Colors.white),
                         ),
-                        _buildDivider(),
-                      ],
-                    ),
-                  )
-                ],
-              ),
-            )
-          ],
-        ),
+                      ),
+                      const SizedBox(height: 10.0),
+                      Card(
+                        elevation: 4.0,
+                        margin: const EdgeInsets.fromLTRB(32.0, 8.0, 32.0, 16.0),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0)
+                        ),
+                        child: Column(
+                          children: <Widget>[
+                            ListTile(
+                              leading: Icon(Icons.lock_outlined, color: Colors.purple),
+                              title: Text('Language Set: ${setting.language!.name??''}'),
+                              trailing: Icon(Icons.keyboard_arrow_right),
+                              onTap: (){
+                                showDialog(
+                                    context: context,
+                                    builder: (BuildContext context){
+                                      return CustomAlertDialog(
+                                        title: 'Change language',
+                                        content: 'Some information',
+                                        widget: LanguageSelector(),
+                                      );
+                                    }
+                                );
+                              },
+                            ),
+                            _buildDivider(),
+                            ListTile(
+                              leading: Icon(Icons.lock_outlined, color: Colors.purple),
+                              title: Text('Change Language'),
+                              trailing: Icon(Icons.keyboard_arrow_right),
+                              onTap: (){},
+                            ),
+                            _buildDivider(),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                )
+              ],
+            );
+          },
+        )
       ),
     );
   }

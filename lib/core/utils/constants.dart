@@ -23,8 +23,16 @@ TextStyle titleHeadingStyle({Color color = secondaryColor}) => TextStyle(
   fontWeight: FontWeight.bold,
 );
 
+enum ILanguage { en, kn, sw}
+
 List<Language> systemLanguages = [
-  Language(name: 'English', short_name: 'en'),
-  Language(name: 'Kinyarwanda', short_name: 'kn'),
-  Language(name: 'Kiswahili', short_name: 'sw')
+  Language(name: 'English', short_name: 'en', iLanguage: ILanguage.en),
+  Language(name: 'Kinyarwanda', short_name: 'kn', iLanguage: ILanguage.kn),
+  Language(name: 'Kiswahili', short_name: 'sw', iLanguage: ILanguage.sw)
 ];
+
+Language getLanguageInfo({ILanguage? iLang, String? shortName}) {
+  return systemLanguages.firstWhere((lang) {
+    return lang.iLanguage == iLang || lang.short_name == shortName;
+  });
+}
