@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.indigo,
         accentColor: Colors.red
       ),
-      home: PageLayout(page: PopularTopicsPage(), title: 'Setting', useLayout: false,),
+      home: PageLayout(page: PopularTopicsPage(), title: 'Setting', useLayout: true,),
       routes: {
         'home': (_) => PageLayout(page: PopularTopicsPage(), title: appTitle),
         'popular_topics': (_) => PopularTopicsPage(),

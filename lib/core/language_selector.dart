@@ -17,11 +17,10 @@ class LanguageSelector extends StatefulWidget {
 }
 
 class LanguageSelectorState extends State<LanguageSelector> {
-  ILanguage? _iLanguage;
+  Language? _language;
 
-  void _selectLanguage(ILanguage? iLanguage) async {
-    Language lang = getLanguageInfo(iLang: iLanguage);
-    Setting setting = Setting(language: lang);
+  void _selectLanguage(Language? language) async {
+    Setting setting = Setting(language: language);
     changeSettings(setting: setting);
   }
 
@@ -36,16 +35,16 @@ class LanguageSelectorState extends State<LanguageSelector> {
         builder: (context, settingState) {
           Setting setting = settingState.theObject as Setting;
           if (setting.language != null) {
-            _iLanguage = setting.language!.iLanguage;
+            _language = setting.language;
           }
           return Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: systemLanguages
                 .map((language) => ListTile(
                       title: Text(language.name),
-                      leading: Radio<ILanguage>(
-                          value: language.iLanguage as ILanguage,
-                          groupValue: _iLanguage,
+                      leading: Radio<Language>(
+                          value: language,
+                          groupValue: _language,
                           onChanged: _selectLanguage),
                     ))
                 .toList(),

@@ -8,8 +8,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../base_action.dart';
 
-Future<void> fetchTopics(
-    {int page = 1, int pageSize = 4, String category = 'carsoul'}) async {
+Future<void> fetchTopics({
+  int page = 1,
+  int pageSize = 4,
+  String category = 'carsoul'}
+  ) async {
   dynamic dispatchedAction;
   dispatchedAction = DispatchedAction<Topic, CarouselTopic>();
   if (category == 'recent') {
@@ -21,9 +24,12 @@ Future<void> fetchTopics(
     final prefs = await SharedPreferences.getInstance();
     final res = await http.get(Uri.parse(url),
         headers: {'Accept-Language': (prefs.getString('shortName') ?? 'kn')});
+
     assert(res.statusCode < 400);
+
     final jsonData = json.decode(res.body)['data'] as List;
     List<Topic> topicsData = jsonData.map((e) => Topic.fromJson(e)).toList();
+
     appStore.dispatch(dispatchedAction.fulfilled(topicsData));
   } catch (error) {
     print('{=======================');
@@ -40,9 +46,9 @@ Future<void> fetchTopicDetail(String topicSlug) async {
 
   appStore.dispatch(dispatchedAction.pending());
   try {
-    String url = '$topicsUrl/$topicSlug';
+    final uri = Uri.parse('$topicsUrl/$topicSlug');
     final prefs = await SharedPreferences.getInstance();
-    final res = await http.get(Uri.parse(url),
+    final res = await http.get(uri,
         headers: {'Accept-Language': (prefs.getString('shortName') ?? 'kn')});
     assert(res.statusCode < 400);
     final jsonData = json.decode(res.body)['data'];

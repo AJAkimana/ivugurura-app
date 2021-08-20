@@ -35,6 +35,11 @@ class _PageLayoutState extends State<PageLayout> {
 
   @override
   Widget build(BuildContext context) {
+    if(!widget.useLayout){
+      return AlwaysAliveWidget(
+        child: widget.page,
+      );
+    }
     return Scaffold(
       key: _key,
       appBar: AppBar(
@@ -76,15 +81,15 @@ class _PageLayoutState extends State<PageLayout> {
                   _buildDivider(),
                   _buildCategoriesList(context),
                   _buildDivider(),
-                  _buildRow(AudioPlayer(), Icons.radio, "Radio", useLayout: true),
+                  _buildRow(AudioPlayer(), Icons.radio, "Radio"),
                   _buildDivider(),
-                  _buildRow(AudioPlayer(), Icons.music_note, "Audio", useLayout: true),
-                  _buildDivider(),
-                  _buildRow(
-                      PopularTopicsPage(), Icons.contact_mail, "Contact us", useLayout: true),
+                  _buildRow(AudioPlayer(), Icons.music_note, "Audio"),
                   _buildDivider(),
                   _buildRow(
-                      SettingPage(), Icons.settings, "Setting", useLayout: true),
+                      PopularTopicsPage(), Icons.contact_mail, "Contact us"),
+                  _buildDivider(),
+                  _buildRow(
+                      SettingPage(), Icons.settings, "Setting"),
                   _buildDivider(),
                 ],
               ),
@@ -143,8 +148,7 @@ class _PageLayoutState extends State<PageLayout> {
     );
   }
 
-  Widget _buildRow(Widget page, IconData icon, String title,
-      {bool useLayout = false}) {
+  Widget _buildRow(Widget page, IconData icon, String title) {
     final TextStyle textStyle = TextStyle(color: active, fontSize: 16.0);
     return InkWell(
       child: Container(
@@ -161,12 +165,7 @@ class _PageLayoutState extends State<PageLayout> {
         Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-                builder: (context) {
-                  if(widget.useLayout || useLayout){
-                    return PageLayout(title: title, page: page);
-                  }
-                  return page;
-                }
+                builder: (_)=> PageLayout(title: title, page: page)
             )
         );
       },

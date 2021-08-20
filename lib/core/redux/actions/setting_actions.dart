@@ -12,25 +12,21 @@ Future<void> loadSettings() async {
   dispatchedAction = DispatchedAction<Setting, SettingInfo>();
 
   final prefs = await SharedPreferences.getInstance();
-  String shortName = (prefs.getString('shortName') ?? 'kn');
-  bool isDark = (prefs.getBool('theme') ?? false);
+  String shortName = (prefs.getString(LANG_SHORT_NAME) ?? 'kn');
+  bool isDark = (prefs.getBool(THEME_DARK) ?? false);
   Setting settings =
       Setting(language: getLanguageInfo(shortName: shortName), isDark: isDark);
   appStore.dispatch(dispatchedAction.fulfilled(settings, dataType: 'object'));
 }
 
 Future<void> changeSettings({Setting? setting}) async {
-  DispatchedAction<Setting, SettingInfo> dispatchedAction;
-
-  dispatchedAction = DispatchedAction<Setting, SettingInfo>();
-
   final prefs = await SharedPreferences.getInstance();
   Language? language = setting!.language;
   if(language!=null){
-    prefs.setString('shortName', language.short_name);
+    prefs.setString(LANG_SHORT_NAME, language.short_name as String);
   }
   if(setting.isDark!=null){
-    prefs.setBool('isDark', setting.isDark as bool);
+    prefs.setBool(THEME_DARK, setting.isDark as bool);
   }
   loadSettings();
 }

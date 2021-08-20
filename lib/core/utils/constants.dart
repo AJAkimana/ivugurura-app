@@ -26,13 +26,16 @@ TextStyle titleHeadingStyle({Color color = secondaryColor}) => TextStyle(
 enum ILanguage { en, kn, sw}
 
 List<Language> systemLanguages = [
-  Language(name: 'English', short_name: 'en', iLanguage: ILanguage.en),
-  Language(name: 'Kinyarwanda', short_name: 'kn', iLanguage: ILanguage.kn),
-  Language(name: 'Kiswahili', short_name: 'sw', iLanguage: ILanguage.sw)
+  Language(name: 'English', short_name: 'en'),
+  Language(name: 'Kinyarwanda', short_name: 'kn'),
+  Language(name: 'Kiswahili', short_name: 'sw')
 ];
 
-Language getLanguageInfo({ILanguage? iLang, String? shortName}) {
+Language getLanguageInfo({String? shortName}) {
   return systemLanguages.firstWhere((lang) {
-    return lang.iLanguage == iLang || lang.short_name == shortName;
+    return lang.short_name == shortName;
   });
 }
+
+const String LANG_SHORT_NAME = 'shortName';
+const String THEME_DARK = 'isDark';
