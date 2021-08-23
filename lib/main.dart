@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:ivugurura_app/core/page_layout.dart';
 import 'package:ivugurura_app/core/redux/store.dart';
+import 'package:ivugurura_app/pages/onboarding_page.dart';
 import 'package:ivugurura_app/pages/one_topic_view.dart';
-import 'package:ivugurura_app/pages/popular_topics.dart';
+import 'package:ivugurura_app/pages/home_page.dart';
 import 'package:ivugurura_app/pages/setting_page.dart';
 
 void main() {
@@ -32,10 +33,9 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.indigo,
         accentColor: Colors.red
       ),
-      home: PageLayout(page: PopularTopicsPage(), title: 'Setting', useLayout: true,),
+      home: PageLayout(page: OnBoardingPage(), title: 'Onboarding'),
       routes: {
-        'home': (_) => PageLayout(page: PopularTopicsPage(), title: appTitle),
-        'popular_topics': (_) => PopularTopicsPage(),
+        'home': (_) => PageLayout(page: HomePage(), title: appTitle, useLayout: true)
         // 'view_one_topic': (context) => OneTopicViewPage()
       },
     );

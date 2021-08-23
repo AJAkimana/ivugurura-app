@@ -16,12 +16,12 @@ import 'package:ivugurura_app/widget/display_loading.dart';
 import 'package:ivugurura_app/widget/network_image.dart';
 import 'package:ivugurura_app/widget/recent_topic_item.dart';
 
-class PopularTopicsPage extends StatefulWidget{
+class HomePage extends StatefulWidget{
   @override
-  _PopularTopicsPageState createState() => _PopularTopicsPageState();
+  _HomePageState createState() => _HomePageState();
 }
 
-class _PopularTopicsPageState extends State<PopularTopicsPage>{
+class _HomePageState extends State<HomePage>{
 
   @override
   Widget build(BuildContext context) {
@@ -129,14 +129,14 @@ RoundedContainer _buildFeacturedTopics(){
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Text(
-          'Most Read Posts',
-          style: TextStyle(
-            fontSize: 22.0,
-            color: Colors.white,
-            fontWeight: FontWeight.bold
-          ),
-        ),
+        // Text(
+        //   'Most Read Posts',
+        //   style: TextStyle(
+        //     fontSize: 22.0,
+        //     color: Colors.white,
+        //     fontWeight: FontWeight.bold
+        //   ),
+        // ),
         Expanded(
           child: StoreConnector<AppState, BaseState<Topic, CarouselTopic>>(
             distinct: true,

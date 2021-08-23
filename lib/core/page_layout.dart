@@ -5,7 +5,7 @@ import 'package:ivugurura_app/core/redux/actions/category_actions.dart';
 import 'package:ivugurura_app/core/redux/base_state.dart';
 import 'package:ivugurura_app/core/redux/store.dart';
 import 'package:ivugurura_app/pages/audio_player.dart';
-import 'package:ivugurura_app/pages/popular_topics.dart';
+import 'package:ivugurura_app/pages/home_page.dart';
 import 'package:ivugurura_app/pages/setting_page.dart';
 import 'package:ivugurura_app/pages/topics_page.dart';
 import 'package:ivugurura_app/utils/oval_right_clipper.dart';
@@ -86,7 +86,7 @@ class _PageLayoutState extends State<PageLayout> {
                   _buildRow(AudioPlayer(), Icons.music_note, "Audio"),
                   _buildDivider(),
                   _buildRow(
-                      PopularTopicsPage(), Icons.contact_mail, "Contact us"),
+                      HomePage(), Icons.contact_mail, "Contact us"),
                   _buildDivider(),
                   _buildRow(
                       SettingPage(), Icons.settings, "Setting"),
