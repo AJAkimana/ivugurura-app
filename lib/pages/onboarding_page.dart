@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_swiper_null_safety/flutter_swiper_null_safety.dart';
 import 'package:ivugurura_app/core/custom_pagination_builder.dart';
+import 'package:ivugurura_app/core/redux/actions/category_actions.dart';
 import 'package:ivugurura_app/core/utils/constants.dart';
 
 class OnBoardingPage extends StatefulWidget {
@@ -94,7 +95,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
         children: <Widget>[
           TextButton(
               onPressed: () {
-                Navigator.of(context).pushReplacementNamed('home');
+                onGoHome();
               },
               child: Text('Skip')),
           IconButton(
@@ -109,11 +110,15 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                 if (currentIndex < pageCount - 1) {
                   swiperController.next();
                 } else {
-                  Navigator.of(context).pushReplacementNamed('home');
+                  onGoHome();
                 }
               })
         ],
       ),
     );
+  }
+
+  void onGoHome(){
+    Navigator.of(context).pushReplacementNamed('home');
   }
 }

@@ -12,6 +12,7 @@ class CustomAlertDialog extends StatelessWidget {
   final String title, content, btnLabel;
   final Widget? icon;
   final Widget widget;
+  final Function() onPressOk;
   final TextStyle titleStyle = TextStyle(
     fontSize: 20.0,
     color: Colors.black,
@@ -24,6 +25,7 @@ class CustomAlertDialog extends StatelessWidget {
     required this.content,
     this.icon,
     required this.widget,
+    required this.onPressOk,
     this.type = AlertDialogType.INFO,
     this.btnLabel = "Ok"
   }): super(key: key);
@@ -63,7 +65,7 @@ class CustomAlertDialog extends StatelessWidget {
                 width: double.infinity,
                 child: TextButton(
                   child: Text(btnLabel),
-                  onPressed: () => Navigator.pop(context, true),
+                  onPressed: this.onPressOk,
                 ),
               )
             ],

@@ -111,6 +111,9 @@ class SettingPageState extends State<SettingPage> {
                                           title: 'Change language',
                                           content: 'Some information',
                                           widget: LanguageSelector(),
+                                          onPressOk: (){
+                                            Navigator.of(context).pushReplacementNamed('home');
+                                          },
                                         );
                                       });
                                 },
