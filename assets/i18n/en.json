@@ -1,0 +1,10 @@
+{
+  "app": {
+    "title": "Reformation Voice",
+    "home": "Home",
+    "topics": "Topics"
+  },
+  "title": {
+    "setting": "Setting"
+  }
+}
