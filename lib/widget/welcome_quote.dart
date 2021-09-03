@@ -1,5 +1,6 @@
 import 'package:animator/animator.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_translate/flutter_translate.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class WelcomeQuote extends StatelessWidget{
@@ -31,13 +32,13 @@ class WelcomeQuote extends StatelessWidget{
               );
             },
             child: Text(
-              'Anyone who has never made a mistake has never tried anything new',
-              style: Theme.of(context).textTheme.headline3!.copyWith(
+              translate('lesson.mathew24_14_book'),
+              style: Theme.of(context).textTheme.headline4!.copyWith(
                 color: Colors.grey.shade800
               ),
             ),
           ),
-          const SizedBox(height: 10.0),
+          const SizedBox(height: 20.0),
           Animator(
             triggerOnInit: true,
             tween: Tween<double>(begin: 1, end: 0),
@@ -48,8 +49,8 @@ class WelcomeQuote extends StatelessWidget{
               );
             },
             child: Text(
-              'Albert Einstein',
-              style: Theme.of(context).textTheme.subtitle1!.copyWith(
+              translate('lesson.mathew24_14'),
+              style: Theme.of(context).textTheme.subtitle2!.copyWith(
                 color: Colors.grey.shade600,
                 fontSize: 20.0
               ),

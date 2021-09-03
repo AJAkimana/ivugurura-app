@@ -83,8 +83,6 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
   }
 
   Widget _buildPage({required Widget swiperPage}) {
-    final TextStyle textStyle =
-        TextStyle(fontSize: 20.0, fontWeight: FontWeight.w500);
     return Container(
       width: double.infinity,
       margin: const EdgeInsets.fromLTRB(16.0, 50.0, 16.0, 40.0),
