@@ -11,6 +11,7 @@ class CustomAlertDialog extends StatelessWidget {
   final AlertDialogType type;
   final String title, content, btnLabel;
   final Widget? icon;
+  final Widget? translateTexts;
   final Widget widget;
   final Function() onPressOk;
   final TextStyle titleStyle = TextStyle(
@@ -24,6 +25,7 @@ class CustomAlertDialog extends StatelessWidget {
     this.title = "Successful",
     required this.content,
     this.icon,
+    this.translateTexts,
     required this.widget,
     required this.onPressOk,
     this.type = AlertDialogType.INFO,
@@ -54,6 +56,8 @@ class CustomAlertDialog extends StatelessWidget {
               ),
               const SizedBox(height: 10.0),
               Text(title, style: titleStyle, textAlign: TextAlign.center),
+              Text('Hitamo ururimi', style: titleStyle, textAlign: TextAlign.center),
+              Text('Chagua lugha', style: titleStyle, textAlign: TextAlign.center),
               Divider(),
               Container(
                 alignment: Alignment.center,

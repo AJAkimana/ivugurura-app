@@ -109,13 +109,11 @@ class _PageLayoutState extends State<PageLayout> {
     return StoreConnector<AppState, BaseState<Category, CategoriesList>>(
         distinct: true,
         onInitialBuild: (store){
-          if(store.theList!.length<1){
-            fetchCategories();
-          }
+            fetchCategories(context);
         },
         converter: (store) => store.state.categoriesState,
         builder: (context, categoriesState){
-          if(categoriesState.loading){
+          if(categoriesState.loading && categoriesState.theList!.length == 0){
             return DisplayLoading();
           }
           if(categoriesState.error!=''){
@@ -162,7 +160,7 @@ class _PageLayoutState extends State<PageLayout> {
         ),
       ),
       onTap: () {
-        Navigator.pushReplacement(
+        Navigator.push(
             context,
             MaterialPageRoute(
                 builder: (_)=> PageLayout(title: title, page: page)
