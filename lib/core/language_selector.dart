@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:flutter_translate/flutter_translate.dart';
 import 'package:ivugurura_app/core/models/language.dart';
 import 'package:ivugurura_app/core/models/setting.dart';
 import 'package:ivugurura_app/core/redux/actions/setting_actions.dart';
@@ -22,6 +23,7 @@ class LanguageSelectorState extends State<LanguageSelector> {
   void _selectLanguage(Language? language) async {
     Setting setting = Setting(language: language);
     changeSettings(setting: setting);
+    changeLocale(context, language!.short_name);
   }
 
   @override
