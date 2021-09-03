@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
+import 'package:flutter_translate/flutter_translate.dart';
 import 'package:http/http.dart' as http;
 import 'package:ivugurura_app/core/models/topic.dart';
 import 'package:ivugurura_app/core/redux/store.dart';
@@ -8,11 +10,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../base_action.dart';
 
-Future<void> fetchTopics({
-  int page = 1,
-  int pageSize = 4,
-  String category = 'carsoul'}
-  ) async {
+Future<void> fetchTopics(BuildContext context,
+    {int page = 1, int pageSize = 4, String category = 'carsoul'}) async {
   dynamic dispatchedAction;
   dispatchedAction = DispatchedAction<Topic, CarouselTopic>();
   if (category == 'recent') {
@@ -21,9 +20,11 @@ Future<void> fetchTopics({
   appStore.dispatch(dispatchedAction.pending());
   try {
     String url = '$topicsUrl?page=$page&pageSize=$pageSize&category=$category';
-    final prefs = await SharedPreferences.getInstance();
-    final res = await http.get(Uri.parse(url),
-        headers: {'Accept-Language': (prefs.getString('shortName') ?? 'kn')});
+    String? acceptLang =
+        LocalizedApp.of(context).delegate.currentLocale.languageCode;
+
+    final res = await http
+        .get(Uri.parse(url), headers: {'Accept-Language': acceptLang});
 
     assert(res.statusCode < 400);
 
@@ -39,7 +40,7 @@ Future<void> fetchTopics({
   }
 }
 
-Future<void> fetchTopicDetail(String topicSlug) async {
+Future<void> fetchTopicDetail(BuildContext context, String topicSlug) async {
   DispatchedAction<Topic, TopicDetail> dispatchedAction;
 
   dispatchedAction = DispatchedAction<Topic, TopicDetail>();
@@ -47,9 +48,10 @@ Future<void> fetchTopicDetail(String topicSlug) async {
   appStore.dispatch(dispatchedAction.pending());
   try {
     final uri = Uri.parse('$topicsUrl/$topicSlug');
-    final prefs = await SharedPreferences.getInstance();
-    final res = await http.get(uri,
-        headers: {'Accept-Language': (prefs.getString('shortName') ?? 'kn')});
+    String? acceptLang =
+        LocalizedApp.of(context).delegate.currentLocale.languageCode;
+
+    final res = await http.get(uri, headers: {'Accept-Language': acceptLang});
     assert(res.statusCode < 400);
     final jsonData = json.decode(res.body)['data'];
     Topic topicData = Topic.fromJson(jsonData);
