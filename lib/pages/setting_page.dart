@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:flutter_translate/flutter_translate.dart';
 import 'package:ivugurura_app/core/custom_alert_dialog.dart';
 import 'package:ivugurura_app/core/language_selector.dart';
 import 'package:ivugurura_app/core/models/language.dart';
@@ -37,7 +38,7 @@ class SettingPageState extends State<SettingPage> {
                 color: _dark ? Colors.white : Colors.grey.shade200),
             backgroundColor: Colors.transparent,
             title: Text(
-              'Setting',
+              translate('title.setting'),
               style: TextStyle(color: _dark ? Colors.white : Colors.black),
             ),
             actions: <Widget>[
@@ -78,7 +79,7 @@ class SettingPageState extends State<SettingPage> {
                           child: ListTile(
                             onTap: () {},
                             title: Text(
-                              'Ivugurura n Ubugorozi',
+                              translate('app.title'),
                               style: TextStyle(
                                   color: Colors.white,
                                   fontWeight: FontWeight.w500),

@@ -13,6 +13,7 @@ import 'package:ivugurura_app/core/utils/constants.dart';
 import 'package:ivugurura_app/pages/one_topic_view.dart';
 import 'package:ivugurura_app/widget/display_error.dart';
 import 'package:ivugurura_app/widget/display_loading.dart';
+import 'package:ivugurura_app/widget/dots_loader.dart';
 import 'package:ivugurura_app/widget/network_image.dart';
 import 'package:ivugurura_app/widget/recent_topic_item.dart';
 
@@ -119,90 +120,89 @@ class _HomePageState extends State<HomePage>{
       ),
     );
   }
-}
-
-RoundedContainer _buildFeacturedTopics(){
-  return RoundedContainer(
-    height: 270,
-    borderRadius: BorderRadius.circular(0),
-    color: Colors.indigo,
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        // Text(
-        //   'Most Read Posts',
-        //   style: TextStyle(
-        //     fontSize: 22.0,
-        //     color: Colors.white,
-        //     fontWeight: FontWeight.bold
-        //   ),
-        // ),
-        Expanded(
-          child: StoreConnector<AppState, BaseState<Topic, CarouselTopic>>(
-            distinct: true,
-            onInitialBuild: (store){
-              fetchTopics();
-            },
-            converter: (store) => store.state.carouselTopicState,
-            builder: (context, topicsState){
-              print(topicsState.error);
-              List<Topic> allTopics = topicsState.theList!;
-              if(topicsState.loading){
-                return DisplayLoading();
-              }
-              if(topicsState.error != ''){
-                return DisplayError();
-              }
-              if(topicsState.theList!.length < 1){
-                return Text('No data to display', style: TextStyle(color: Colors.white),);
-              }else{
-                return Swiper(
-                  pagination: SwiperPagination(margin: const EdgeInsets.only()),
-                  viewportFraction: 0.9,
-                  itemCount: topicsState.theList!.length,
-                  autoplay: true,
-                  loop: true,
-                  itemBuilder: (context, index){
-                    Topic topic = allTopics[index];
-                    return Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: RoundedContainer(
-                        borderRadius: BorderRadius.circular(4.0),
-                        margin: const EdgeInsets.only(bottom: 20),
-                        child: Row(
-                          children: <Widget>[
-                            Expanded(
-                              flex: 3,
-                              child: Text(
-                                topic.title,
-                               style: Theme.of(context).textTheme.bodyText1,
-                              ),
-                            ),
-                            const SizedBox(width: 10.0),
-                            Expanded(
-                              flex: 2,
-                              child: Container(
-                                color: Colors.blueAccent,
-                                child: PNetworkImage(
-                                  "$IMAGE_PATH/${topic.coverImage}",
-                                  fit: BoxFit.cover,
-                                  height: 210,
+  RoundedContainer _buildFeacturedTopics(){
+    return RoundedContainer(
+      height: 270,
+      borderRadius: BorderRadius.circular(0),
+      color: Colors.indigo,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          // Text(
+          //   'Most Read Posts',
+          //   style: TextStyle(
+          //     fontSize: 22.0,
+          //     color: Colors.white,
+          //     fontWeight: FontWeight.bold
+          //   ),
+          // ),
+          Expanded(
+              child: StoreConnector<AppState, BaseState<Topic, CarouselTopic>>(
+                distinct: true,
+                onInitialBuild: (store){
+                  fetchTopics(context);
+                },
+                converter: (store) => store.state.carouselTopicState,
+                builder: (context, topicsState){
+                  print(topicsState.error);
+                  List<Topic> allTopics = topicsState.theList!;
+                  if(topicsState.loading){
+                    return DotsLoader();
+                  }
+                  if(topicsState.error != ''){
+                    return DisplayError();
+                  }
+                  if(topicsState.theList!.length < 1){
+                    return Text('No data to display', style: TextStyle(color: Colors.white),);
+                  }else{
+                    return Swiper(
+                      pagination: SwiperPagination(margin: const EdgeInsets.only()),
+                      viewportFraction: 0.9,
+                      itemCount: topicsState.theList!.length,
+                      autoplay: true,
+                      loop: true,
+                      itemBuilder: (context, index){
+                        Topic topic = allTopics[index];
+                        return Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: RoundedContainer(
+                            borderRadius: BorderRadius.circular(4.0),
+                            margin: const EdgeInsets.only(bottom: 20),
+                            child: Row(
+                              children: <Widget>[
+                                Expanded(
+                                  flex: 3,
+                                  child: Text(
+                                    topic.title,
+                                    style: Theme.of(context).textTheme.bodyText1,
+                                  ),
                                 ),
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
+                                const SizedBox(width: 10.0),
+                                Expanded(
+                                  flex: 2,
+                                  child: Container(
+                                    color: Colors.blueAccent,
+                                    child: PNetworkImage(
+                                      "$IMAGE_PATH/${topic.coverImage}",
+                                      fit: BoxFit.cover,
+                                      height: 210,
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        );
+                      },
                     );
-                  },
-                );
-              }
-            },
+                  }
+                },
+              )
           )
-        )
-      ],
-    ),
-  );
+        ],
+      ),
+    );
+  }
 }
 
 Padding _buildHeading(String title){
@@ -233,13 +233,13 @@ Widget _buildListTopics(BuildContext context, Color color){
   return StoreConnector<AppState, BaseState<Topic, RecentTopic>>(
     distinct: true,
     onInitialBuild: (store){
-      fetchTopics(category: 'recent');
+      fetchTopics(context, category: 'recent');
     },
     converter: (store) => store.state.recentTopicState,
     builder: (context, recentTopicsState){
       List<Topic> recentTopics = recentTopicsState.theList!;
       if(recentTopicsState.loading){
-        return DisplayLoading();
+        return DotsLoader();
       }
       if(recentTopicsState.error!=''){
         return DisplayError();

@@ -9,134 +9,145 @@ import 'package:ivugurura_app/core/redux/store.dart';
 import 'package:ivugurura_app/core/utils/constants.dart';
 import 'package:ivugurura_app/widget/display_error.dart';
 import 'package:ivugurura_app/widget/display_loading.dart';
+import 'package:ivugurura_app/widget/dots_loader.dart';
 import 'package:ivugurura_app/widget/network_image.dart';
 import 'package:ivugurura_app/core/extensions/string_cap_extension.dart';
 
-class OneTopicViewPage extends StatefulWidget{
+class OneTopicViewPage extends StatefulWidget {
   final String topicSlug;
 
-  OneTopicViewPage({
-    Key? key,
-    required this.topicSlug
-  }):super(key: key);
+  OneTopicViewPage({Key? key, required this.topicSlug}) : super(key: key);
   @override
   OneTopicViewPageState createState() => OneTopicViewPageState();
 }
 
-class OneTopicViewPageState extends State<OneTopicViewPage>{
+class OneTopicViewPageState extends State<OneTopicViewPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: StoreConnector<AppState, BaseState<Topic, TopicDetail>>(
-        distinct: true,
-        onInitialBuild: (store){
-          fetchTopicDetail(widget.topicSlug);
-        },
-        converter: (store) => store.state.topicDetailState,
-        builder: (context, topicDetail) {
-          if (topicDetail.loading) {
-            return DisplayLoading();
-          }
-          if (topicDetail.error != '') {
-            return DisplayError();
-          }
-          if (topicDetail.theObject!.title.isEmpty) {
-            return Text('Nothing to display');
-          }
-          else {
-            Topic topic = topicDetail.theObject!;
-            DateTime dateTime = DateTime.parse(topic.createdAt as String);
-            return CustomScrollView(
-              slivers: <Widget>[
-                SliverAppBar(
-                  expandedHeight: 150.0,
-                  pinned: true,
-                  flexibleSpace: FlexibleSpaceBar(
-                    title: Text(topic.title),
-                    background: PNetworkImage(
-                        '$IMAGE_PATH/${topic.coverImage}',
-                        fit: BoxFit.cover),
-                    ),
-                  actions: <Widget>[
-                    IconButton(onPressed: (){}, icon: const Icon(Icons.category))
-                  ],
-                ),
-                SliverToBoxAdapter(
-                  child: Container(
-                    color: Colors.indigoAccent,
-                    child: Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Icon(Icons.category, color: Colors.white),
-                          Text(topic.category!.name as String, style: TextStyle(color: Colors.white))
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                SliverToBoxAdapter(
+          distinct: true,
+          onInitialBuild: (store) {
+            fetchTopicDetail(context, widget.topicSlug);
+          },
+          converter: (store) => store.state.topicDetailState,
+          builder: (context, topicDetail) {
+            if (topicDetail.loading) {
+              return Container(
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
-                      Row(
-                        children: <Widget>[
-                          Expanded(child: Text(DateFormat.yMMMMEEEEd().format(dateTime))),
-                          IconButton(onPressed: () {}, icon: Icon(Icons.access_time))
-                        ],
-                      ),
-                      Text(topic.title.inCaps, style: Theme.of(context).textTheme.headline4),
-                      Divider(),
-                      SizedBox(height: 10.0),
-                      Html(data: topic.content),
-                      Divider(),
+                      DotsLoader(),
+                      SizedBox(height: 10.0,),
+                    ],
+                  )
+              );
+            }
+            if (topicDetail.error != '') {
+              return DisplayError();
+            }
+            if (topicDetail.theObject!.title.isEmpty) {
+              return Text('Nothing to display');
+            } else {
+              Topic topic = topicDetail.theObject!;
+              DateTime dateTime = DateTime.parse(topic.createdAt as String);
+              return CustomScrollView(
+                slivers: <Widget>[
+                  SliverAppBar(
+                    expandedHeight: 150.0,
+                    pinned: true,
+                    flexibleSpace: FlexibleSpaceBar(
+                      title: Text(topic.title),
+                      background: PNetworkImage(
+                          '$IMAGE_PATH/${topic.coverImage}',
+                          fit: BoxFit.cover),
+                    ),
+                    actions: <Widget>[
+                      IconButton(
+                          onPressed: () {}, icon: const Icon(Icons.category))
                     ],
                   ),
-                ),
-                SliverToBoxAdapter(
-                  child: Container(
-                      padding: EdgeInsets.all(20.0),
+                  SliverToBoxAdapter(
+                    child: Container(
                       color: Colors.indigoAccent,
-                      child: Text(
-                          "Related topics",
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold
-                          )
-                      )
+                      child: Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Icon(Icons.category, color: Colors.white),
+                            Text(topic.category!.name as String,
+                                style: TextStyle(color: Colors.white))
+                          ],
+                        ),
+                      ),
+                    ),
                   ),
-                ),
-                SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                    (BuildContext context, int index) {
+                  SliverToBoxAdapter(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Row(
+                          children: <Widget>[
+                            Expanded(
+                                child: Text(
+                                    DateFormat.yMMMMEEEEd().format(dateTime))),
+                            IconButton(
+                                onPressed: () {}, icon: Icon(Icons.access_time))
+                          ],
+                        ),
+                        Text(topic.title.inCaps,
+                            style: Theme.of(context).textTheme.headline4),
+                        Divider(),
+                        SizedBox(height: 10.0),
+                        Html(data: topic.content),
+                        Divider(),
+                      ],
+                    ),
+                  ),
+                  SliverToBoxAdapter(
+                    child: Container(
+                        padding: EdgeInsets.all(20.0),
+                        color: Colors.indigoAccent,
+                        child: Text("Related topics",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold))),
+                  ),
+                  SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                        (BuildContext context, int index) {
                       Topic catTopic = topic.category!.relatedTopics![index];
                       return ListTile(
                         title: Text(
                             catTopic.title.toLowerCase().capitalizeFirstOfEach,
-                            style: titleHeadingStyle(color: Colors.black87)
-                        ),
-                        subtitle: Text(catTopic.description.toLowerCase().inCaps),
+                            style: titleHeadingStyle(color: Colors.black87)),
+                        subtitle:
+                            Text(catTopic.description.toLowerCase().inCaps),
                         trailing: Container(
                           width: 80.0,
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10.0),
                               image: DecorationImage(
-                                  image: NetworkImage('$IMAGE_PATH/${catTopic.coverImage}'),
-                                  fit: BoxFit.cover
-                              )
-                          ),
+                                  image: NetworkImage(
+                                      '$IMAGE_PATH/${catTopic.coverImage}'),
+                                  fit: BoxFit.cover)),
                         ),
+                        onTap: () {
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => OneTopicViewPage(
+                                      topicSlug: catTopic.slug)));
+                        },
                       );
-                    },
-                    childCount: topic.category!.relatedTopics!.length
+                    }, childCount: topic.category!.relatedTopics!.length),
                   ),
-                ),
-              ],
-            );
-          }
-        }
-      ),
+                ],
+              );
+            }
+          }),
     );
   }
 }
