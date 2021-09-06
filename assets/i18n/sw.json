@@ -2,10 +2,17 @@
   "app": {
     "title": "Sauti ya Matengenezo",
     "home": "Utangurizi",
-    "topics": "Masomo"
+    "topics": "Nakala",
+    "category_browse": "Vinjari kwa vikundi ya nakala",
+    "recent_topics": "Nakala za hivi karibuni",
+    "related_topics": "Nakala zinazo husiana",
+    "most_read_topics": "Nakala zilizo somwa zaidi"
   },
   "title": {
-    "setting": "Mipangilio"
+    "setting": "Mipangilio",
+    "audio": "Audio",
+    "radio": "Sikiliza radio",
+    "contact_us": "Tuandikie"
   },
   "lesson": {
     "mathew24_14_book": "Mathayo 24:14",

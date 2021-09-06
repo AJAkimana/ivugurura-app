@@ -2,10 +2,17 @@
   "app": {
     "title": "Ijwi ry Ubugorozi",
     "home": "Ahabanza",
-    "topics": "Ibyigisho"
+    "topics": "Ibyigisho",
+    "category_browse": "Shakisha ukoresheje imitwe y ibyigisho",
+    "recent_topics": "Ibyigisho biheruka",
+    "related_topics": "Ibyigisho bijyanye",
+    "most_read_topics": "Ibyigisho byasomwe cyane"
   },
   "title": {
-    "setting": "Igenamikorere"
+    "setting": "Igenamikorere",
+    "audio": "Ama audio",
+    "radio": "Umva radio",
+    "contact_us": "Twandikire"
   },
   "lesson": {
     "mathew24_14_book": "Matayo 24:14",

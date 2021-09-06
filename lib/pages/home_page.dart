@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_swiper_null_safety/flutter_swiper_null_safety.dart';
+import 'package:flutter_translate/flutter_translate.dart';
 import 'package:ivugurura_app/core/models/category.dart';
 import 'package:ivugurura_app/core/models/topic.dart';
 import 'package:ivugurura_app/core/redux/actions/topic_actions.dart';
@@ -32,90 +33,10 @@ class _HomePageState extends State<HomePage>{
         children: <Widget>[
           _buildFeacturedTopics(),
           const SizedBox(height: 10.0),
-          _buildHeading("Recent topics"),
+          _buildHeading(translate('app.recent_topics')),
           _buildListTopics(context, Colors.blue.shade300),
           // _buildListTopics(context, Colors.red.shade300),
-          _buildHeading("Browse by category"),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 4.0),
-            child: Row(
-              children: <Widget>[
-                Expanded(
-                  child: Container(
-                    height: 100,
-                    width: 100,
-                    margin: const EdgeInsets.symmetric(horizontal: 4.0),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: Colors.green.shade200,
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: Container(
-                    height: 100,
-                    width: 100,
-                    margin: const EdgeInsets.symmetric(horizontal: 4.0),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: Colors.green.shade200,
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: Container(
-                    height: 100,
-                    width: 100,
-                    margin: const EdgeInsets.symmetric(horizontal: 4.0),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: Colors.green.shade200,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              children: <Widget>[
-                Expanded(
-                  child: Container(
-                    height: 100,
-                    width: 100,
-                    margin: const EdgeInsets.symmetric(horizontal: 4.0),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: Colors.green.shade200,
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: Container(
-                    height: 100,
-                    width: 100,
-                    margin: const EdgeInsets.symmetric(horizontal: 4.0),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: Colors.green.shade200,
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: Container(
-                    height: 100,
-                    width: 100,
-                    margin: const EdgeInsets.symmetric(horizontal: 4.0),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: Colors.green.shade200,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
+          _buildHeading(translate('app.category_browse')),
         ],
       ),
     );
@@ -128,14 +49,14 @@ class _HomePageState extends State<HomePage>{
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          // Text(
-          //   'Most Read Posts',
-          //   style: TextStyle(
-          //     fontSize: 22.0,
-          //     color: Colors.white,
-          //     fontWeight: FontWeight.bold
-          //   ),
-          // ),
+          Text(
+            translate('app.most_read_topics'),
+            style: TextStyle(
+              fontSize: 20.0,
+              color: Colors.white,
+              fontWeight: FontWeight.bold
+            ),
+          ),
           Expanded(
               child: StoreConnector<AppState, BaseState<Topic, CarouselTopic>>(
                 distinct: true,

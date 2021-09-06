@@ -2,10 +2,17 @@
   "app": {
     "title": "Reformation Voice",
     "home": "Home",
-    "topics": "Topics"
+    "topics": "Topics",
+    "category_browse": "Browse by category",
+    "recent_topics": "Recent topics",
+    "related_topics": "Related topics",
+    "most_read_topics": "Most read topics"
   },
   "title": {
-    "setting": "Setting"
+    "setting": "Setting",
+    "audio": "Audios",
+    "radio": "Listen to radio",
+    "contact_us": "Contact us"
   },
   "lesson": {
     "mathew24_14_book": "Mathew 24:14",

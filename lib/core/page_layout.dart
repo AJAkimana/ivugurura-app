@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:flutter_translate/flutter_translate.dart';
 import 'package:ivugurura_app/core/keep_alive.dart';
 import 'package:ivugurura_app/core/redux/actions/category_actions.dart';
 import 'package:ivugurura_app/core/redux/base_state.dart';
@@ -11,6 +12,7 @@ import 'package:ivugurura_app/pages/topics_page.dart';
 import 'package:ivugurura_app/utils/oval_right_clipper.dart';
 import 'package:ivugurura_app/widget/display_error.dart';
 import 'package:ivugurura_app/widget/display_loading.dart';
+import 'package:ivugurura_app/widget/dots_loader.dart';
 
 import 'models/category.dart';
 
@@ -77,19 +79,19 @@ class _PageLayoutState extends State<PageLayout> {
             child: SingleChildScrollView(
               child: Column(
                 children: <Widget>[
-                  _buildRow(TopicsPage(), Icons.home, "Home"),
+                  _buildRow(TopicsPage(), Icons.home, translate('app.home')),
                   _buildDivider(),
                   _buildCategoriesList(context),
                   _buildDivider(),
-                  _buildRow(AudioPlayer(), Icons.radio, "Radio"),
+                  _buildRow(AudioPlayer(), Icons.radio, translate('title.radio')),
                   _buildDivider(),
-                  _buildRow(AudioPlayer(), Icons.music_note, "Audio"),
-                  _buildDivider(),
-                  _buildRow(
-                      HomePage(), Icons.contact_mail, "Contact us"),
+                  _buildRow(AudioPlayer(), Icons.music_note, translate('title.audio')),
                   _buildDivider(),
                   _buildRow(
-                      SettingPage(), Icons.settings, "Setting"),
+                      HomePage(), Icons.contact_mail, translate('title.contact_us')),
+                  _buildDivider(),
+                  _buildRow(
+                      SettingPage(), Icons.settings, translate('title.setting')),
                   _buildDivider(),
                 ],
               ),
@@ -114,7 +116,7 @@ class _PageLayoutState extends State<PageLayout> {
         converter: (store) => store.state.categoriesState,
         builder: (context, categoriesState){
           if(categoriesState.loading && categoriesState.theList!.length == 0){
-            return DisplayLoading();
+            return DotsLoader();
           }
           if(categoriesState.error!=''){
             return DisplayError();

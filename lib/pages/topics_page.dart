@@ -31,7 +31,7 @@ class TopicsPageState extends State<TopicsPage>{
           backgroundColor: Theme.of(context).buttonColor,
           appBar: AppBar(
             centerTitle: true,
-            title: Text('Topics'),
+            title: Text('Topics', style: TextStyle(color: bgColor)),
             leading: Icon(Icons.category),
             actions: <Widget>[
               IconButton(icon: Icon(Icons.search), onPressed: (){})
@@ -39,8 +39,8 @@ class TopicsPageState extends State<TopicsPage>{
             bottom: TabBar(
               isScrollable: true,
               labelColor: bgColor,
-              indicatorColor: bgColor,
-              unselectedLabelColor: secondaryColor,
+              indicatorColor: secondaryColor,
+              unselectedLabelColor: bgColor,
               tabs: <Widget>[
                 Padding(
                   padding: const EdgeInsets.all(8.0),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:flutter_translate/flutter_translate.dart';
 import 'package:intl/intl.dart';
 import 'package:ivugurura_app/core/models/topic.dart';
 import 'package:ivugurura_app/core/redux/actions/topic_actions.dart';
@@ -110,7 +111,7 @@ class OneTopicViewPageState extends State<OneTopicViewPage> {
                     child: Container(
                         padding: EdgeInsets.all(20.0),
                         color: Colors.indigoAccent,
-                        child: Text("Related topics",
+                        child: Text(translate('app.related_topics'),
                             style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold))),

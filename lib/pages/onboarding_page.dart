@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_swiper_null_safety/flutter_swiper_null_safety.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:ivugurura_app/core/custom_alert_dialog.dart';
 import 'package:ivugurura_app/core/custom_pagination_builder.dart';
 import 'package:ivugurura_app/core/language_selector.dart';
@@ -48,7 +49,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
       WelcomeQuote()
     ];
     return Scaffold(
-      backgroundColor: secondaryColor,
+      backgroundColor: Colors.lightBlue,
       body: Column(
         children: <Widget>[
           Expanded(
@@ -116,8 +117,8 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
               color: Colors.white,
               icon: Icon(
                 currentIndex < pageCount - 1
-                    ? Icons.arrow_forward_outlined
-                    : Icons.thumb_up,
+                    ? FontAwesomeIcons.arrowAltCircleRight
+                    : FontAwesomeIcons.checkCircle,
                 size: 40,
               ),
               onPressed: () async {
