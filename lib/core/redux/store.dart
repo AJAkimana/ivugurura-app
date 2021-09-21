@@ -61,11 +61,11 @@ class AppState{
     BaseState<Setting, SettingInfo>? settingState
   }){
     return AppState(
-      carouselTopicState: carouselTopicState?? this.carouselTopicState,
-      recentTopicState: recentTopicState?? this.recentTopicState,
-      topicDetailState: topicDetailState?? this.topicDetailState,
-      categoriesState: categoriesState?? this.categoriesState,
-        settingState:settingState??this.settingState
+        carouselTopicState: carouselTopicState?? this.carouselTopicState,
+        recentTopicState: recentTopicState?? this.recentTopicState,
+        topicDetailState: topicDetailState?? this.topicDetailState,
+        categoriesState: categoriesState?? this.categoriesState,
+        settingState: settingState?? this.settingState
     );
   }
 }

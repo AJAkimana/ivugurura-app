@@ -5,7 +5,6 @@ import 'package:flutter_translate/flutter_translate.dart';
 import 'package:ivugurura_app/core/models/category.dart';
 import 'package:ivugurura_app/core/utils/constants.dart';
 import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../base_action.dart';
 import '../store.dart';
@@ -19,7 +18,7 @@ Future<void> fetchCategories(BuildContext context) async {
     String? acceptLang =
         LocalizedApp.of(context).delegate.currentLocale.languageCode;
 
-    final res = await http.get(Uri.parse(categoriesUrl),
+    final res = await http.get(Uri.parse(categoriesUrl+'?categoryType=with-topics'),
         headers: {'Accept-Language': acceptLang});
     assert(res.statusCode < 400);
     final jsonData = json.decode(res.body)['data'] as List;

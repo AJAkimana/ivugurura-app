@@ -65,7 +65,6 @@ class _HomePageState extends State<HomePage>{
                 },
                 converter: (store) => store.state.carouselTopicState,
                 builder: (context, topicsState){
-                  print(topicsState.error);
                   List<Topic> allTopics = topicsState.theList!;
                   if(topicsState.loading){
                     return DotsLoader();
