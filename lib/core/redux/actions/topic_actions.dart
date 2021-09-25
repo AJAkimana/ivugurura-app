@@ -11,11 +11,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../base_action.dart';
 
 Future<void> fetchTopics(BuildContext context,
-    {int page = 1, int pageSize = 4, String category = 'carsoul'}) async {
+    {int page = 1, int pageSize = 4, dynamic category = 'carsoul'}) async {
   dynamic dispatchedAction;
   dispatchedAction = DispatchedAction<Topic, CarouselTopic>();
   if (category == 'recent') {
     dispatchedAction = DispatchedAction<Topic, RecentTopic>();
+  }
+  if (category is int){
+    dispatchedAction = DispatchedAction<Topic, CategoryTopic>();
   }
   appStore.dispatch(dispatchedAction.pending());
   try {

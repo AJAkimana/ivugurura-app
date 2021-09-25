@@ -92,6 +92,7 @@ class _DotsLoaderState extends State<DotsLoader>
       child: Center(
         child: RotationTransition(
           turns: animationRotation,
+          alignment: Alignment.center,
           child: Stack(
             children: <Widget>[
               Dot(

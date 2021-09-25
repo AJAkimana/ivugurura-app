@@ -7,11 +7,13 @@ part 'category.g.dart';
 
 @JsonSerializable()
 class Category{
+  int? id;
   String? name, slug;
   Language? language;
   List<Topic>? relatedTopics;
 
   Category({
+    this.id,
     this.name,
     this.slug,
     this.language,

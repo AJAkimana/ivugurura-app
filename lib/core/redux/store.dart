@@ -34,6 +34,11 @@ AppState appReducer(AppState state, dynamic action){
         settingState: baseReducer(state.settingState, action)
     );
   }
+  if(action is BaseAction<Topic, CategoryTopic>){
+    return state.copyWith(
+        categoryTopic: baseReducer(state.categoryTopic, action)
+    );
+  }
   return state;
 }
 
@@ -44,13 +49,15 @@ class AppState{
   final BaseState<Topic, TopicDetail> topicDetailState;
   final BaseState<Category, CategoriesList> categoriesState;
   final BaseState<Setting, SettingInfo> settingState;
+  final BaseState<Topic, CategoryTopic> categoryTopic;
 
   AppState({
     required this.carouselTopicState,
     required this.recentTopicState,
     required this.topicDetailState,
     required this.categoriesState,
-    required this.settingState
+    required this.settingState,
+    required this.categoryTopic
   });
 
   AppState copyWith({
@@ -58,14 +65,16 @@ class AppState{
     BaseState<Topic, RecentTopic>? recentTopicState,
     BaseState<Topic, TopicDetail>? topicDetailState,
     BaseState<Category, CategoriesList>? categoriesState,
-    BaseState<Setting, SettingInfo>? settingState
+    BaseState<Setting, SettingInfo>? settingState,
+    BaseState<Topic, CategoryTopic>? categoryTopic
   }){
     return AppState(
         carouselTopicState: carouselTopicState?? this.carouselTopicState,
         recentTopicState: recentTopicState?? this.recentTopicState,
         topicDetailState: topicDetailState?? this.topicDetailState,
         categoriesState: categoriesState?? this.categoriesState,
-        settingState: settingState?? this.settingState
+        settingState: settingState?? this.settingState,
+        categoryTopic: categoryTopic?? this.categoryTopic
     );
   }
 }
@@ -83,7 +92,8 @@ class ReduxStore{
           recentTopicState: BaseState<Topic, RecentTopic>.initial(()=>new Topic()),
           topicDetailState: BaseState<Topic, TopicDetail>.initial(()=>new Topic(),dataType: 'object'),
           categoriesState: BaseState<Category, CategoriesList>.initial(() => new Category()),
-          settingState: BaseState<Setting, SettingInfo>.initial(() => Setting(), dataType: 'object')
+          settingState: BaseState<Setting, SettingInfo>.initial(() => Setting(), dataType: 'object'),
+          categoryTopic: BaseState<Topic, CategoryTopic>.initial(() => new Topic())
         )
     );
   }

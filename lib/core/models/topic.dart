@@ -32,3 +32,5 @@ class RecentTopic{}
 class CarouselTopic{}
 
 class TopicDetail{}
+
+class CategoryTopic{}
