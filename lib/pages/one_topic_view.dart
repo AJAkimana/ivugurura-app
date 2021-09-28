@@ -46,7 +46,7 @@ class OneTopicViewPageState extends State<OneTopicViewPage> {
               );
             }
             if (topicDetail.error != '') {
-              return DisplayError();
+              return DisplayError(error: topicDetail.error);
             }
             if (topicDetail.theObject!.title.isEmpty) {
               return Text('Nothing to display');

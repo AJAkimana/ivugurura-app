@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_translate/flutter_translate.dart';
+import 'package:ivugurura_app/core/data/dependencies_provider.dart';
 import 'package:ivugurura_app/core/keep_alive.dart';
 import 'package:ivugurura_app/core/redux/actions/category_actions.dart';
 import 'package:ivugurura_app/core/redux/base_state.dart';
 import 'package:ivugurura_app/core/redux/store.dart';
+import 'package:ivugurura_app/pages/all_topics_page.dart';
 import 'package:ivugurura_app/pages/audio_player.dart';
 import 'package:ivugurura_app/pages/home_page.dart';
 import 'package:ivugurura_app/pages/setting_page.dart';
-import 'package:ivugurura_app/pages/topics_page.dart';
 import 'package:ivugurura_app/utils/oval_right_clipper.dart';
-import 'package:ivugurura_app/widget/display_error.dart';
-import 'package:ivugurura_app/widget/display_loading.dart';
 import 'package:ivugurura_app/widget/dots_loader.dart';
 
 import 'models/category.dart';
@@ -20,12 +19,12 @@ class PageLayout extends StatefulWidget {
   final String title;
   final Widget page;
   final bool useLayout;
-  const PageLayout({
-    Key? key,
-    required this.title,
-    required this.page,
-    this.useLayout = false
-  }) : super(key: key);
+  const PageLayout(
+      {Key? key,
+      required this.title,
+      required this.page,
+      this.useLayout = false})
+      : super(key: key);
   @override
   _PageLayoutState createState() => _PageLayoutState();
 }
@@ -37,32 +36,35 @@ class _PageLayoutState extends State<PageLayout> {
 
   @override
   Widget build(BuildContext context) {
-    if(!widget.useLayout){
-      return AlwaysAliveWidget(
+    if (!widget.useLayout) {
+      return DependenciesProvider(
+          child: AlwaysAliveWidget(
         child: widget.page,
-      );
+      ));
     }
-    return Scaffold(
-      key: _key,
-      appBar: AppBar(
-        title: Text(widget.title),
-        automaticallyImplyLeading: false,
-        leading: IconButton(
-          icon: Icon(Icons.menu),
-          onPressed: () {
-            _key.currentState!.openDrawer();
-          },
-        ),
-      ),
-      drawer: _buildDrawer(),
-      body: Stack(
-        fit: StackFit.expand,
-        children: <Widget>[
-          AlwaysAliveWidget(
-            child: widget.page,
-          )
-        ],
-      ),
+    return DependenciesProvider(
+        child: Scaffold(
+          key: _key,
+          appBar: AppBar(
+            title: Text(widget.title),
+            automaticallyImplyLeading: false,
+            leading: IconButton(
+              icon: Icon(Icons.menu),
+              onPressed: () {
+                _key.currentState!.openDrawer();
+              },
+            ),
+          ),
+          drawer: _buildDrawer(),
+          body: Stack(
+            fit: StackFit.expand,
+            children: <Widget>[
+              AlwaysAliveWidget(
+                child: widget.page,
+              )
+            ],
+          ),
+        )
     );
   }
 
@@ -79,19 +81,21 @@ class _PageLayoutState extends State<PageLayout> {
             child: SingleChildScrollView(
               child: Column(
                 children: <Widget>[
-                  _buildRow(TopicsPage(), Icons.home, translate('app.home')),
+                  _buildRow(AllTopicsPage(), Icons.home, translate('app.home')),
                   _buildDivider(),
                   _buildCategoriesList(context),
                   _buildDivider(),
-                  _buildRow(AudioPlayer(), Icons.radio, translate('title.radio')),
-                  _buildDivider(),
-                  _buildRow(AudioPlayer(), Icons.music_note, translate('title.audio')),
-                  _buildDivider(),
                   _buildRow(
-                      HomePage(), Icons.contact_mail, translate('title.contact_us')),
+                      AudioPlayer(), Icons.radio, translate('title.radio')),
                   _buildDivider(),
-                  _buildRow(
-                      SettingPage(), Icons.settings, translate('title.setting')),
+                  _buildRow(AudioPlayer(), Icons.music_note,
+                      translate('title.audio')),
+                  _buildDivider(),
+                  _buildRow(HomePage(), Icons.contact_mail,
+                      translate('title.contact_us')),
+                  _buildDivider(),
+                  _buildRow(SettingPage(), Icons.settings,
+                      translate('title.setting')),
                   _buildDivider(),
                 ],
               ),
@@ -106,29 +110,29 @@ class _PageLayoutState extends State<PageLayout> {
     return Divider(color: active);
   }
 
-  Widget _buildCategoriesList(BuildContext context){
+  Widget _buildCategoriesList(BuildContext context) {
     final TextStyle textStyle = TextStyle(color: active, fontSize: 16.0);
     return StoreConnector<AppState, BaseState<Category, CategoriesList>>(
         distinct: true,
-        onInitialBuild: (store){
-            fetchCategories(context);
+        onInitialBuild: (store) {
+          fetchCategories(context);
         },
         converter: (store) => store.state.categoriesState,
-        builder: (context, categoriesState){
-          if(categoriesState.loading && categoriesState.theList!.length == 0){
+        builder: (context, categoriesState) {
+          if (categoriesState.loading && categoriesState.theList!.length == 0) {
             return DotsLoader();
           }
-          if(categoriesState.error!=''){
-            return DisplayError();
+          if (categoriesState.error != '') {
+            return Text('Something went wrong');
           }
-          if(categoriesState.theList!.length < 1){
+          if (categoriesState.theList!.length < 1) {
             return Text('Not data');
           }
-          return  ListView.builder(
+          return ListView.builder(
             shrinkWrap: true,
             physics: NeverScrollableScrollPhysics(),
             itemCount: categoriesState.theList!.length,
-            itemBuilder: (BuildContext context, int index){
+            itemBuilder: (BuildContext context, int index) {
               Category category = categoriesState.theList![index];
               return InkWell(
                 child: Container(
@@ -137,15 +141,14 @@ class _PageLayoutState extends State<PageLayout> {
                     children: <Widget>[
                       Icon(Icons.read_more, color: active),
                       SizedBox(width: 10),
-                      Text(category.name as String,  style: textStyle)
+                      Text(category.name as String, style: textStyle)
                     ],
                   ),
                 ),
               );
             },
           );
-        }
-    );
+        });
   }
 
   Widget _buildRow(Widget page, IconData icon, String title) {
@@ -165,9 +168,7 @@ class _PageLayoutState extends State<PageLayout> {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (_)=> PageLayout(title: title, page: page)
-            )
-        );
+                builder: (_) => PageLayout(title: title, page: page)));
       },
     );
   }

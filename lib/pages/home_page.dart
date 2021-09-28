@@ -70,7 +70,7 @@ class _HomePageState extends State<HomePage>{
                     return DotsLoader();
                   }
                   if(topicsState.error != ''){
-                    return DisplayError();
+                    return DisplayError(error: topicsState.error);
                   }
                   if(topicsState.theList!.length < 1){
                     return Text('No data to display', style: TextStyle(color: Colors.white),);
@@ -162,7 +162,7 @@ Widget _buildListTopics(BuildContext context, Color color){
         return DotsLoader();
       }
       if(recentTopicsState.error!=''){
-        return DisplayError();
+        return DisplayError(error: recentTopicsState.error);
       }
       if(recentTopicsState.theList!.length < 1){
         return Text('Not data to display');

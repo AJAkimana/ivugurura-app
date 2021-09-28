@@ -82,14 +82,14 @@ class TopicsPageState extends State<TopicsPage> {
       converter: (store) => store.state.categoryTopic,
       builder: (context, categoryTopicsState){
         List<Topic> categoryTopics = categoryTopicsState.theList!;
-        print(categoryTopics);
-        print(category);
-        print(currentIndex);
+        // print(categoryTopics);
+        // print(category);
+        // print(currentIndex);
         if(categoryTopicsState.loading){
           return DotsLoader();
         }
         if(categoryTopicsState.error!=''){
-          return DisplayError();
+          return DisplayError(error: categoryTopicsState.error);
         }
         if(categoryTopicsState.theList!.length < 1){
           return NoDisplayData();
