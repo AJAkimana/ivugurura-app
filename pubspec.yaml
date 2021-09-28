@@ -49,6 +49,7 @@ dependencies:
   provider: ^5.0.0
   font_awesome_flutter: ^9.1.0
   flutter_translate: ^3.0.1
+  dio: ^4.0.0
 #  redux_api_middleware: ^0.2.1
 
 dev_dependencies:
