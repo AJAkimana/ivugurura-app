@@ -1,29 +1,33 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:ivugurura_app/core/rounded_container.dart';
+import 'package:ivugurura_app/widget/error_indicator.dart';
 
 class DisplayError extends StatelessWidget {
-  final String title;
+  final dynamic error;
+  final VoidCallback? onTryAgain;
   const DisplayError({
-    this.title = 'Sorry, an error happened',
     Key? key,
+    required this.error,
+    this.onTryAgain
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return RoundedContainer(
-        borderRadius: BorderRadius.circular(4.0),
-        margin: const EdgeInsets.only(bottom: 20),
-        child: Row(
-            children: <Widget>[
-              Expanded(
-                  child: Column(
-                    children: <Widget>[
-                      Text(title, style: TextStyle(fontWeight: FontWeight.bold)),
-                    ],
-                  )
-              )
-            ]
-        )
+    if(error is SocketException){
+      return ErrorIndicator(
+        title: 'No connection',
+        message: 'Please check the internet connection and try again',
+        assetName: 'assets/frustrated-face.png',
+        onTryAgain: onTryAgain,
+      );
+    }
+    return ErrorIndicator(
+      title: 'Something went wrong',
+      message: 'The application has encountered an unknown error.\nPlease try again later',
+      assetName: 'assets/confused-face.png',
+      onTryAgain: onTryAgain,
     );
   }
 }
