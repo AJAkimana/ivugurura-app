@@ -22,7 +22,6 @@ class _TopicListView extends State<TopicListView> {
   dynamic error;
 
   Future<void> fetchTopics() async {
-    print('Its fetching');
     if (!isLoading) {
       setState(() {
         isLoading = true;
@@ -31,7 +30,7 @@ class _TopicListView extends State<TopicListView> {
       });
     }
     try {
-      final page = await _repository.getListTopics(context);
+      final page = await _repository.getListTopics();
       setState(() {
         topics = page.itemList;
         isLoading = false;
@@ -56,7 +55,7 @@ class _TopicListView extends State<TopicListView> {
             child: CircularProgressIndicator(),
           )
         : error != null
-            ? DisplayError(error: error, onTryAgain:fetchTopics)
+            ? DisplayError(error: error, onTryAgain: fetchTopics,)
             : topics.isEmpty
                 ? NoDisplayData()
                 : ListView.separated(
@@ -64,12 +63,10 @@ class _TopicListView extends State<TopicListView> {
                       return TopicListItem(topic: topics[index]);
                     },
                     separatorBuilder: (context, index) {
-                      return const SizedBox(
-                        height: 16,
-                      );
+                      return const SizedBox(height: 4);
                     },
                     itemCount: topics.length,
-                    padding: const EdgeInsets.all(16),
+                    padding: const EdgeInsets.all(8),
                   );
   }
 }

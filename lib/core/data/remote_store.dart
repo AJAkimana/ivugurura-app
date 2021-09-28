@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
@@ -20,11 +19,9 @@ class RemoteStore {
   });
 
   Future<ListPage<Topic>> getTopicsList({int pageNumber = 1, int pageSize = 20}) async {
-    // print('Its getting topic lists ${dio.options}');
     try {
-
       final response = await dio.get('/topics');
-      final result = json.decode(response.data);
+      final result = response.data;
 
       final jsonData = result['data'] as List;
       List<Topic> topicsData = jsonData.map((e) => Topic.fromJson(e)).toList();

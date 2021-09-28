@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:intl/intl.dart';
 import 'package:ivugurura_app/core/models/topic.dart';
 import 'package:ivugurura_app/core/utils/constants.dart';
 import 'package:ivugurura_app/widget/network_image.dart';
+import 'package:truncate/truncate.dart';
 
 class TopicListItem extends StatelessWidget {
   final Topic topic;
@@ -32,7 +34,7 @@ class TopicListItem extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Expanded(
-                    child: Text(topic.title, style: textTheme.subtitle1),
+                    child: Text(topic.title, style: textTheme.headline6),
                   ),
                   const SizedBox(width: 16),
                   ClipRRect(
@@ -42,7 +44,11 @@ class TopicListItem extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 16),
-              Text(topic.description, style: textTheme.bodyText2),
+              Html(data: truncate(topic.content as String, 150, omission: '...')),
+              // Text(
+              //  '',
+              //   style: textTheme.bodyText2
+              // ),
               Text(DateFormat('MMM d yyyy').format(dateTime))
             ],
           ),
