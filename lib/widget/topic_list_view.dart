@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:ivugurura_app/core/data/repository.dart';
 import 'package:ivugurura_app/core/models/topic.dart';
 import 'package:ivugurura_app/widget/display_error.dart';
@@ -17,56 +18,66 @@ class TopicListView extends StatefulWidget {
 
 class _TopicListView extends State<TopicListView> {
   Repository get _repository => widget.repository;
-  bool isLoading = true;
-  List<Topic> topics = [];
-  dynamic error;
+  final int pageSize = 4;
 
-  Future<void> fetchTopics() async {
-    if (!isLoading) {
-      setState(() {
-        isLoading = true;
-        error = null;
-        topics = [];
-      });
-    }
+  final pagingController = PagingController<int, Topic>(firstPageKey: 1);
+
+  Future<void> fetchPage(int pageKey) async {
     try {
-      final page = await _repository.getListTopics();
-      setState(() {
-        topics = page.itemList;
-        isLoading = false;
-        error = null;
-      });
-    } catch (err) {
-      isLoading = false;
-      error = err;
+      final newPage = await _repository.getListTopics(
+          pageNumber: pageKey, pageSize: pageSize);
+      final previouslyFetchedItemsCount =
+          pagingController.itemList?.length ?? 0;
+      final isLastPage = newPage.isLastPage(previouslyFetchedItemsCount);
+      final newItems = newPage.itemList;
+
+      if (isLastPage) {
+        pagingController.appendLastPage(newItems);
+      } else {
+        final nextPageKey = pageKey + 1;
+        pagingController.appendPage(newItems, nextPageKey);
+      }
+    } catch (error) {
+      pagingController.error = error;
     }
   }
 
   @override
   void initState() {
-    fetchTopics();
+    pagingController.addPageRequestListener((pageKey) {
+      fetchPage(pageKey);
+    });
     super.initState();
   }
 
   @override
+  void dispose() {
+    pagingController.dispose();
+    super.dispose();
+  }
+  @override
   Widget build(BuildContext context) {
-    return isLoading
-        ? const Center(
-            child: CircularProgressIndicator(),
-          )
-        : error != null
-            ? DisplayError(error: error, onTryAgain: fetchTopics,)
-            : topics.isEmpty
-                ? NoDisplayData()
-                : ListView.separated(
-                    itemBuilder: (context, index) {
-                      return TopicListItem(topic: topics[index]);
-                    },
-                    separatorBuilder: (context, index) {
-                      return const SizedBox(height: 4);
-                    },
-                    itemCount: topics.length,
-                    padding: const EdgeInsets.all(8),
-                  );
+    return RefreshIndicator(
+      onRefresh: ()=>Future.sync(() => pagingController.refresh()),
+      child: PagedListView.separated(
+        pagingController: pagingController,
+        builderDelegate: PagedChildBuilderDelegate<Topic>(
+          itemBuilder: (context, topic, index){
+            return TopicListItem(topic: topic);
+          },
+          firstPageErrorIndicatorBuilder: (context){
+            return DisplayError(
+              error: pagingController.error,
+              onTryAgain:() => pagingController.refresh(),
+            );
+          },
+          noItemsFoundIndicatorBuilder: (context)=>NoDisplayData()
+        ),
+        padding: const EdgeInsets.all(8),
+        separatorBuilder: (context, index){
+          return const SizedBox(height: 1);
+        },
+      ),
+    );
   }
 }

@@ -14,13 +14,12 @@ Dio dio = Dio(options);
 
 class RemoteStore {
   final Dio dio;
-  RemoteStore({
-    required this.dio
-  });
+  RemoteStore({required this.dio});
 
-  Future<ListPage<Topic>> getTopicsList({int pageNumber = 1, int pageSize = 20}) async {
+  Future<ListPage<Topic>> getTopicsList(
+      {int pageNumber = 1, int pageSize = 20}) async {
     try {
-      final response = await dio.get('/topics');
+      final response = await dio.get('/topics?page=$pageNumber&pageSize=$pageSize');
       final result = response.data;
 
       final jsonData = result['data'] as List;
