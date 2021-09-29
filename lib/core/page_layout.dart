@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_translate/flutter_translate.dart';
 import 'package:ivugurura_app/core/data/dependencies_provider.dart';
-import 'package:ivugurura_app/core/data/repository.dart';
 import 'package:ivugurura_app/core/keep_alive.dart';
 import 'package:ivugurura_app/core/redux/actions/category_actions.dart';
 import 'package:ivugurura_app/core/redux/base_state.dart';
@@ -10,12 +9,9 @@ import 'package:ivugurura_app/core/redux/store.dart';
 import 'package:ivugurura_app/pages/all_topics_page.dart';
 import 'package:ivugurura_app/pages/audio_player.dart';
 import 'package:ivugurura_app/pages/home_page.dart';
-import 'package:ivugurura_app/pages/one_topic_view.dart';
 import 'package:ivugurura_app/pages/setting_page.dart';
 import 'package:ivugurura_app/utils/oval_right_clipper.dart';
 import 'package:ivugurura_app/widget/dots_loader.dart';
-import 'package:ivugurura_app/widget/topic_list_view.dart';
-import 'package:provider/provider.dart';
 
 import 'models/category.dart';
 
@@ -84,7 +80,7 @@ class _PageLayoutState extends State<PageLayout> {
             child: SingleChildScrollView(
               child: Column(
                 children: <Widget>[
-                  _buildRow(AllTopicsPage(category: null), Icons.home, translate('app.home')),
+                  _buildRow(AllTopicsPage(), Icons.home, translate('app.home')),
                   _buildDivider(),
                   _buildCategoriesList(),
                   _buildDivider(),
