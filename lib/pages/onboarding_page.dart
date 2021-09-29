@@ -45,7 +45,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
         content: 'Some information',
         translateTexts: SizedBox(),
         widget: LanguageSelector(),
-        onPressOk: (){}),
+        ),
       WelcomeQuote()
     ];
     return Scaffold(

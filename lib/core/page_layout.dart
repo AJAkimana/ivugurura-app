@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_translate/flutter_translate.dart';
 import 'package:ivugurura_app/core/data/dependencies_provider.dart';
+import 'package:ivugurura_app/core/data/repository.dart';
 import 'package:ivugurura_app/core/keep_alive.dart';
 import 'package:ivugurura_app/core/redux/actions/category_actions.dart';
 import 'package:ivugurura_app/core/redux/base_state.dart';
@@ -9,9 +10,12 @@ import 'package:ivugurura_app/core/redux/store.dart';
 import 'package:ivugurura_app/pages/all_topics_page.dart';
 import 'package:ivugurura_app/pages/audio_player.dart';
 import 'package:ivugurura_app/pages/home_page.dart';
+import 'package:ivugurura_app/pages/one_topic_view.dart';
 import 'package:ivugurura_app/pages/setting_page.dart';
 import 'package:ivugurura_app/utils/oval_right_clipper.dart';
 import 'package:ivugurura_app/widget/dots_loader.dart';
+import 'package:ivugurura_app/widget/topic_list_view.dart';
+import 'package:provider/provider.dart';
 
 import 'models/category.dart';
 
@@ -44,31 +48,30 @@ class _PageLayoutState extends State<PageLayout> {
     }
     return DependenciesProvider(
         child: Scaffold(
-          key: _key,
-          appBar: AppBar(
-            title: Text(widget.title),
-            automaticallyImplyLeading: false,
-            leading: IconButton(
-              icon: Icon(Icons.menu),
-              onPressed: () {
-                _key.currentState!.openDrawer();
-              },
-            ),
-          ),
-          drawer: _buildDrawer(),
-          body: Stack(
-            fit: StackFit.expand,
-            children: <Widget>[
-              AlwaysAliveWidget(
-                child: widget.page,
-              )
-            ],
-          ),
-        )
-    );
+      key: _key,
+      appBar: AppBar(
+        title: Text(widget.title),
+        automaticallyImplyLeading: false,
+        leading: IconButton(
+          icon: Icon(Icons.menu),
+          onPressed: () {
+            _key.currentState!.openDrawer();
+          },
+        ),
+      ),
+      drawer: _buildDrawer(),
+      body: Stack(
+        fit: StackFit.expand,
+        children: <Widget>[
+          AlwaysAliveWidget(
+            child: widget.page,
+          )
+        ],
+      ),
+    ));
   }
 
-  _buildDrawer() {
+  Widget _buildDrawer() {
     return ClipPath(
       clipper: OverRightBorderClipper(),
       child: Drawer(
@@ -81,9 +84,9 @@ class _PageLayoutState extends State<PageLayout> {
             child: SingleChildScrollView(
               child: Column(
                 children: <Widget>[
-                  _buildRow(AllTopicsPage(), Icons.home, translate('app.home')),
+                  _buildRow(AllTopicsPage(category: null), Icons.home, translate('app.home')),
                   _buildDivider(),
-                  _buildCategoriesList(context),
+                  _buildCategoriesList(),
                   _buildDivider(),
                   _buildRow(
                       AudioPlayer(), Icons.radio, translate('title.radio')),
@@ -110,7 +113,7 @@ class _PageLayoutState extends State<PageLayout> {
     return Divider(color: active);
   }
 
-  Widget _buildCategoriesList(BuildContext context) {
+  Widget _buildCategoriesList() {
     final TextStyle textStyle = TextStyle(color: active, fontSize: 16.0);
     return StoreConnector<AppState, BaseState<Category, CategoriesList>>(
         distinct: true,
@@ -134,7 +137,19 @@ class _PageLayoutState extends State<PageLayout> {
             itemCount: categoriesState.theList!.length,
             itemBuilder: (BuildContext context, int index) {
               Category category = categoriesState.theList![index];
+              print(category.language);
               return InkWell(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => PageLayout(
+                            title: 'title',
+                            page: AllTopicsPage(category: category)
+                        )
+                    )
+                  );
+                },
                 child: Container(
                   padding: const EdgeInsets.symmetric(vertical: 8.0),
                   child: Row(

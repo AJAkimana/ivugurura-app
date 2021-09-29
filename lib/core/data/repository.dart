@@ -11,6 +11,10 @@ class Repository {
   Repository({required this.remoteStore, required this.inMemoryStore});
 
   Future<ListPage<Topic>> getListTopics(
-          {int pageNumber = 1, int pageSize = 5}) =>
-      remoteStore.getTopicsList(pageNumber: pageNumber, pageSize: pageSize);
+          {int pageNumber = 1, int pageSize = 5, category}) =>
+      remoteStore.getTopicsList(
+          pageNumber: pageNumber,
+          pageSize: pageSize,
+          categoryId: category
+      );
 }

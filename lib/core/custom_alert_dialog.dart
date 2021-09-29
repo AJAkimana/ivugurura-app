@@ -13,7 +13,7 @@ class CustomAlertDialog extends StatelessWidget {
   final Widget? icon;
   final Widget? translateTexts;
   final Widget widget;
-  final Function() onPressOk;
+  final Function()? onPressOk;
   final TextStyle titleStyle = TextStyle(
     fontSize: 20.0,
     color: Colors.black,
@@ -27,7 +27,7 @@ class CustomAlertDialog extends StatelessWidget {
     this.icon,
     this.translateTexts,
     required this.widget,
-    required this.onPressOk,
+    this.onPressOk,
     this.type = AlertDialogType.INFO,
     this.btnLabel = "Ok"
   }): super(key: key);
@@ -64,14 +64,16 @@ class CustomAlertDialog extends StatelessWidget {
                 child: this.widget,
               ),
               // Text(content, textAlign: TextAlign.center),
-              SizedBox(height: 40.0),
-              SizedBox(
-                width: double.infinity,
-                child: TextButton(
-                  child: Text(btnLabel),
-                  onPressed: this.onPressOk,
-                ),
-              )
+              if(onPressOk!=null) ...[
+                SizedBox(height: 40.0),
+                SizedBox(
+                  width: double.infinity,
+                  child: TextButton(
+                    child: Text(btnLabel),
+                    onPressed: this.onPressOk,
+                  ),
+                )
+              ]
             ],
           ),
         ),

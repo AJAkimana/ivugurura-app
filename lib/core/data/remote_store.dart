@@ -17,9 +17,13 @@ class RemoteStore {
   RemoteStore({required this.dio});
 
   Future<ListPage<Topic>> getTopicsList(
-      {int pageNumber = 1, int pageSize = 20}) async {
+      {int pageNumber = 1, int pageSize = 20, int categoryId = 0}) async {
     try {
-      final response = await dio.get('/topics?page=$pageNumber&pageSize=$pageSize');
+      String params = 'page=$pageNumber&pageSize=$pageSize';
+      if (categoryId != 0) {
+        params += '&category=$categoryId';
+      }
+      final response = await dio.get('/topics?$params');
       final result = response.data;
 
       final jsonData = result['data'] as List;

@@ -8,9 +8,11 @@ import 'package:ivugurura_app/widget/topic_list_item.dart';
 
 class TopicListView extends StatefulWidget {
   final Repository repository;
+  final int? categoryId;
   const TopicListView({
     Key? key,
     required this.repository,
+    this.categoryId
   }) : super(key: key);
 
   _TopicListView createState() => _TopicListView();
@@ -25,7 +27,7 @@ class _TopicListView extends State<TopicListView> {
   Future<void> fetchPage(int pageKey) async {
     try {
       final newPage = await _repository.getListTopics(
-          pageNumber: pageKey, pageSize: pageSize);
+          pageNumber: pageKey, pageSize: pageSize, category: widget.categoryId);
       final previouslyFetchedItemsCount =
           pagingController.itemList?.length ?? 0;
       final isLastPage = newPage.isLastPage(previouslyFetchedItemsCount);

@@ -18,7 +18,7 @@ class LanguageSelector extends StatefulWidget {
 }
 
 class LanguageSelectorState extends State<LanguageSelector> {
-  Language? _language;
+  Language? _language = Language(name: 'English', short_name: 'en');
 
   void _selectLanguage(Language? language) async {
     Setting setting = Setting(language: language);
@@ -31,7 +31,7 @@ class LanguageSelectorState extends State<LanguageSelector> {
     return StoreConnector<AppState, BaseState<Setting, SettingInfo>>(
         distinct: true,
         onInitialBuild: (store) {
-          // loadSettings();
+          loadSettings();
         },
         converter: (store) => store.state.settingState,
         builder: (context, settingState) {
