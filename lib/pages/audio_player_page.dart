@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-class AudioPlayer extends StatefulWidget{
+class AudioPlayerPage extends StatefulWidget{
   @override
-  _AudioPlayerState createState() => _AudioPlayerState();
+  _AudioPlayerPageState createState() => _AudioPlayerPageState();
 }
 
-class _AudioPlayerState extends State<AudioPlayer>{
+class _AudioPlayerPageState extends State<AudioPlayerPage>{
   @override
   Widget build(BuildContext context) {
      double height = MediaQuery.of(context).size.height;

@@ -6,13 +6,15 @@ import 'package:ivugurura_app/core/keep_alive.dart';
 import 'package:ivugurura_app/core/redux/actions/category_actions.dart';
 import 'package:ivugurura_app/core/redux/base_state.dart';
 import 'package:ivugurura_app/core/redux/store.dart';
+import 'package:ivugurura_app/pages/RadiolizePage.dart';
 import 'package:ivugurura_app/pages/all_topics_page.dart';
-import 'package:ivugurura_app/pages/audio_player.dart';
+import 'package:ivugurura_app/pages/audio_player_page.dart';
 import 'package:ivugurura_app/pages/home_page.dart';
 import 'package:ivugurura_app/pages/setting_page.dart';
 import 'package:ivugurura_app/utils/oval_right_clipper.dart';
 import 'package:ivugurura_app/widget/dots_loader.dart';
 
+import 'models/audio.dart';
 import 'models/category.dart';
 
 class PageLayout extends StatefulWidget {
@@ -85,9 +87,16 @@ class _PageLayoutState extends State<PageLayout> {
                   _buildCategoriesList(),
                   _buildDivider(),
                   _buildRow(
-                      AudioPlayer(), Icons.radio, translate('title.radio')),
+                      RadiolizePage(
+                          audio: Audio(
+                              title: 'Ijwi ry ubugorozi',
+                              author: 'Radiolize',
+                              mediaLink:
+                                  'https://studio18.radiolize.com/radio/8220/radio.mp3')),
+                      Icons.radio,
+                      translate('title.radio')),
                   _buildDivider(),
-                  _buildRow(AudioPlayer(), Icons.music_note,
+                  _buildRow(AudioPlayerPage(), Icons.music_note,
                       translate('title.audio')),
                   _buildDivider(),
                   _buildRow(HomePage(), Icons.contact_mail,
@@ -139,12 +148,9 @@ class _PageLayoutState extends State<PageLayout> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (_) => PageLayout(
-                            title: 'title',
-                            page: AllTopicsPage(category: category)
-                        )
-                    )
-                  );
+                          builder: (_) => PageLayout(
+                              title: 'title',
+                              page: AllTopicsPage(category: category))));
                 },
                 child: Container(
                   padding: const EdgeInsets.symmetric(vertical: 8.0),
