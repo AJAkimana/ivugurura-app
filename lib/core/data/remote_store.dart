@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:ivugurura_app/core/models/audio.dart';
 import 'package:ivugurura_app/core/models/list_page.dart';
 import 'package:ivugurura_app/core/models/topic.dart';
 import 'package:ivugurura_app/core/utils/constants.dart';
@@ -31,6 +32,27 @@ class RemoteStore {
 
       return ListPage<Topic>(
           itemList: topicsData, grandTotalCount: result['totalItems']);
+    } catch (error) {
+      if (error is DioError && error.error is SocketException) {
+        throw error.error;
+      }
+
+      throw error;
+    }
+  }
+
+  Future<ListPage<Audio>> getAudiosList(
+      {int pageNumber = 1, int pageSize = 6}) async {
+    try {
+      String params = 'page=$pageNumber&pageSize=$pageSize';
+      final response = await dio.get('/albums/medias/audio?$params');
+      final result = response.data;
+
+      final jsonData = result['data'] as List;
+      List<Audio> audiosData = jsonData.map((e) => Audio.fromJson(e)).toList();
+
+      return ListPage<Audio>(
+          itemList: audiosData, grandTotalCount: result['totalItems']);
     } catch (error) {
       if (error is DioError && error.error is SocketException) {
         throw error.error;

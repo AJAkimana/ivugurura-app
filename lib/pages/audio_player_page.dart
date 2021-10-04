@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:ivugurura_app/core/data/repository.dart';
+import 'package:ivugurura_app/widget/audio_list_view.dart';
+import 'package:provider/provider.dart';
 
 class AudioPlayerPage extends StatefulWidget{
   @override
@@ -48,36 +51,7 @@ class _AudioPlayerPageState extends State<AudioPlayerPage>{
                          Text(' Buffering... ', style: TextStyle(color: Colors.white, fontSize: 25)),
                          _progress(),
                          Expanded(
-                           child: ListView.builder(
-                             physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
-                             itemCount: 6,
-                             itemBuilder: (BuildContext context, int index){
-                               return Column(
-                                 children: <Widget>[
-                                   ListTile(
-                                     onTap: (){},
-                                     leading: Text(
-                                       '${index + 1}',
-                                       style: TextStyle(color: Colors.white, fontSize: 20),
-                                     ),
-                                     title: Text(
-                                       'Indirimbo ya ${index + 1}',
-                                       style: TextStyle(color: Colors.white, fontSize: 20),
-                                     ),
-                                     subtitle: Text(
-                                       'Author for ${index + 1}',
-                                       style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w200),
-                                     ),
-                                     trailing: IconButton(
-                                       onPressed: (){},
-                                       icon: Icon(Icons.play_arrow, color: Colors.white),
-                                     ),
-                                   ),
-                                   Divider(height: 1, color: Colors.white,)
-                                 ],
-                               );
-                             },
-                           ),
+                           child: AudioListView(repository: Provider.of<Repository>(context))
                          )
                        ],
                      ),

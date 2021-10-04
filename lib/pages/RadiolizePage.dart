@@ -4,6 +4,7 @@ import 'package:flutter/painting.dart';
 import 'package:ivugurura_app/core/models/audio.dart';
 import 'package:ivugurura_app/utils/app_colors.dart' as appColors;
 import 'package:ivugurura_app/widget/music_player.dart';
+import 'package:ivugurura_app/widget/player_widget.dart';
 
 class RadiolizePage extends StatefulWidget{
   final Audio audio;
@@ -19,12 +20,7 @@ class RadiolizePage extends StatefulWidget{
 
 class _RadiolizePageState extends State<RadiolizePage>{
   late AudioPlayer audioPlayer;
-
-  @override
-  void initState() {
-    audioPlayer = AudioPlayer();
-    super.initState();
-  }
+  
 
   @override
   Widget build(BuildContext context) {
@@ -45,11 +41,12 @@ class _RadiolizePageState extends State<RadiolizePage>{
           Positioned(
             top: 0, left: 0, right: 0,
             child: AppBar(
+              title: Text('Radiolize'),
               leading: IconButton(
                 icon: Icon(Icons.arrow_back_ios),
                 onPressed: (){
                   Navigator.of(context).pop();
-                  audioPlayer.stop();
+                  // audioPlayer.stop();
                 },
               ),
               actions: <Widget>[
@@ -82,11 +79,7 @@ class _RadiolizePageState extends State<RadiolizePage>{
                   Text(widget.audio.author as String,
                     style: TextStyle(fontSize: 20),
                   ),
-                  MusicPlayer(
-                      audioPlayer: audioPlayer,
-                      audioPath: widget.audio.mediaLink as String,
-                    isRadio:true
-                  )
+                  PlayerWidget(audio: widget.audio)
                 ],
               ),
             ),
