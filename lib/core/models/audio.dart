@@ -26,3 +26,5 @@ class Audio{
 }
 
 class AudioList {}
+
+class AudioDetail {}

@@ -27,12 +27,14 @@ class LanguageSelectorState extends State<LanguageSelector> {
   }
 
   @override
+  void initState() {
+    loadSettings();
+    super.initState();
+  }
+  @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, BaseState<Setting, SettingInfo>>(
         distinct: true,
-        onInitialBuild: (store) {
-          loadSettings();
-        },
         converter: (store) => store.state.settingState,
         builder: (context, settingState) {
           Setting setting = settingState.theObject as Setting;

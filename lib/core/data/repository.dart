@@ -15,7 +15,9 @@ class Repository {
           {int pageNumber = 1, int pageSize = 6, category}) =>
       remoteStore.getTopicsList(
           pageNumber: pageNumber, pageSize: pageSize, categoryId: category);
-  Future<ListPage<Audio>> getListAudios(
-          {int pageNumber = 1, int pageSize = 5}) =>
-      remoteStore.getAudiosList(pageNumber: pageNumber, pageSize: pageSize);
+  Future<ListPage<Audio>> getListAudios(int pageNumber, int pageSize) =>
+      remoteStore.getAudiosList(pageNumber, pageSize);
+
+  // void setCurrentAudio(Audio audio)=>inMemoryStore.addAudio(audio);
+  // Audio getCurrentAudio()=>inMemoryStore.getAudio();
 }

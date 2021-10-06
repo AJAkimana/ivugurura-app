@@ -28,5 +28,5 @@ Future<void> changeSettings({Setting? setting}) async {
   if(setting.isDark!=null){
     prefs.setBool(THEME_DARK, setting.isDark as bool);
   }
-  loadSettings();
+  await loadSettings();
 }

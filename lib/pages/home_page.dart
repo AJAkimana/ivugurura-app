@@ -17,6 +17,7 @@ import 'package:ivugurura_app/widget/display_loading.dart';
 import 'package:ivugurura_app/widget/dots_loader.dart';
 import 'package:ivugurura_app/widget/network_image.dart';
 import 'package:ivugurura_app/widget/recent_topic_item.dart';
+import 'package:ivugurura_app/widget/topic_list_item.dart';
 
 class HomePage extends StatefulWidget{
   @override
@@ -172,7 +173,7 @@ Widget _buildListTopics(BuildContext context, Color color){
         physics: NeverScrollableScrollPhysics(),
           itemCount: recentTopics.length,
           itemBuilder: (BuildContext context, int index){
-            return RecentTopicItem(topic: recentTopics[index]);
+            return TopicListItem(topic: recentTopics[index]);
           },
       );
     },

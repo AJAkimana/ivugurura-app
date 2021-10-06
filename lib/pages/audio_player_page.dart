@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ivugurura_app/core/data/repository.dart';
 import 'package:ivugurura_app/widget/audio_list_view.dart';
+import 'package:ivugurura_app/widget/player_widget.dart';
 import 'package:provider/provider.dart';
 
 class AudioPlayerPage extends StatefulWidget{
@@ -18,112 +19,10 @@ class _AudioPlayerPageState extends State<AudioPlayerPage>{
        body: SafeArea(
          child: SingleChildScrollView(
            physics: NeverScrollableScrollPhysics(),
-           child: Stack(
-             children: <Widget>[
-               Column(
-                 children: <Widget>[
-                   Stack(
-                     children: <Widget>[
-                       Container(
-                         height: topHeight,
-                         width: MediaQuery.of(context).size.width,
-                         child: Image.asset('assets/audio.jpeg', fit: BoxFit.cover),
-                       ),
-                     ],
-                   ),
-                   Container(
-                     height: height * 0.6,
-                     decoration: BoxDecoration(
-                       gradient: LinearGradient(
-                         begin: Alignment.topLeft,
-                         end: Alignment.bottomRight,
-                         stops: [0, 0.5, 1],
-                         colors: [
-                           Color(0xFF014F82),
-                           Color(0xff00395f),
-                           Color(0xFF001726)
-                         ]
-                       )
-                     ),
-                     child: Column(
-                       children: <Widget>[
-                         SizedBox(height: 25),
-                         Text(' Buffering... ', style: TextStyle(color: Colors.white, fontSize: 25)),
-                         _progress(),
-                         Expanded(
-                           child: AudioListView(repository: Provider.of<Repository>(context))
-                         )
-                       ],
-                     ),
-                   )
-                 ],
-               ),
-               Positioned(
-                 left: MediaQuery.of(context).size.width * 0.15,
-                 top: topHeight - 35,
-                 child: FractionalTranslation(
-                   translation: Offset(0, 0.5),
-                   child: playerWidget(),
-                 ),
-               )
-             ],
-           ),
+           child: AudioListView(repository: Provider.of<Repository>(context))
          ),
        ),
      );
-  }
-  playerWidget(){
-    return Stack(
-      clipBehavior: Clip.none,
-      children: <Widget>[
-        Container(
-          alignment: Alignment.topCenter,
-          height: 35,
-          width: MediaQuery.of(context).size.width * 0.7,
-          margin: EdgeInsets.only(bottom: 6),
-          decoration: BoxDecoration(
-            boxShadow: [BoxShadow(blurRadius: 5)],
-            borderRadius: BorderRadius.circular(50),
-            color: Colors.blue
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              IconButton(
-                icon: Icon(
-                  Icons.skip_previous,
-                  color: Colors.white,
-                ),
-                onPressed: () {},
-              ),
-              IconButton(
-                icon: Icon(
-                  Icons.fast_rewind,
-                  color: Colors.white,
-                ),
-                onPressed: () {},
-              ),
-              SizedBox(
-                width: 25,
-              ),
-              IconButton(
-                  icon: Icon(
-                    Icons.fast_forward,
-                    color: Colors.white,
-                  ),
-                  onPressed: () {}),
-              IconButton(
-                icon: Icon(
-                  Icons.skip_next,
-                  color: Colors.white,
-                ),
-                onPressed: () {},
-              ),
-            ],
-          ),
-        )
-      ],
-    );
   }
 }
 

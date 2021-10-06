@@ -3,15 +3,10 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_translate/flutter_translate.dart';
 import 'package:ivugurura_app/core/custom_alert_dialog.dart';
 import 'package:ivugurura_app/core/language_selector.dart';
-import 'package:ivugurura_app/core/models/language.dart';
 import 'package:ivugurura_app/core/models/setting.dart';
-import 'package:ivugurura_app/core/redux/actions/setting_actions.dart';
 import 'package:ivugurura_app/core/redux/base_state.dart';
 import 'package:ivugurura_app/core/redux/store.dart';
 import 'package:ivugurura_app/core/res/assets.dart';
-import 'package:ivugurura_app/core/utils/constants.dart';
-import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingPage extends StatefulWidget {
   @override
@@ -53,9 +48,6 @@ class SettingPageState extends State<SettingPage> {
           ),
           body: StoreConnector<AppState, BaseState<Setting, SettingInfo>>(
             distinct: true,
-            onInitialBuild: (store) {
-              loadSettings();
-            },
             converter: (store) => store.state.settingState,
             builder: (context, settingState) {
               Setting setting = settingState.theObject as Setting;

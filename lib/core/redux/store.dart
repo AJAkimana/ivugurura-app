@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:ivugurura_app/core/models/audio.dart';
 import 'package:ivugurura_app/core/models/category.dart';
 import 'package:ivugurura_app/core/models/language.dart';
 import 'package:ivugurura_app/core/models/setting.dart';
@@ -34,6 +35,10 @@ AppState appReducer(AppState state, dynamic action) {
     return state.copyWith(
         categoryTopic: baseReducer(state.categoryTopic, action));
   }
+  if (action is BaseAction<Audio, AudioDetail>) {
+    return state.copyWith(
+        currentAudio: baseReducer(state.currentAudio, action));
+  }
   return state;
 }
 
@@ -45,6 +50,7 @@ class AppState {
   final BaseState<Category, CategoriesList> categoriesState;
   final BaseState<Setting, SettingInfo> settingState;
   final BaseState<Topic, CategoryTopic> categoryTopic;
+  final BaseState<Audio, AudioDetail> currentAudio;
 
   AppState(
       {required this.carouselTopicState,
@@ -52,47 +58,63 @@ class AppState {
       required this.topicDetailState,
       required this.categoriesState,
       required this.settingState,
-      required this.categoryTopic});
+      required this.categoryTopic,
+      required this.currentAudio});
 
-  AppState copyWith(
-      {BaseState<Topic, CarouselTopic>? carouselTopicState,
-      BaseState<Topic, RecentTopic>? recentTopicState,
-      BaseState<Topic, TopicDetail>? topicDetailState,
-      BaseState<Category, CategoriesList>? categoriesState,
-      BaseState<Setting, SettingInfo>? settingState,
-      BaseState<Topic, CategoryTopic>? categoryTopic}) {
+  AppState copyWith({
+    BaseState<Topic, CarouselTopic>? carouselTopicState,
+    BaseState<Topic, RecentTopic>? recentTopicState,
+    BaseState<Topic, TopicDetail>? topicDetailState,
+    BaseState<Category, CategoriesList>? categoriesState,
+    BaseState<Setting, SettingInfo>? settingState,
+    BaseState<Topic, CategoryTopic>? categoryTopic,
+    BaseState<Audio, AudioDetail>? currentAudio,
+  }) {
     return AppState(
         carouselTopicState: carouselTopicState ?? this.carouselTopicState,
         recentTopicState: recentTopicState ?? this.recentTopicState,
         topicDetailState: topicDetailState ?? this.topicDetailState,
         categoriesState: categoriesState ?? this.categoriesState,
         settingState: settingState ?? this.settingState,
-        categoryTopic: categoryTopic ?? this.categoryTopic);
+        categoryTopic: categoryTopic ?? this.categoryTopic,
+        currentAudio: currentAudio ?? this.currentAudio);
   }
 }
 
 class ReduxStore {
-  Topic topic() => new Topic();
+  // Topic topic() => new Topic();
   static Store<AppState> store() {
-    // final topic = new Topic();
     return Store<AppState>(appReducer,
         middleware: [thunkMiddleware],
         initialState: AppState(
-            carouselTopicState:
-                BaseState<Topic, CarouselTopic>.initial(() => new Topic()),
-            recentTopicState:
-                BaseState<Topic, RecentTopic>.initial(() => new Topic()),
+            carouselTopicState: BaseState<Topic, CarouselTopic>.initial(
+                    () => new Topic()
+            ),
+            recentTopicState: BaseState<Topic, RecentTopic>.initial(
+                    () => new Topic()
+            ),
             topicDetailState: BaseState<Topic, TopicDetail>.initial(
                 () => new Topic(),
-                dataType: 'object'),
+                dataType: 'object'
+            ),
             categoriesState: BaseState<Category, CategoriesList>.initial(
-                () => new Category()),
+                () => new Category()
+            ),
             settingState: BaseState<Setting, SettingInfo>.initial(
-                () => Setting(
-                    language: Language(name: 'English', short_name: 'en')),
-                dataType: 'object'),
-            categoryTopic:
-                BaseState<Topic, CategoryTopic>.initial(() => new Topic())));
+                () => new Setting(
+                    language: Language(name: 'English', short_name: 'en')
+                ),
+                dataType: 'object'
+            ),
+            categoryTopic: BaseState<Topic, CategoryTopic>.initial(
+                    () => new Topic()
+            ),
+            currentAudio: BaseState<Audio, AudioDetail>.initial(
+                () => new Audio(),
+                dataType: 'object'
+            )
+        )
+    );
   }
 }
 

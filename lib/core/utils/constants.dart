@@ -10,6 +10,7 @@ const BASE_URL = isLocal ? BASE_LOCAL_URL : BASE_REMOTE_URL;
 const String API_APP_URL = "$BASE_URL/api/v1";
 
 const String IMAGE_PATH = "$BASE_URL/images";
+const String AUDIO_PATH = "$BASE_URL/songs/";
 
 const String topicsUrl = "$API_APP_URL/topics";
 const String categoriesUrl = "$API_APP_URL/categories";

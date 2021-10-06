@@ -41,8 +41,7 @@ class RemoteStore {
     }
   }
 
-  Future<ListPage<Audio>> getAudiosList(
-      {int pageNumber = 1, int pageSize = 6}) async {
+  Future<ListPage<Audio>> getAudiosList(int pageNumber, int pageSize) async {
     try {
       String params = 'page=$pageNumber&pageSize=$pageSize';
       final response = await dio.get('/albums/medias/audio?$params');

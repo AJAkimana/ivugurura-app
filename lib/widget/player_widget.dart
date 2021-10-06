@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:audioplayers/notifications.dart';
 import 'package:ivugurura_app/core/models/audio.dart';
+import 'package:ivugurura_app/core/utils/constants.dart';
 
 class PlayerWidget extends StatefulWidget {
   final Audio audio;
@@ -83,7 +84,7 @@ class _PlayerWidgetState extends State<PlayerWidget> {
           ),
           _slider(),
           _buildActionButtons(),
-          Text('State: $_audioPlayerState'),
+          Text('State: $_audioPlayerState')
         ],
       ),
     );
@@ -142,20 +143,26 @@ class _PlayerWidgetState extends State<PlayerWidget> {
         _audioPlayerState = state;
       }
     });
+    _audioPlayer.onSeekComplete.listen((event) {
+      print('Seeking=====');
+    });
     _playingRoute = PlayingRoute.SPEAKERS;
     _play(fromStart: true);
   }
 
-  Future<int> _play({bool fromStart=false}) async {
+  Future<int> _play({bool fromStart = false}) async {
     final playPosition = (_position != null &&
             _duration != null &&
             _position!.inMilliseconds > 0 &&
-            _position!.inMilliseconds < _duration!.inMilliseconds)
+            _position!.inMilliseconds < _duration!.inMilliseconds &&
+            !widget.isRadio)
         ? _position
         : null;
-    final startPosition = fromStart?null:playPosition;
-    final result =
-        await _audioPlayer.play(audio.mediaLink!, position: startPosition);
+    final startPosition = fromStart || widget.isRadio ? null : playPosition;
+    final audioLink =
+        widget.isRadio ? audio.mediaLink : AUDIO_PATH + audio.mediaLink!;
+    // print(audioLink);
+    final result = await _audioPlayer.play(audioLink!, position: startPosition);
     if (result == 1) {
       setState(() => _playerState = PlayerState.PLAYING);
     }
@@ -197,18 +204,23 @@ class _PlayerWidgetState extends State<PlayerWidget> {
     return Slider(
       activeColor: Colors.red,
       inactiveColor: Colors.grey,
-      value: _position != null ? _position!.inSeconds.toDouble() : 0,
+      value: _position != null && !widget.isRadio
+          ? _position!.inSeconds.toDouble()
+          : 100,
       min: 0.0,
       max: (_duration != null &&
               _position != null &&
-              _position!.inMilliseconds <= _duration!.inMilliseconds)
+              _position!.inMilliseconds <= _duration!.inMilliseconds &&
+              !widget.isRadio)
           ? _duration!.inSeconds.toDouble()
           : 100,
       onChanged: (double value) {
-        setState(() {
-          Duration newDuration = Duration(seconds: value.toInt());
-          _audioPlayer.seek(newDuration);
-        });
+        if (!widget.isRadio) {
+          setState(() {
+            Duration newDuration = Duration(seconds: value.toInt());
+            _audioPlayer.seek(newDuration);
+          });
+        }
       },
     );
   }
