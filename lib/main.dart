@@ -1,3 +1,4 @@
+import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_redux/flutter_redux.dart';
@@ -9,15 +10,21 @@ import 'package:ivugurura_app/pages/home_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  AssetsAudioPlayer.setupNotificationsOpenAction((notification){
+    print('===>Notification id: ${notification.audioId}');
+    return true;
+  });
 
   var delegate = await LocalizationDelegate.create(
       fallbackLocale: 'en',
       supportedLocales: ['en', 'kn', 'sw', 'fr']
   );
-  runApp(LocalizedApp(
-      delegate,
-      StoreProvider(store: appStore, child: MyApp())
-  ));
+  runApp(
+      LocalizedApp(
+          delegate,
+          StoreProvider(store: appStore, child: MyApp())
+      )
+  );
 }
 
 class MyApp extends StatelessWidget {

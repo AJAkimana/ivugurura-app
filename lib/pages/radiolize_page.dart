@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:ivugurura_app/core/models/audio.dart';
 import 'package:ivugurura_app/utils/app_colors.dart' as appColors;
-import 'package:ivugurura_app/widget/music_player.dart';
 import 'package:ivugurura_app/widget/player_widget.dart';
 
 class RadiolizePage extends StatefulWidget{

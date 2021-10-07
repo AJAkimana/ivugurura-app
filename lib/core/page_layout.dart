@@ -6,6 +6,7 @@ import 'package:ivugurura_app/core/keep_alive.dart';
 import 'package:ivugurura_app/core/redux/actions/category_actions.dart';
 import 'package:ivugurura_app/core/redux/base_state.dart';
 import 'package:ivugurura_app/core/redux/store.dart';
+import 'package:ivugurura_app/pages/music_player_page.dart';
 import 'package:ivugurura_app/pages/radiolize_page.dart';
 import 'package:ivugurura_app/pages/all_topics_page.dart';
 import 'package:ivugurura_app/pages/audio_player_page.dart';
@@ -13,6 +14,7 @@ import 'package:ivugurura_app/pages/home_page.dart';
 import 'package:ivugurura_app/pages/setting_page.dart';
 import 'package:ivugurura_app/utils/oval_right_clipper.dart';
 import 'package:ivugurura_app/widget/dots_loader.dart';
+import 'package:provider/provider.dart';
 
 import 'models/audio.dart';
 import 'models/category.dart';
