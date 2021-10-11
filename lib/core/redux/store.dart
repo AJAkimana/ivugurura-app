@@ -87,34 +87,25 @@ class ReduxStore {
     return Store<AppState>(appReducer,
         middleware: [thunkMiddleware],
         initialState: AppState(
-            carouselTopicState: BaseState<Topic, CarouselTopic>.initial(
-                    () => new Topic()
-            ),
-            recentTopicState: BaseState<Topic, RecentTopic>.initial(
-                    () => new Topic()
-            ),
+            carouselTopicState:
+                BaseState<Topic, CarouselTopic>.initial(() => new Topic()),
+            recentTopicState:
+                BaseState<Topic, RecentTopic>.initial(() => new Topic()),
             topicDetailState: BaseState<Topic, TopicDetail>.initial(
                 () => new Topic(),
-                dataType: 'object'
-            ),
+                dataType: 'object'),
             categoriesState: BaseState<Category, CategoriesList>.initial(
-                () => new Category()
-            ),
+                () => new Category()),
             settingState: BaseState<Setting, SettingInfo>.initial(
                 () => new Setting(
-                    language: Language(name: 'English', short_name: 'en')
-                ),
-                dataType: 'object'
-            ),
-            categoryTopic: BaseState<Topic, CategoryTopic>.initial(
-                    () => new Topic()
-            ),
+                    language: Language(name: 'Kinyarwanda', short_name: 'kn'),
+                    isDark: false),
+                dataType: 'object'),
+            categoryTopic:
+                BaseState<Topic, CategoryTopic>.initial(() => new Topic()),
             currentAudio: BaseState<Audio, AudioDetail>.initial(
                 () => new Audio(),
-                dataType: 'object'
-            )
-        )
-    );
+                dataType: 'object')));
   }
 }
 

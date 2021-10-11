@@ -5,6 +5,9 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:ivugurura_app/core/custom_alert_dialog.dart';
 import 'package:ivugurura_app/core/custom_pagination_builder.dart';
 import 'package:ivugurura_app/core/language_selector.dart';
+import 'package:ivugurura_app/core/models/setting.dart';
+import 'package:ivugurura_app/core/redux/actions/category_actions.dart';
+import 'package:ivugurura_app/core/redux/actions/setting_actions.dart';
 import 'package:ivugurura_app/core/utils/constants.dart';
 import 'package:ivugurura_app/widget/welcome_quote.dart';
 
@@ -33,6 +36,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
 
   @override
   void initState() {
+    loadSettings(context);
     super.initState();
   }
 
@@ -133,7 +137,9 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
     );
   }
 
-  void onGoHome(){
+  void onGoHome() async {
+    changeSettings(context, setting: Setting(hasSet: true));
+    await fetchCategories(context);
     Navigator.of(context).pushReplacementNamed('home');
   }
 }
