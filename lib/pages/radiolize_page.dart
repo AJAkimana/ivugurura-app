@@ -66,7 +66,7 @@ class _RadiolizePageState extends State<RadiolizePage> {
             height: screenHeight * 0.3,
             child: Container(
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(40), color: Colors.white),
+                  borderRadius: BorderRadius.circular(40), color: Colors.lightGreen),
               child: Column(
                 children: <Widget>[
                   SizedBox(height: screenHeight * 0.05),

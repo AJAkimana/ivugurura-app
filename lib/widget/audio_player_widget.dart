@@ -1,6 +1,7 @@
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
 import 'package:ivugurura_app/core/extensions/duration_media_extension.dart';
+import 'package:ivugurura_app/core/utils/constants.dart';
 
 class AudioPlayerWidget extends StatefulWidget {
   final String mediaUrl;
@@ -18,9 +19,13 @@ class _AudioPlayerWidgetState extends State<AudioPlayerWidget> {
 
   @override
   Widget build(BuildContext context) {
+    if (widget.mediaUrl == '' || widget.mediaUrl == AUDIO_PATH){
+      return Center(child: Text('Loading,...'));
+    }
     return AudioWidget.network(
       url: widget.mediaUrl,
       play: _play,
+      initialPosition: const Duration(),
       onReadyToPlay: (total) {
         setState(() {
           _currentPosition = widget.isRadio
