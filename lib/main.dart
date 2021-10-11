@@ -49,10 +49,9 @@ class MyApp extends StatelessWidget {
             scaffoldBackgroundColor: Colors.grey.shade300,
             primarySwatch: Colors.indigo,
             accentColor: Colors.red),
-        home: PageLayout(page: landingScreen, title: 'Onboarding'),
+        home: landingScreen,
         routes: {
-          'home': (_) => PageLayout(
-              page: HomePage(), title: translate('app.title'), useLayout: true)
+          'home': (_) => landingScreen
           // 'view_one_topic': (context) => OneTopicViewPage()
         },
       ),

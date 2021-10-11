@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_swiper_null_safety/flutter_swiper_null_safety.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:ivugurura_app/core/custom_alert_dialog.dart';
@@ -8,6 +9,7 @@ import 'package:ivugurura_app/core/language_selector.dart';
 import 'package:ivugurura_app/core/models/setting.dart';
 import 'package:ivugurura_app/core/redux/actions/category_actions.dart';
 import 'package:ivugurura_app/core/redux/actions/setting_actions.dart';
+import 'package:ivugurura_app/core/rounded_container.dart';
 import 'package:ivugurura_app/core/utils/constants.dart';
 import 'package:ivugurura_app/widget/welcome_quote.dart';
 
@@ -43,7 +45,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
   @override
   Widget build(BuildContext context) {
     final List<Widget> swiperPages = [
-      _buildText('The first text'),
+      WelcomeCard(),
       CustomAlertDialog(
         title: 'Choose a language',
         content: 'Some information',
@@ -99,6 +101,9 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
+          _buildText('Revival and Reformation'),
+          _buildText('Ivugurura n Ubugorozi'),
+          _buildText('La Reveil et la Reforme'),
           swiperPage,
           SizedBox(height: 30)
         ],
@@ -137,9 +142,23 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
     );
   }
 
-  void onGoHome() async {
+  void onGoHome() {
     changeSettings(context, setting: Setting(hasSet: true));
-    await fetchCategories(context);
+    fetchCategories(context);
     Navigator.of(context).pushReplacementNamed('home');
+  }
+}
+class WelcomeCard extends StatelessWidget{
+  @override
+  Widget build(BuildContext context) {
+    double screenH = MediaQuery.of(context).size.height;
+    double screenW = MediaQuery.of(context).size.width;
+    return RoundedContainer(
+      borderRadius: BorderRadius.circular(10.0),
+      margin: const EdgeInsets.only(top: 10),
+      width: screenW,
+      height: screenH/2,
+      child: SvgPicture.asset('assets/read-bible.svg'),
+    );
   }
 }
