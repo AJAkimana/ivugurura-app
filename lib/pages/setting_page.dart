@@ -28,7 +28,7 @@ class SettingPageState extends State<SettingPage> {
           backgroundColor: _dark ? null : Colors.grey.shade500,
           appBar: AppBar(
             elevation: 0,
-            brightness: _getBrightness(),
+            // brightness: _getBrightness(),
             iconTheme: IconThemeData(
                 color: _dark ? Colors.white : Colors.grey.shade200),
             backgroundColor: Colors.transparent,
@@ -51,10 +51,7 @@ class SettingPageState extends State<SettingPage> {
             converter: (store) => store.state.settingState,
             builder: (context, settingState) {
               Setting setting = settingState.theObject as Setting;
-              String langName = '';
-              if (setting.language != null) {
-                langName = setting.language!.name;
-              }
+              String langName =  setting.language!.name;
               return Stack(
                 fit: StackFit.expand,
                 children: <Widget>[

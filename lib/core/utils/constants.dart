@@ -40,3 +40,4 @@ Language getLanguageInfo({String? shortName}) {
 
 const String LANG_SHORT_NAME = 'shortName';
 const String THEME_DARK = 'isDark';
+const HAS_SET = 'hasSet';

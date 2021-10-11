@@ -8,7 +8,6 @@ import 'package:ivugurura_app/core/redux/actions/setting_actions.dart';
 import 'package:ivugurura_app/core/redux/base_state.dart';
 import 'package:ivugurura_app/core/redux/store.dart';
 import 'package:ivugurura_app/core/utils/constants.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class LanguageSelector extends StatefulWidget {
   LanguageSelector({Key? key}) : super(key: key);
@@ -22,13 +21,13 @@ class LanguageSelectorState extends State<LanguageSelector> {
 
   void _selectLanguage(Language? language) async {
     Setting setting = Setting(language: language);
-    changeSettings(setting: setting);
+    changeSettings(context, setting: setting);
     changeLocale(context, language!.short_name);
   }
 
   @override
   void initState() {
-    loadSettings();
+    loadSettings(context);
     super.initState();
   }
   @override
