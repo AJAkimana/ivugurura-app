@@ -20,7 +20,7 @@ class ErrorIndicator extends StatelessWidget{
         padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 16),
         child: Column(
           children: <Widget>[
-            Image.asset(assetName),
+            // Image.asset(assetName),
             const SizedBox(height: 32),
             Text(title,
               textAlign:
