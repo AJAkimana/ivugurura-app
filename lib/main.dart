@@ -10,21 +10,15 @@ import 'package:ivugurura_app/pages/home_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  AssetsAudioPlayer.setupNotificationsOpenAction((notification){
+  AssetsAudioPlayer.setupNotificationsOpenAction((notification) {
     print('===>Notification id: ${notification.audioId}');
     return true;
   });
 
   var delegate = await LocalizationDelegate.create(
-      fallbackLocale: 'en',
-      supportedLocales: ['en', 'kn', 'sw', 'fr']
-  );
+      fallbackLocale: 'en', supportedLocales: ['en', 'kn', 'sw', 'fr']);
   runApp(
-      LocalizedApp(
-          delegate,
-          StoreProvider(store: appStore, child: MyApp())
-      )
-  );
+      LocalizedApp(delegate, StoreProvider(store: appStore, child: MyApp())));
 }
 
 class MyApp extends StatelessWidget {
@@ -33,10 +27,17 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var localizationDelegate = LocalizedApp.of(context).delegate;
+    Widget landingScreen = PageLayout(
+        page: HomePage(), title: translate('app.title'), useLayout: true);
+    final state = StoreProvider.of<AppState>(context).state.settingState;
+    if (!state.theObject!.hasSet) {
+      landingScreen = OnBoardingPage();
+    }
     return LocalizationProvider(
       state: LocalizationProvider.of(context).state,
       child: MaterialApp(
         title: translate('app.title'),
+        debugShowCheckedModeBanner: false,
         localizationsDelegates: [
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
@@ -47,11 +48,11 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
             scaffoldBackgroundColor: Colors.grey.shade300,
             primarySwatch: Colors.indigo,
-            accentColor: Colors.red
-        ),
-        home: PageLayout(page: OnBoardingPage(), title: 'Onboarding'),
+            accentColor: Colors.red),
+        home: PageLayout(page: landingScreen, title: 'Onboarding'),
         routes: {
-          'home': (_) => PageLayout(page: HomePage(), title: translate('app.title'), useLayout: true)
+          'home': (_) => PageLayout(
+              page: HomePage(), title: translate('app.title'), useLayout: true)
           // 'view_one_topic': (context) => OneTopicViewPage()
         },
       ),
