@@ -25,7 +25,9 @@ class AudioListView extends StatefulWidget {
 class _AudioListViewState extends State<AudioListView> {
   Repository get _repository => widget.repository;
   final int pageSize = 10;
-  late Audio currentAudio = Audio();
+  Audio currentAudio = Audio();
+  bool _play = false;
+  int _currentIndex = 0;
 
   final pagingController = PagingController<int, Audio>(firstPageKey: 1);
 
@@ -38,7 +40,7 @@ class _AudioListViewState extends State<AudioListView> {
       final newItems = newPage.itemList;
 
       if (pageKey == 1 && newItems.length > 0) {
-        setCurrentAudio(newItems[0]);
+        setCurrentAudio(newItems[_currentIndex]);
       }
       if (isLastPage) {
         pagingController.appendLastPage(newItems);
@@ -101,7 +103,11 @@ class _AudioListViewState extends State<AudioListView> {
                               Container(
                                   height: topHeight,
                                   width: MediaQuery.of(context).size.width,
-                                  child: AudioPlayerWidget(mediaUrl: mediaUrl))
+                                  child: AudioPlayerWidget(
+                                    mediaUrl: mediaUrl,
+                                    play: _play,
+                                    onPlay: onSetPlay,
+                                  ))
                             ],
                           ),
                           Container(
@@ -139,11 +145,21 @@ class _AudioListViewState extends State<AudioListView> {
                                           PagedChildBuilderDelegate<Audio>(
                                               itemBuilder:
                                                   (context, audio, index) {
+                                                int audioIndex =
+                                                    pagingController.itemList!
+                                                        .indexWhere((au) =>
+                                                            au.slug ==
+                                                            audio.slug);
                                                 return AudioItem(
                                                   audio: audio,
                                                   audioIndex: index,
                                                   onSetCurrent: () {
                                                     setCurrent(audio);
+                                                    setState(() {
+                                                      _play = true;
+                                                      _currentIndex =
+                                                          audioIndex;
+                                                    });
                                                   },
                                                   currentAudio: theAudio,
                                                 );
@@ -184,6 +200,12 @@ class _AudioListViewState extends State<AudioListView> {
         });
   }
 
+  onSetPlay() {
+    setState(() {
+      _play = !_play;
+    });
+  }
+
   playerWidget() {
     return Stack(
       clipBehavior: Clip.none,
@@ -205,21 +227,34 @@ class _AudioListViewState extends State<AudioListView> {
                   Icons.skip_previous,
                   color: Colors.white,
                 ),
-                onPressed: () {},
+                enableFeedback: _currentIndex != 0,
+                onPressed: () {
+                  onSetNextOrPrev(action: 'prev');
+                },
               ),
               IconButton(
-                icon: Icon(
-                  Icons.play_circle,
-                  color: Colors.white,
-                ),
-                onPressed: () {},
+                icon: _play
+                    ? Icon(
+                        Icons.pause,
+                        color: Colors.white,
+                      )
+                    : Icon(
+                        Icons.play_circle,
+                        color: Colors.white,
+                      ),
+                onPressed: onSetPlay,
               ),
               IconButton(
                 icon: Icon(
                   Icons.skip_next,
                   color: Colors.white,
                 ),
-                onPressed: () {},
+                enableFeedback: pagingController.itemList != null
+                    ? _currentIndex != pagingController.itemList!.length - 1
+                    : false,
+                onPressed: () {
+                  onSetNextOrPrev();
+                },
               ),
             ],
           ),
@@ -230,5 +265,19 @@ class _AudioListViewState extends State<AudioListView> {
 
   void setCurrent(Audio _audio) {
     setCurrentAudio(_audio);
+  }
+  void onSetNextOrPrev({String action = 'next'}){
+    int nextIndex = _currentIndex + 1;
+    if(_currentIndex==0||_currentIndex==pagingController.itemList!.length-1){
+      return;
+    }
+    if(action=='prev'){
+      nextIndex = _currentIndex -1;
+    }
+    setCurrent(pagingController.itemList![nextIndex]);
+    setState(() {
+      _currentIndex = nextIndex;
+      _play = true;
+    });
   }
 }

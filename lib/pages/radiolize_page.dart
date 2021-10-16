@@ -17,6 +17,7 @@ class RadiolizePage extends StatefulWidget {
 
 class _RadiolizePageState extends State<RadiolizePage> {
   late AudioPlayer audioPlayer;
+  bool _play = true;
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +67,8 @@ class _RadiolizePageState extends State<RadiolizePage> {
             height: screenHeight * 0.3,
             child: Container(
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(40), color: Colors.lightGreen),
+                  borderRadius: BorderRadius.circular(40),
+                  color: Colors.lightGreen),
               child: Column(
                 children: <Widget>[
                   SizedBox(height: screenHeight * 0.05),
@@ -82,9 +84,16 @@ class _RadiolizePageState extends State<RadiolizePage> {
                     style: TextStyle(fontSize: 20),
                   ),
                   AudioPlayerWidget(
-                      mediaUrl:
-                          'https://studio18.radiolize.com/radio/8220/radio.mp3',
-                      isRadio: true)
+                    mediaUrl:
+                        'https://studio18.radiolize.com/radio/8220/radio.mp3',
+                    isRadio: true,
+                    play: _play,
+                    onPlay: () {
+                      setState(() {
+                        _play = !_play;
+                      });
+                    },
+                  )
                 ],
               ),
             ),

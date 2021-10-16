@@ -6,15 +6,20 @@ import 'package:ivugurura_app/core/utils/constants.dart';
 class AudioPlayerWidget extends StatefulWidget {
   final String mediaUrl;
   final bool isRadio;
-  const AudioPlayerWidget(
-      {Key? key, required this.mediaUrl, this.isRadio = false})
-      : super(key: key);
+  final bool play;
+  final VoidCallback onPlay;
+  const AudioPlayerWidget({
+    Key? key,
+    required this.mediaUrl,
+    this.isRadio = false,
+    required this.play,
+    required this.onPlay
+  }): super(key: key);
   @override
   _AudioPlayerWidgetState createState() => _AudioPlayerWidgetState();
 }
 
 class _AudioPlayerWidgetState extends State<AudioPlayerWidget> {
-  bool _play = true;
   String _currentPosition = '';
 
   @override
@@ -24,7 +29,7 @@ class _AudioPlayerWidgetState extends State<AudioPlayerWidget> {
     }
     return AudioWidget.network(
       url: widget.mediaUrl,
-      play: _play,
+      play: widget.play,
       initialPosition: const Duration(),
       onReadyToPlay: (total) {
         setState(() {
@@ -52,13 +57,9 @@ class _AudioPlayerWidgetState extends State<AudioPlayerWidget> {
                 padding: EdgeInsets.all(14),
                 primary: Theme.of(context).primaryColor,
               ),
-              onPressed: () {
-                setState(() {
-                  _play = !_play;
-                });
-              },
+              onPressed: widget.onPlay,
               child: Icon(
-                _play ? Icons.pause : Icons.play_arrow,
+                widget.play ? Icons.pause : Icons.play_arrow,
                 color: Colors.white,
                 size: 44,
               ),

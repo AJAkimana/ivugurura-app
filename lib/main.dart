@@ -27,11 +27,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var localizationDelegate = LocalizedApp.of(context).delegate;
-    Widget landingScreen = PageLayout(
-        page: HomePage(), title: translate('app.title'), useLayout: true);
+    Widget landingScreen = OnBoardingPage();
     final state = StoreProvider.of<AppState>(context).state.settingState;
-    if (!state.theObject!.hasSet) {
-      landingScreen = OnBoardingPage();
+    if (state.theObject!.hasSet) {
+      landingScreen = PageLayout(
+          page: HomePage(), title: translate('app.title'), useLayout: true);
     }
     return LocalizationProvider(
       state: LocalizationProvider.of(context).state,
@@ -47,8 +47,7 @@ class MyApp extends StatelessWidget {
         locale: localizationDelegate.currentLocale,
         theme: ThemeData(
             scaffoldBackgroundColor: Colors.grey.shade300,
-            primarySwatch: Colors.indigo,
-            accentColor: Colors.red),
+            primarySwatch: Colors.indigo),
         home: landingScreen,
         routes: {
           'home': (_) => landingScreen
