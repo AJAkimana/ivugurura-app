@@ -34,6 +34,8 @@ Future<void> changeSettings(BuildContext context, {Setting? setting}) async {
   if (setting.isDark != null) {
     prefs.setBool(THEME_DARK, setting.isDark ?? false);
   }
-  prefs.setBool(HAS_SET, setting.hasSet);
+  if(setting.hasSet!=null){
+    prefs.setBool(HAS_SET, setting.hasSet??false);
+  }
   await loadSettings(context);
 }

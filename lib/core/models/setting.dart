@@ -7,12 +7,12 @@ part 'setting.g.dart';
 class Setting{
   Language? language;
   bool? isDark;
-  bool hasSet;
+  bool? hasSet;
 
   Setting({
     this.language,
     this.isDark,
-    this.hasSet = false
+    this.hasSet
   });
 
   factory Setting.fromJson(Map<String, dynamic> json) => _$SettingFromJson(json);

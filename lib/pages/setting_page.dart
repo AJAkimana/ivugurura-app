@@ -4,6 +4,7 @@ import 'package:flutter_translate/flutter_translate.dart';
 import 'package:ivugurura_app/core/custom_alert_dialog.dart';
 import 'package:ivugurura_app/core/language_selector.dart';
 import 'package:ivugurura_app/core/models/setting.dart';
+import 'package:ivugurura_app/core/redux/actions/setting_actions.dart';
 import 'package:ivugurura_app/core/redux/base_state.dart';
 import 'package:ivugurura_app/core/redux/store.dart';
 import 'package:ivugurura_app/core/res/assets.dart';
