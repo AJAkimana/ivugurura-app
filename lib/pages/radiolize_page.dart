@@ -32,7 +32,7 @@ class _RadiolizePageState extends State<RadiolizePage> {
             top: 0,
             left: 0,
             right: 0,
-            height: screenHeight / 3,
+            height: screenHeight / 2,
             child: Container(
               color: appColors.audioBlueBackground,
             ),
@@ -63,8 +63,8 @@ class _RadiolizePageState extends State<RadiolizePage> {
           Positioned(
             left: 0,
             right: 0,
-            top: screenHeight / 6,
-            height: screenHeight * 0.3,
+            top: screenHeight / 3,
+            height: screenHeight * 0.4,
             child: Container(
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(40),
