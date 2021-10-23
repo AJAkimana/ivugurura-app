@@ -33,12 +33,12 @@ class OneTopicViewPageState extends State<OneTopicViewPage> {
           converter: (store) => store.state.topicDetailState,
           builder: (context, topicDetail) {
             if (topicDetail.loading) {
-              return Container(
+              return Center(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
-                      DotsLoader(),
+                      CircularProgressIndicator(),
                       SizedBox(height: 10.0,),
                     ],
                   )
