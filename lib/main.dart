@@ -4,6 +4,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_translate/flutter_translate.dart';
 import 'package:ivugurura_app/core/page_layout.dart';
+import 'package:ivugurura_app/core/redux/actions/setting_actions.dart';
 import 'package:ivugurura_app/core/redux/store.dart';
 import 'package:ivugurura_app/pages/onboarding_page.dart';
 import 'package:ivugurura_app/pages/home_page.dart';
@@ -24,12 +25,14 @@ void main() async {
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   final String appTitle = 'Reformation Voice';
+
   @override
   Widget build(BuildContext context) {
     var localizationDelegate = LocalizedApp.of(context).delegate;
+    // loadSettings(context);
     Widget landingScreen = OnBoardingPage();
     final state = StoreProvider.of<AppState>(context).state.settingState;
-    if (state.theObject!.hasSet) {
+    if (state.theObject!.hasSet??false) {
       landingScreen = PageLayout(
           page: HomePage(), title: translate('app.title'), useLayout: true);
     }
