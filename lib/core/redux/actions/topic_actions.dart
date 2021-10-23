@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_translate/flutter_translate.dart';
 import 'package:http/http.dart' as http;
+import 'package:ivugurura_app/core/models/home_content.dart';
 import 'package:ivugurura_app/core/models/topic.dart';
 import 'package:ivugurura_app/core/redux/store.dart';
 import 'package:ivugurura_app/core/utils/constants.dart';
@@ -63,6 +64,30 @@ Future<void> fetchTopicDetail(BuildContext context, String topicSlug) async {
   } catch (error) {
     print('{=======================');
     print(error.toString());
+    print('=========================}');
+    appStore.dispatch(dispatchedAction.rejected(error.toString()));
+  }
+}
+Future<void> fetchHomeContents(BuildContext context) async {
+  DispatchedAction<HomeContent, HomeContentObject> dispatchedAction;
+
+  dispatchedAction = DispatchedAction<HomeContent, HomeContentObject>();
+
+  appStore.dispatch(dispatchedAction.pending());
+  try {
+    final uri = Uri.parse('$homeContentUrl');
+    String? acceptLang =
+        LocalizedApp.of(context).delegate.currentLocale.languageCode;
+
+    final res = await http.get(uri, headers: {'Accept-Language': acceptLang});
+    assert(res.statusCode < 400);
+    final jsonData = json.decode(res.body)['data'];
+    final contentData = HomeContent.fromJson(jsonData);
+    appStore
+        .dispatch(dispatchedAction.fulfilled(contentData, dataType: 'object'));
+  } catch (error) {
+    print('{=======================');
+    print(error);
     print('=========================}');
     appStore.dispatch(dispatchedAction.rejected(error.toString()));
   }

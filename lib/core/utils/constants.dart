@@ -15,6 +15,7 @@ const String AUDIO_PATH = "$BASE_URL/songs/";
 
 const String topicsUrl = "$API_APP_URL/topics";
 const String categoriesUrl = "$API_APP_URL/categories";
+const String homeContentUrl = "$API_APP_URL/manage/home/contents";
 
 const Color primaryColor = Colors.indigo;
 const Color secondaryColor = Color(0xfff12bb8);
