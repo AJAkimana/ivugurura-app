@@ -39,6 +39,7 @@ class _PageLayoutState extends State<PageLayout> {
   final GlobalKey<ScaffoldState> _key = GlobalKey<ScaffoldState>();
   final Color primary = Color(0xff172347);
   final Color active = Color(0xffcdd2d7);
+  String _menuValue = '';
 
   @override
   Widget build(BuildContext context) {
@@ -69,10 +70,10 @@ class _PageLayoutState extends State<PageLayout> {
             icon: Icon(Icons.share),
             onPressed: () {},
           ),
-          PopupMenuButton(
+          PopupMenuButton<String>(
             icon: Icon(Icons.more_vert),
             itemBuilder: (BuildContext context) {
-              return <PopupMenuItem>[
+              return <PopupMenuEntry<String>>[
                 PopupMenuItem(
                   child: ListTile(
                     leading: Icon(Icons.radio),
@@ -82,6 +83,7 @@ class _PageLayoutState extends State<PageLayout> {
                           translate('title.radio'));
                     },
                   ),
+                  value: 'radiolize',
                 ),
                 PopupMenuItem(
                   child: ListTile(
@@ -91,8 +93,14 @@ class _PageLayoutState extends State<PageLayout> {
                       onGoToPage(SettingPage(), translate('title.setting'));
                     },
                   ),
+                  value: 'setting',
                 )
               ];
+            },
+            onSelected: (value){
+             setState(() {
+               _menuValue = value;
+             });
             },
           )
         ],
@@ -219,6 +227,7 @@ class _PageLayoutState extends State<PageLayout> {
   }
 
   void onGoToPage(Widget page, String title) {
+    Navigator.pop(context);
     Navigator.push(
         context,
         MaterialPageRoute(

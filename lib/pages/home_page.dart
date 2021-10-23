@@ -22,13 +22,12 @@ import 'package:ivugurura_app/widget/radio_widget.dart';
 import 'package:ivugurura_app/widget/recent_topic_item.dart';
 import 'package:ivugurura_app/widget/topic_list_item.dart';
 
-class HomePage extends StatefulWidget{
+class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage>{
-
+class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,7 +43,8 @@ class _HomePageState extends State<HomePage>{
       ),
     );
   }
-  RoundedContainer _buildFeacturedTopics(){
+
+  RoundedContainer _buildFeacturedTopics() {
     return RoundedContainer(
       height: 270,
       borderRadius: BorderRadius.circular(0),
@@ -55,80 +55,81 @@ class _HomePageState extends State<HomePage>{
           Text(
             translate('app.most_read_topics'),
             style: TextStyle(
-              fontSize: 20.0,
-              color: Colors.white,
-              fontWeight: FontWeight.bold
-            ),
+                fontSize: 20.0,
+                color: Colors.white,
+                fontWeight: FontWeight.bold),
           ),
           Expanded(
               child: StoreConnector<AppState, BaseState<Topic, CarouselTopic>>(
-                distinct: true,
-                onInitialBuild: (store){
-                  fetchTopics(context);
-                },
-                converter: (store) => store.state.carouselTopicState,
-                builder: (context, topicsState){
-                  List<Topic> allTopics = topicsState.theList!;
-                  if(topicsState.loading){
-                    return DotsLoader();
-                  }
-                  if(topicsState.error != ''){
-                    return DisplayError(error: topicsState.error);
-                  }
-                  if(topicsState.theList!.length < 1){
-                    return Text('No data to display', style: TextStyle(color: Colors.white),);
-                  }else{
-                    return Swiper(
-                      pagination: SwiperPagination(margin: const EdgeInsets.only()),
-                      viewportFraction: 0.9,
-                      itemCount: topicsState.theList!.length,
-                      autoplay: true,
-                      loop: true,
-                      itemBuilder: (context, index){
-                        Topic topic = allTopics[index];
-                        return Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: RoundedContainer(
-                            borderRadius: BorderRadius.circular(4.0),
-                            margin: const EdgeInsets.only(bottom: 20),
-                            child: Row(
-                              children: <Widget>[
-                                Expanded(
-                                  flex: 3,
-                                  child: Text(
-                                    topic.title,
-                                    style: Theme.of(context).textTheme.bodyText1,
-                                  ),
-                                ),
-                                const SizedBox(width: 10.0),
-                                Expanded(
-                                  flex: 2,
-                                  child: Container(
-                                    color: Colors.blueAccent,
-                                    child: PNetworkImage(
-                                      "$IMAGE_PATH/${topic.coverImage}",
-                                      fit: BoxFit.cover,
-                                      height: 210,
-                                    ),
-                                  ),
-                                )
-                              ],
+            distinct: true,
+            onInitialBuild: (store) {
+              fetchTopics(context);
+            },
+            converter: (store) => store.state.carouselTopicState,
+            builder: (context, topicsState) {
+              List<Topic> allTopics = topicsState.theList!;
+              if (topicsState.loading) {
+                return DotsLoader();
+              }
+              if (topicsState.error != '') {
+                return DisplayError(error: topicsState.error);
+              }
+              if (topicsState.theList!.length < 1) {
+                return Text(
+                  'No data to display',
+                  style: TextStyle(color: Colors.white),
+                );
+              } else {
+                return Swiper(
+                  pagination: SwiperPagination(margin: const EdgeInsets.only()),
+                  viewportFraction: 0.9,
+                  itemCount: topicsState.theList!.length,
+                  autoplay: true,
+                  loop: true,
+                  itemBuilder: (context, index) {
+                    Topic topic = allTopics[index];
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: RoundedContainer(
+                        borderRadius: BorderRadius.circular(4.0),
+                        margin: const EdgeInsets.only(bottom: 20),
+                        child: Row(
+                          children: <Widget>[
+                            Expanded(
+                              flex: 3,
+                              child: Text(
+                                topic.title,
+                                style: Theme.of(context).textTheme.bodyText1,
+                              ),
                             ),
-                          ),
-                        );
-                      },
+                            const SizedBox(width: 10.0),
+                            Expanded(
+                              flex: 2,
+                              child: Container(
+                                color: Colors.blueAccent,
+                                child: PNetworkImage(
+                                  "$IMAGE_PATH/${topic.coverImage}",
+                                  fit: BoxFit.cover,
+                                  height: 210,
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
                     );
-                  }
-                },
-              )
-          )
+                  },
+                );
+              }
+            },
+          ))
         ],
       ),
     );
   }
 }
 
-Padding _buildHeading(String title){
+Padding _buildHeading(String title) {
   return Padding(
     padding: const EdgeInsets.all(8.0),
     child: Row(
@@ -143,7 +144,8 @@ Padding _buildHeading(String title){
           height: 0,
           child: Icon(Icons.keyboard_arrow_right),
           minWidth: 0,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
           padding: const EdgeInsets.all(2.0),
           onPressed: () {},
         )
@@ -152,31 +154,31 @@ Padding _buildHeading(String title){
   );
 }
 
-Widget _buildListTopics(BuildContext context, Color color){
+Widget _buildListTopics(BuildContext context, Color color) {
   return StoreConnector<AppState, BaseState<Topic, RecentTopic>>(
     distinct: true,
-    onInitialBuild: (store){
+    onInitialBuild: (store) {
       fetchTopics(context, category: 'recent');
     },
     converter: (store) => store.state.recentTopicState,
-    builder: (context, recentTopicsState){
+    builder: (context, recentTopicsState) {
       List<Topic> recentTopics = recentTopicsState.theList!;
-      if(recentTopicsState.loading){
+      if (recentTopicsState.loading) {
         return DotsLoader();
       }
-      if(recentTopicsState.error!=''){
+      if (recentTopicsState.error != '') {
         return DisplayError(error: recentTopicsState.error);
       }
-      if(recentTopicsState.theList!.length < 1){
+      if (recentTopicsState.theList!.length < 1) {
         return Text('Not data to display');
       }
-      return  ListView.builder(
+      return ListView.builder(
         shrinkWrap: true,
         physics: NeverScrollableScrollPhysics(),
-          itemCount: recentTopics.length,
-          itemBuilder: (BuildContext context, int index){
-            return TopicListItem(topic: recentTopics[index]);
-          },
+        itemCount: recentTopics.length,
+        itemBuilder: (BuildContext context, int index) {
+          return TopicListItem(topic: recentTopics[index]);
+        },
       );
     },
   );
