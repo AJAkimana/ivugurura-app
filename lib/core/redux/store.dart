@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:ivugurura_app/core/models/audio.dart';
 import 'package:ivugurura_app/core/models/category.dart';
+import 'package:ivugurura_app/core/models/home_content.dart';
 import 'package:ivugurura_app/core/models/language.dart';
 import 'package:ivugurura_app/core/models/setting.dart';
 import 'package:ivugurura_app/core/models/topic.dart';
@@ -39,6 +40,10 @@ AppState appReducer(AppState state, dynamic action) {
     return state.copyWith(
         currentAudio: baseReducer(state.currentAudio, action));
   }
+  if (action is BaseAction<HomeContent, HomeContentObject>) {
+    return state.copyWith(
+        homeContent: baseReducer(state.homeContent, action));
+  }
   return state;
 }
 
@@ -51,6 +56,7 @@ class AppState {
   final BaseState<Setting, SettingInfo> settingState;
   final BaseState<Topic, CategoryTopic> categoryTopic;
   final BaseState<Audio, AudioDetail> currentAudio;
+  final BaseState<HomeContent, HomeContentObject> homeContent;
 
   AppState(
       {required this.carouselTopicState,
@@ -59,17 +65,18 @@ class AppState {
       required this.categoriesState,
       required this.settingState,
       required this.categoryTopic,
-      required this.currentAudio});
+      required this.currentAudio,
+      required this.homeContent});
 
-  AppState copyWith({
-    BaseState<Topic, CarouselTopic>? carouselTopicState,
-    BaseState<Topic, RecentTopic>? recentTopicState,
-    BaseState<Topic, TopicDetail>? topicDetailState,
-    BaseState<Category, CategoriesList>? categoriesState,
-    BaseState<Setting, SettingInfo>? settingState,
-    BaseState<Topic, CategoryTopic>? categoryTopic,
-    BaseState<Audio, AudioDetail>? currentAudio,
-  }) {
+  AppState copyWith(
+      {BaseState<Topic, CarouselTopic>? carouselTopicState,
+      BaseState<Topic, RecentTopic>? recentTopicState,
+      BaseState<Topic, TopicDetail>? topicDetailState,
+      BaseState<Category, CategoriesList>? categoriesState,
+      BaseState<Setting, SettingInfo>? settingState,
+      BaseState<Topic, CategoryTopic>? categoryTopic,
+      BaseState<Audio, AudioDetail>? currentAudio,
+      BaseState<HomeContent, HomeContentObject>? homeContent}) {
     return AppState(
         carouselTopicState: carouselTopicState ?? this.carouselTopicState,
         recentTopicState: recentTopicState ?? this.recentTopicState,
@@ -77,7 +84,8 @@ class AppState {
         categoriesState: categoriesState ?? this.categoriesState,
         settingState: settingState ?? this.settingState,
         categoryTopic: categoryTopic ?? this.categoryTopic,
-        currentAudio: currentAudio ?? this.currentAudio);
+        currentAudio: currentAudio ?? this.currentAudio,
+        homeContent: homeContent ?? this.homeContent);
   }
 }
 
@@ -91,8 +99,7 @@ class ReduxStore {
                 BaseState<Topic, CarouselTopic>.initial(() => new Topic()),
             recentTopicState:
                 BaseState<Topic, RecentTopic>.initial(() => new Topic()),
-            topicDetailState: BaseState<Topic, TopicDetail>.initial(
-                () => new Topic(),
+            topicDetailState: BaseState<Topic, TopicDetail>.initial(() => new Topic(),
                 dataType: 'object'),
             categoriesState: BaseState<Category, CategoriesList>.initial(
                 () => new Category()),
@@ -103,8 +110,9 @@ class ReduxStore {
                 dataType: 'object'),
             categoryTopic:
                 BaseState<Topic, CategoryTopic>.initial(() => new Topic()),
-            currentAudio: BaseState<Audio, AudioDetail>.initial(
-                () => new Audio(),
+            currentAudio: BaseState<Audio, AudioDetail>.initial(() => new Audio(),
+                dataType: 'object'),
+            homeContent: BaseState<HomeContent, HomeContentObject>.initial(() => new HomeContent(),
                 dataType: 'object')));
   }
 }

@@ -20,6 +20,7 @@ import 'package:ivugurura_app/widget/dots_loader.dart';
 
 import 'models/audio.dart';
 import 'models/category.dart';
+import 'models/home_content.dart';
 
 class PageLayout extends StatefulWidget {
   final String title;
@@ -161,26 +162,28 @@ class _PageLayoutState extends State<PageLayout> {
 
   Widget _buildCategoriesList() {
     final TextStyle textStyle = TextStyle(color: active, fontSize: 16.0);
-    return StoreConnector<AppState, BaseState<Category, CategoriesList>>(
+    return StoreConnector<AppState, BaseState<HomeContent, HomeContentObject>>(
         distinct: true,
         onInitialBuild: (store) {},
-        converter: (store) => store.state.categoriesState,
-        builder: (context, categoriesState) {
-          if (categoriesState.loading && categoriesState.theList!.length == 0) {
-            return DotsLoader();
+        converter: (store) => store.state.homeContent,
+        builder: (context, homeContentState) {
+          final categories = homeContentState.theObject!.categories;
+          if (homeContentState.loading) {
+            return CircularProgressIndicator();
           }
-          if (categoriesState.error != '') {
+          if (homeContentState.error != '') {
             return Text('Something went wrong');
           }
-          if (categoriesState.theList!.length < 1) {
+          if (categories.length < 1) {
             return Text('Not data');
           }
+
           return ListView.builder(
             shrinkWrap: true,
             physics: NeverScrollableScrollPhysics(),
-            itemCount: categoriesState.theList!.length,
+            itemCount: categories.length,
             itemBuilder: (BuildContext context, int index) {
-              Category category = categoriesState.theList![index];
+              Category category = categories[index];
               print(category.language);
               return InkWell(
                 onTap: () {
