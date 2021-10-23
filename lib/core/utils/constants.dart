@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ivugurura_app/core/models/audio.dart';
 import 'package:ivugurura_app/core/models/language.dart';
 
 const bool isLocal = false;
@@ -19,12 +20,12 @@ const Color primaryColor = Colors.indigo;
 const Color secondaryColor = Color(0xfff12bb8);
 const Color bgColor = Color(0xffF9E0E3);
 TextStyle titleHeadingStyle({Color color = secondaryColor}) => TextStyle(
-  color: color,
-  fontSize: 20.0,
-  fontWeight: FontWeight.bold,
-);
+      color: color,
+      fontSize: 20.0,
+      fontWeight: FontWeight.bold,
+    );
 
-enum ILanguage { en, kn, sw}
+enum ILanguage { en, kn, sw }
 
 List<Language> systemLanguages = [
   Language(name: 'English', short_name: 'en'),
@@ -41,3 +42,9 @@ Language getLanguageInfo({String? shortName}) {
 const String LANG_SHORT_NAME = 'shortName';
 const String THEME_DARK = 'isDark';
 const HAS_SET = 'hasSet';
+
+Audio audioRadiolize = Audio(
+    title: 'Ijwi ry ubugorozi',
+    author: 'Radiolize',
+    mediaLink: 'https://studio18.radiolize.com/radio/8220/radio.mp3'
+);

@@ -5,6 +5,7 @@ import 'package:ivugurura_app/core/models/audio.dart';
 import 'package:ivugurura_app/utils/app_colors.dart' as appColors;
 import 'package:ivugurura_app/widget/audio_player_widget.dart';
 import 'package:ivugurura_app/widget/player_widget.dart';
+import 'package:ivugurura_app/widget/radio_widget.dart';
 
 class RadiolizePage extends StatefulWidget {
   final Audio audio;
@@ -16,7 +17,6 @@ class RadiolizePage extends StatefulWidget {
 }
 
 class _RadiolizePageState extends State<RadiolizePage> {
-  late AudioPlayer audioPlayer;
   bool _play = true;
 
   @override
@@ -60,43 +60,11 @@ class _RadiolizePageState extends State<RadiolizePage> {
               elevation: 0.0,
             ),
           ),
-          Positioned(
-            left: 0,
-            right: 0,
-            top: screenHeight / 3,
-            height: screenHeight * 0.4,
-            child: Container(
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(40),
-                  color: Colors.lightGreen),
-              child: Column(
-                children: <Widget>[
-                  SizedBox(height: screenHeight * 0.05),
-                  Text(
-                    widget.audio.title as String,
-                    style: TextStyle(
-                        fontSize: 30,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Avenir'),
-                  ),
-                  Text(
-                    widget.audio.author as String,
-                    style: TextStyle(fontSize: 20),
-                  ),
-                  AudioPlayerWidget(
-                    mediaUrl:
-                        'https://studio18.radiolize.com/radio/8220/radio.mp3',
-                    isRadio: true,
-                    play: _play,
-                    onPlay: () {
-                      setState(() {
-                        _play = !_play;
-                      });
-                    },
-                  )
-                ],
-              ),
-            ),
+          RadioWidget(
+              audio: widget.audio,
+              top: screenHeight / 3,
+              height: screenHeight * 0.4,
+            color: Colors.blueGrey,
           )
         ],
       ),
