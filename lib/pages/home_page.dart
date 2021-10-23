@@ -4,6 +4,8 @@ import 'package:flutter_swiper_null_safety/flutter_swiper_null_safety.dart';
 import 'package:flutter_translate/flutter_translate.dart';
 import 'package:ivugurura_app/core/models/category.dart';
 import 'package:ivugurura_app/core/models/topic.dart';
+import 'package:ivugurura_app/core/redux/actions/category_actions.dart';
+import 'package:ivugurura_app/core/redux/actions/setting_actions.dart';
 import 'package:ivugurura_app/core/redux/actions/topic_actions.dart';
 import 'package:ivugurura_app/core/redux/base_state.dart';
 import 'package:ivugurura_app/core/redux/store.dart';
@@ -26,6 +28,11 @@ class HomePage extends StatefulWidget{
 
 class _HomePageState extends State<HomePage>{
 
+  // @override
+  // void initState() {
+  //   super.initState();
+  //
+  // }
   @override
   Widget build(BuildContext context) {
     return Scaffold(

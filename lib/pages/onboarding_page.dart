@@ -142,9 +142,9 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
     );
   }
 
-  void onGoHome() {
+  void onGoHome() async {
     changeSettings(context, setting: Setting(hasSet: true));
-    fetchCategories(context);
+    await fetchCategories(context);
     Navigator.of(context).pushReplacementNamed('home');
   }
 }
