@@ -125,9 +125,7 @@ class _PageLayoutState extends State<PageLayout> {
     final TextStyle textStyle = TextStyle(color: active, fontSize: 16.0);
     return StoreConnector<AppState, BaseState<Category, CategoriesList>>(
         distinct: true,
-        onInitialBuild: (store) {
-          fetchCategories(context);
-        },
+        onInitialBuild: (store) {},
         converter: (store) => store.state.categoriesState,
         builder: (context, categoriesState) {
           if (categoriesState.loading && categoriesState.theList!.length == 0) {
