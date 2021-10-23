@@ -6,6 +6,7 @@ import 'package:ivugurura_app/core/keep_alive.dart';
 import 'package:ivugurura_app/core/redux/actions/category_actions.dart';
 import 'package:ivugurura_app/core/redux/base_state.dart';
 import 'package:ivugurura_app/core/redux/store.dart';
+import 'package:ivugurura_app/core/utils/constants.dart';
 // import 'package:ivugurura_app/widget/audio_player_widget.dart';
 // import 'package:ivugurura_app/pages/music_player_page.dart';
 import 'package:ivugurura_app/pages/radiolize_page.dart';
@@ -59,6 +60,42 @@ class _PageLayoutState extends State<PageLayout> {
             _key.currentState!.openDrawer();
           },
         ),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.radio),
+            onPressed: () {},
+          ),
+          IconButton(
+            icon: Icon(Icons.share),
+            onPressed: () {},
+          ),
+          PopupMenuButton(
+            icon: Icon(Icons.more_vert),
+            itemBuilder: (BuildContext context) {
+              return <PopupMenuItem>[
+                PopupMenuItem(
+                  child: ListTile(
+                    leading: Icon(Icons.radio),
+                    title: Text('Radiolize'),
+                    onTap: () {
+                      onGoToPage(RadiolizePage(audio: audioRadiolize),
+                          translate('title.radio'));
+                    },
+                  ),
+                ),
+                PopupMenuItem(
+                  child: ListTile(
+                    leading: Icon(Icons.settings),
+                    title: Text(translate('title.setting')),
+                    onTap: () {
+                      onGoToPage(SettingPage(), translate('title.setting'));
+                    },
+                  ),
+                )
+              ];
+            },
+          )
+        ],
       ),
       drawer: _buildDrawer(),
       body: Stack(
@@ -89,14 +126,7 @@ class _PageLayoutState extends State<PageLayout> {
                   _buildDivider(),
                   _buildCategoriesList(),
                   _buildDivider(),
-                  _buildRow(
-                      RadiolizePage(
-                          audio: Audio(
-                              title: 'Ijwi ry ubugorozi',
-                              author: 'Radiolize',
-                              mediaLink:
-                                  'https://studio18.radiolize.com/radio/8220/radio.mp3')),
-                      Icons.radio,
+                  _buildRow(RadiolizePage(audio: audioRadiolize), Icons.radio,
                       translate('title.radio')),
                   _buildDivider(),
                   _buildRow(AudioPlayerPage(), Icons.music_note,
@@ -183,11 +213,15 @@ class _PageLayoutState extends State<PageLayout> {
         ),
       ),
       onTap: () {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (_) => PageLayout(title: title, page: page)));
+        onGoToPage(page, title);
       },
     );
+  }
+
+  void onGoToPage(Widget page, String title) {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (_) => PageLayout(title: title, page: page)));
   }
 }

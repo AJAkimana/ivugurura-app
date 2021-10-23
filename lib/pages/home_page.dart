@@ -18,6 +18,7 @@ import 'package:ivugurura_app/widget/display_error.dart';
 import 'package:ivugurura_app/widget/display_loading.dart';
 import 'package:ivugurura_app/widget/dots_loader.dart';
 import 'package:ivugurura_app/widget/network_image.dart';
+import 'package:ivugurura_app/widget/radio_widget.dart';
 import 'package:ivugurura_app/widget/recent_topic_item.dart';
 import 'package:ivugurura_app/widget/topic_list_item.dart';
 
@@ -28,11 +29,6 @@ class HomePage extends StatefulWidget{
 
 class _HomePageState extends State<HomePage>{
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  //
-  // }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,7 +39,6 @@ class _HomePageState extends State<HomePage>{
           const SizedBox(height: 10.0),
           _buildHeading(translate('app.recent_topics')),
           _buildListTopics(context, Colors.blue.shade300),
-          // _buildListTopics(context, Colors.red.shade300),
           _buildHeading(translate('app.category_browse')),
         ],
       ),
