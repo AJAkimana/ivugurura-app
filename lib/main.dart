@@ -4,7 +4,6 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_translate/flutter_translate.dart';
 import 'package:ivugurura_app/core/page_layout.dart';
-import 'package:ivugurura_app/core/redux/actions/setting_actions.dart';
 import 'package:ivugurura_app/core/redux/store.dart';
 import 'package:ivugurura_app/pages/onboarding_page.dart';
 import 'package:ivugurura_app/pages/home_page.dart';
@@ -30,11 +29,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     var localizationDelegate = LocalizedApp.of(context).delegate;
     // loadSettings(context);
-    Widget landingScreen = OnBoardingPage();
+    Widget landingScreen = PageLayout(
+        page: HomePage(), title: translate('app.title'), useLayout: true);
     final state = StoreProvider.of<AppState>(context).state.settingState;
-    if (state.theObject!.hasSet??false) {
-      landingScreen = PageLayout(
-          page: HomePage(), title: translate('app.title'), useLayout: true);
+    if (state.theObject!.hasSet == null || state.theObject!.hasSet!) {
+      landingScreen = OnBoardingPage();
     }
     return LocalizationProvider(
       state: LocalizationProvider.of(context).state,
