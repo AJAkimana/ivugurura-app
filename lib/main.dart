@@ -7,6 +7,7 @@ import 'package:ivugurura_app/core/page_layout.dart';
 import 'package:ivugurura_app/core/redux/store.dart';
 import 'package:ivugurura_app/pages/onboarding_page.dart';
 import 'package:ivugurura_app/pages/home_page.dart';
+import 'package:ivugurura_app/pages/splash_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,14 +28,20 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var localizationDelegate = LocalizedApp.of(context).delegate;
     // loadSettings(context);
-    Widget landingScreen = PageLayout(
-        page: HomePage(), title: translate('app.title'), useLayout: true);
+    Widget landingScreen = SplashPage();
     final state = StoreProvider.of<AppState>(context).state.settingState;
-    if (state.theObject!.hasSet == null || state.theObject!.hasSet!) {
+    if(state.theObject!.hasSet == null){
+      landingScreen =  SplashPage();
+    }
+    if (state.theObject!.hasSet??false) {
       landingScreen = OnBoardingPage();
     }
+    if(state.theObject!.hasSet??true){
+      landingScreen = PageLayout(
+          page: HomePage(), title: translate('app.title'), useLayout: true);
+    }
+    var localizationDelegate = LocalizedApp.of(context).delegate;
     return LocalizationProvider(
       state: LocalizationProvider.of(context).state,
       child: MaterialApp(

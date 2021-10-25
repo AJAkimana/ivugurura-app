@@ -10,7 +10,7 @@ class SplashPage extends StatelessWidget {
           ? Color(0xe1f5fe).withOpacity(1.0)
           : Color(0x042a49).withOpacity(1.0),
       body: Center(
-          child: Text('I', style: TextStyle(fontSize: 48))),
+          child: Text('Ijwi ry Ubugorozi', style: TextStyle(fontSize: 72))),
     );
   }
 }

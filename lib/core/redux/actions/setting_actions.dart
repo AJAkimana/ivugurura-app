@@ -27,15 +27,14 @@ Future<void> loadSettings(BuildContext context) async {
 
 Future<void> changeSettings(BuildContext context, {Setting? setting}) async {
   final prefs = await SharedPreferences.getInstance();
-  Language? language = setting!.language;
-  if (language != null) {
-    prefs.setString(LANG_SHORT_NAME, language.short_name ?? 'kn');
+  if (setting!.language != null) {
+    prefs.setString(LANG_SHORT_NAME, setting.language!.short_name ?? 'kn');
   }
   if (setting.isDark != null) {
     prefs.setBool(THEME_DARK, setting.isDark ?? false);
   }
-  if(setting.hasSet!=null){
-    prefs.setBool(HAS_SET, setting.hasSet??false);
+  if (setting.hasSet != null) {
+    prefs.setBool(HAS_SET, setting.hasSet ?? false);
   }
   await loadSettings(context);
 }

@@ -22,7 +22,7 @@ class LanguageSelectorState extends State<LanguageSelector> {
   void _selectLanguage(Language? language) async {
     Setting setting = Setting(language: language);
     changeSettings(context, setting: setting);
-    changeLocale(context, language!.short_name);
+    // changeLocale(context, language!.short_name);
   }
 
   @override
