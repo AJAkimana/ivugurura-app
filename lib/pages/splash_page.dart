@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashPage extends StatelessWidget {
   @override
@@ -19,10 +20,12 @@ class Init {
   Init._();
   static final instance = Init._();
 
-  Future initialize() async {
+  Future<SharedPreferences> initialize() async {
     // This is where you can initialize the resources needed by your app while
     // the splash screen is displayed.  Remove the following example because
     // delaying the user experience is a bad design practice!
-    await Future.delayed(const Duration(seconds: 3));
+    final prefs = await SharedPreferences.getInstance();
+
+    return prefs;
   }
 }

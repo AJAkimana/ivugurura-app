@@ -8,7 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../base_action.dart';
 import '../store.dart';
 
-Future<void> loadSettings(BuildContext context) async {
+Future<void> loadSettings() async {
   DispatchedAction<Setting, SettingInfo> dispatchedAction;
 
   dispatchedAction = DispatchedAction<Setting, SettingInfo>();
@@ -22,13 +22,13 @@ Future<void> loadSettings(BuildContext context) async {
   final setting = Setting(language: language, isDark: isDark, hasSet: hasSet);
 
   appStore.dispatch(dispatchedAction.fulfilled(setting, dataType: 'object'));
-  changeLocale(context, setting.language!.short_name);
 }
 
 Future<void> changeSettings(BuildContext context, {Setting? setting}) async {
   final prefs = await SharedPreferences.getInstance();
   if (setting!.language != null) {
     prefs.setString(LANG_SHORT_NAME, setting.language!.short_name ?? 'kn');
+    changeLocale(context, setting.language!.short_name);
   }
   if (setting.isDark != null) {
     prefs.setBool(THEME_DARK, setting.isDark ?? false);
@@ -36,5 +36,5 @@ Future<void> changeSettings(BuildContext context, {Setting? setting}) async {
   if (setting.hasSet != null) {
     prefs.setBool(HAS_SET, setting.hasSet ?? false);
   }
-  await loadSettings(context);
+  await loadSettings();
 }

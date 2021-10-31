@@ -40,7 +40,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
 
   @override
   void initState() {
-    loadSettings(context);
+    loadSettings();
     super.initState();
   }
 

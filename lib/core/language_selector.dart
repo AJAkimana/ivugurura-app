@@ -27,7 +27,7 @@ class LanguageSelectorState extends State<LanguageSelector> {
 
   @override
   void initState() {
-    loadSettings(context);
+    loadSettings();
     super.initState();
   }
   @override
