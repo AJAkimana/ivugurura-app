@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ivugurura_app/core/redux/actions/setting_actions.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashPage extends StatelessWidget {
@@ -24,6 +25,7 @@ class Init {
     // This is where you can initialize the resources needed by your app while
     // the splash screen is displayed.  Remove the following example because
     // delaying the user experience is a bad design practice!
+    await loadSettings();
     final prefs = await SharedPreferences.getInstance();
 
     return prefs;

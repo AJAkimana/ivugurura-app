@@ -4,6 +4,7 @@ import 'package:flutter_swiper_null_safety/flutter_swiper_null_safety.dart';
 import 'package:flutter_translate/flutter_translate.dart';
 import 'package:ivugurura_app/core/models/category.dart';
 import 'package:ivugurura_app/core/models/home_content.dart';
+import 'package:ivugurura_app/core/models/setting.dart';
 import 'package:ivugurura_app/core/models/topic.dart';
 import 'package:ivugurura_app/core/page_layout.dart';
 import 'package:ivugurura_app/core/redux/actions/category_actions.dart';
@@ -15,6 +16,7 @@ import 'package:ivugurura_app/core/res/assets.dart';
 import 'package:ivugurura_app/core/res/text_styles.dart';
 import 'package:ivugurura_app/core/rounded_container.dart';
 import 'package:ivugurura_app/core/utils/constants.dart';
+import 'package:ivugurura_app/pages/onboarding_page.dart';
 import 'package:ivugurura_app/widget/display_error.dart';
 import 'package:ivugurura_app/widget/network_image.dart';
 import 'package:ivugurura_app/widget/topic_list_item.dart';
@@ -29,32 +31,47 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
-    return StoreConnector<AppState, BaseState<HomeContent, HomeContentObject>>(
+    return StoreConnector<AppState, dynamic>(
         distinct: true,
         onInitialBuild: (store) {
           fetchHomeContents(context);
         },
-        converter: (store) => store.state.homeContent,
-        builder: (context, homeContentState) {
+        converter: (store) => store.state,
+        builder: (context, allState) {
+          final homeContentState = allState.homeContent;
+
+          final settingState =
+              allState.settingState as BaseState<Setting, SettingInfo>;
+
           final mostReads = homeContentState.theObject!.mostReads;
           final categories = homeContentState.theObject!.categories;
           final recents = homeContentState.theObject!.recents;
+
+          if (settingState.theObject != null &&
+              settingState.theObject!.hasSet != null &&
+              !settingState.theObject!.hasSet!) {
+            return OnBoardingPage();
+          }
           if (homeContentState.loading) {
             return Center(
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    CircularProgressIndicator(),
-                    SizedBox(height: 10.0,),
-                  ],
-                )
-            );
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                CircularProgressIndicator(),
+                SizedBox(
+                  height: 10.0,
+                ),
+              ],
+            ));
           }
           if (homeContentState.error != '') {
-            return DisplayError(error: homeContentState.error, onTryAgain: (){
-              fetchHomeContents(context);
-            },);
+            return DisplayError(
+              error: homeContentState.error,
+              onTryAgain: () {
+                fetchHomeContents(context);
+              },
+            );
           } else {
             return Scaffold(
               backgroundColor: Colors.grey.shade300,
@@ -78,15 +95,16 @@ class _HomePageState extends State<HomePage> {
                     child: ListView.builder(
                       scrollDirection: Axis.horizontal,
                       itemCount: categories.length,
-                      itemBuilder: (BuildContext context, int index){
+                      itemBuilder: (BuildContext context, int index) {
                         return InkWell(
-                          onTap: (){
+                          onTap: () {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                     builder: (_) => PageLayout(
                                         title: 'title',
-                                        page: AllTopicsPage(category: categories[index]))));
+                                        page: AllTopicsPage(
+                                            category: categories[index]))));
                           },
                           child: Column(
                             children: <Widget>[
@@ -101,7 +119,7 @@ class _HomePageState extends State<HomePage> {
                                 height: 50,
                               ),
                               SizedBox(height: 10),
-                              Text(categories[index].name??'')
+                              Text(categories[index].name ?? '')
                             ],
                           ),
                         );
@@ -112,8 +130,7 @@ class _HomePageState extends State<HomePage> {
               ),
             );
           }
-        }
-    );
+        });
   }
 }
 
@@ -141,7 +158,6 @@ Padding _buildHeading(String title) {
     ),
   );
 }
-
 
 class MostReadTopics extends StatelessWidget {
   final List<Topic> topics;
@@ -205,8 +221,6 @@ class MostReadTopics extends StatelessWidget {
                   );
                 },
               ))
-            ]
-        )
-    );
+            ]));
   }
 }
