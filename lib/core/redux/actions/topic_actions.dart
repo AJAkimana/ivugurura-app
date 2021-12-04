@@ -1,13 +1,12 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_translate/flutter_translate.dart';
 import 'package:http/http.dart' as http;
 import 'package:ivugurura_app/core/models/home_content.dart';
 import 'package:ivugurura_app/core/models/topic.dart';
 import 'package:ivugurura_app/core/redux/store.dart';
 import 'package:ivugurura_app/core/utils/constants.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../base_action.dart';
 
@@ -18,14 +17,13 @@ Future<void> fetchTopics(BuildContext context,
   if (category == 'recent') {
     dispatchedAction = DispatchedAction<Topic, RecentTopic>();
   }
-  if (category is int){
+  if (category is int) {
     dispatchedAction = DispatchedAction<Topic, CategoryTopic>();
   }
   appStore.dispatch(dispatchedAction.pending());
   try {
     String url = '$topicsUrl?page=$page&pageSize=$pageSize&category=$category';
-    String? acceptLang =
-        LocalizedApp.of(context).delegate.currentLocale.languageCode;
+    String? acceptLang = await getLangFromPrefs();
 
     final res = await http
         .get(Uri.parse(url), headers: {'Accept-Language': acceptLang});
@@ -39,8 +37,9 @@ Future<void> fetchTopics(BuildContext context,
   } catch (error) {
     print('{=======================');
     print(error);
+    print(error.runtimeType);
     print('=========================}');
-    appStore.dispatch(dispatchedAction.rejected(error.toString()));
+    appStore.dispatch(dispatchedAction.rejected(error));
   }
 }
 
@@ -52,8 +51,7 @@ Future<void> fetchTopicDetail(BuildContext context, String topicSlug) async {
   appStore.dispatch(dispatchedAction.pending());
   try {
     final uri = Uri.parse('$topicsUrl/$topicSlug');
-    String? acceptLang =
-        LocalizedApp.of(context).delegate.currentLocale.languageCode;
+    String? acceptLang = await getLangFromPrefs();
 
     final res = await http.get(uri, headers: {'Accept-Language': acceptLang});
     assert(res.statusCode < 400);
@@ -64,10 +62,12 @@ Future<void> fetchTopicDetail(BuildContext context, String topicSlug) async {
   } catch (error) {
     print('{=======================');
     print(error.toString());
+    print(error.runtimeType);
     print('=========================}');
-    appStore.dispatch(dispatchedAction.rejected(error.toString()));
+    appStore.dispatch(dispatchedAction.rejected(error));
   }
 }
+
 Future<void> fetchHomeContents(BuildContext context) async {
   DispatchedAction<HomeContent, HomeContentObject> dispatchedAction;
 
@@ -76,8 +76,7 @@ Future<void> fetchHomeContents(BuildContext context) async {
   appStore.dispatch(dispatchedAction.pending());
   try {
     final uri = Uri.parse('$homeContentUrl');
-    String? acceptLang =
-        LocalizedApp.of(context).delegate.currentLocale.languageCode;
+    String? acceptLang = await getLangFromPrefs();
 
     final res = await http.get(uri, headers: {'Accept-Language': acceptLang});
     assert(res.statusCode < 400);
@@ -88,7 +87,8 @@ Future<void> fetchHomeContents(BuildContext context) async {
   } catch (error) {
     print('{=======================');
     print(error);
+    print(error.runtimeType);
     print('=========================}');
-    appStore.dispatch(dispatchedAction.rejected(error.toString()));
+    appStore.dispatch(dispatchedAction.rejected(error));
   }
 }

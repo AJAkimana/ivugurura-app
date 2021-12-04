@@ -39,12 +39,6 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
   int currentIndex = 0;
 
   @override
-  void initState() {
-    loadSettings();
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final List<Widget> swiperPages = [
       WelcomeCard(),
@@ -145,6 +139,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
   }
 
   void onGoHome() async {
+
     changeSettings(context, setting: Setting(hasSet: true));
     // await fetchCategories(context);
     Navigator.push(

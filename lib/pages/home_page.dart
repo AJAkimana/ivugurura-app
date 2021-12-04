@@ -2,16 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_swiper_null_safety/flutter_swiper_null_safety.dart';
 import 'package:flutter_translate/flutter_translate.dart';
-import 'package:ivugurura_app/core/models/category.dart';
 import 'package:ivugurura_app/core/models/home_content.dart';
 import 'package:ivugurura_app/core/models/topic.dart';
 import 'package:ivugurura_app/core/page_layout.dart';
-import 'package:ivugurura_app/core/redux/actions/category_actions.dart';
 import 'package:ivugurura_app/core/redux/actions/setting_actions.dart';
 import 'package:ivugurura_app/core/redux/actions/topic_actions.dart';
 import 'package:ivugurura_app/core/redux/base_state.dart';
 import 'package:ivugurura_app/core/redux/store.dart';
-import 'package:ivugurura_app/core/res/assets.dart';
 import 'package:ivugurura_app/core/res/text_styles.dart';
 import 'package:ivugurura_app/core/rounded_container.dart';
 import 'package:ivugurura_app/core/utils/constants.dart';
@@ -27,6 +24,13 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    loadSettings(context);
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, BaseState<HomeContent, HomeContentObject>>(
@@ -42,19 +46,23 @@ class _HomePageState extends State<HomePage> {
           if (homeContentState.loading) {
             return Center(
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    CircularProgressIndicator(),
-                    SizedBox(height: 10.0,),
-                  ],
-                )
-            );
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                CircularProgressIndicator(),
+                SizedBox(
+                  height: 10.0,
+                ),
+              ],
+            ));
           }
           if (homeContentState.error != '') {
-            return DisplayError(error: homeContentState.error, onTryAgain: (){
-              fetchHomeContents(context);
-            },);
+            return DisplayError(
+              error: homeContentState.error,
+              onTryAgain: () {
+                fetchHomeContents(context);
+              },
+            );
           } else {
             return Scaffold(
               backgroundColor: Colors.grey.shade300,
@@ -78,15 +86,16 @@ class _HomePageState extends State<HomePage> {
                     child: ListView.builder(
                       scrollDirection: Axis.horizontal,
                       itemCount: categories.length,
-                      itemBuilder: (BuildContext context, int index){
+                      itemBuilder: (BuildContext context, int index) {
                         return InkWell(
-                          onTap: (){
+                          onTap: () {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                     builder: (_) => PageLayout(
                                         title: 'title',
-                                        page: AllTopicsPage(category: categories[index]))));
+                                        page: AllTopicsPage(
+                                            category: categories[index]))));
                           },
                           child: Column(
                             children: <Widget>[
@@ -101,7 +110,7 @@ class _HomePageState extends State<HomePage> {
                                 height: 50,
                               ),
                               SizedBox(height: 10),
-                              Text(categories[index].name??'')
+                              Text(categories[index].name ?? '')
                             ],
                           ),
                         );
@@ -112,8 +121,7 @@ class _HomePageState extends State<HomePage> {
               ),
             );
           }
-        }
-    );
+        });
   }
 }
 
@@ -141,7 +149,6 @@ Padding _buildHeading(String title) {
     ),
   );
 }
-
 
 class MostReadTopics extends StatelessWidget {
   final List<Topic> topics;
@@ -205,8 +212,6 @@ class MostReadTopics extends StatelessWidget {
                   );
                 },
               ))
-            ]
-        )
-    );
+            ]));
   }
 }
