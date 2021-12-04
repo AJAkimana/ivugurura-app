@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:ivugurura_app/core/models/audio.dart';
 import 'package:ivugurura_app/core/models/language.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 const bool isLocal = false;
 const String BASE_REMOTE_URL = "https://reformationvoice.org";
-const String BASE_LOCAL_URL = "http://192.168.8.100:5600";
+const String BASE_LOCAL_URL = "http://192.168.88.46:5600";
 
 const BASE_URL = isLocal ? BASE_LOCAL_URL : BASE_REMOTE_URL;
 
@@ -49,3 +50,8 @@ Audio audioRadiolize = Audio(
     author: 'Radiolize',
     mediaLink: 'https://studio18.radiolize.com/radio/8220/radio.mp3'
 );
+
+Future<String> getLangFromPrefs() async {
+  final prefs = await SharedPreferences.getInstance();
+  return (prefs.getString(LANG_SHORT_NAME) ?? 'kn');
+}

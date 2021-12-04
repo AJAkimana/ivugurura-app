@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_translate/flutter_translate.dart';
 import 'package:ivugurura_app/core/models/category.dart';
 import 'package:ivugurura_app/core/utils/constants.dart';
 import 'package:http/http.dart' as http;
@@ -15,10 +14,10 @@ Future<void> fetchCategories(BuildContext context) async {
 
   appStore.dispatch(dispatchedAction.pending());
   try {
-    String? acceptLang =
-        LocalizedApp.of(context).delegate.currentLocale.languageCode;
+    String acceptLang = await getLangFromPrefs();
 
-    final res = await http.get(Uri.parse(categoriesUrl+'?categoryType=with-topics'),
+    final res = await http.get(
+        Uri.parse(categoriesUrl + '?categoryType=with-topics'),
         headers: {'Accept-Language': acceptLang});
     assert(res.statusCode < 400);
     final jsonData = json.decode(res.body)['data'] as List;

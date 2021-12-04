@@ -8,18 +8,20 @@ import 'package:ivugurura_app/core/redux/store.dart';
 import 'package:ivugurura_app/core/utils/constants.dart';
 import 'package:ivugurura_app/pages/onboarding_page.dart';
 import 'package:ivugurura_app/pages/home_page.dart';
-import 'package:ivugurura_app/pages/splash_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+bool? hasAlreadySetUp;
 void main() async {
+  // loadSettings();
   WidgetsFlutterBinding.ensureInitialized();
   AssetsAudioPlayer.setupNotificationsOpenAction((notification) {
     print('===>Notification id: ${notification.audioId}');
     return true;
   });
-
   var delegate = await LocalizationDelegate.create(
-      fallbackLocale: 'en', supportedLocales: ['en', 'kn', 'sw', 'fr']);
+      fallbackLocale: 'kn', supportedLocales: ['kn', 'en', 'sw', 'fr']);
+  final prefs = await SharedPreferences.getInstance();
+  hasAlreadySetUp = prefs.getBool(HAS_SET);
   runApp(
       LocalizedApp(delegate, StoreProvider(store: appStore, child: MyApp())));
 }
@@ -30,11 +32,14 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // loadSettings(context);
-    Widget landingScreen = PageLayout(
-        page: HomePage(), title: translate('app.title'), useLayout: true);
     var localizationDelegate = LocalizedApp.of(context).delegate;
-
+    final StatefulWidget homeScreen;
+    if (hasAlreadySetUp != null && hasAlreadySetUp as bool) {
+      homeScreen = PageLayout(
+          page: HomePage(), title: translate('app.title'), useLayout: true);
+    } else {
+      homeScreen = OnBoardingPage();
+    }
     return LocalizationProvider(
       state: LocalizationProvider.of(context).state,
       child: MaterialApp(
@@ -50,11 +55,8 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
             scaffoldBackgroundColor: Colors.grey.shade300,
             primarySwatch: Colors.indigo),
-        home: landingScreen,
-        routes: {
-          'home': (_) => landingScreen
-          // 'view_one_topic': (context) => OneTopicViewPage()
-        },
+        home: homeScreen,
+        routes: {'home': (_) => homeScreen},
       ),
     );
   }

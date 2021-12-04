@@ -5,11 +5,10 @@ import '../store.dart';
 
 void setCurrentAudio(Audio _audio) {
   try {
-    DispatchedAction<Audio, AudioDetail> dispatchedAction =
-    DispatchedAction<Audio, AudioDetail>();
+    final dispatchedAction = DispatchedAction<Audio, AudioDetail>();
     // appStore.dispatch(dispatchedAction.pending());
     appStore.dispatch(dispatchedAction.fulfilled(_audio, dataType: 'object'));
-  } catch (error){
+  } catch (error) {
     print(error);
     // print('=================>${dispatchedAction.runtimeType}');
   }

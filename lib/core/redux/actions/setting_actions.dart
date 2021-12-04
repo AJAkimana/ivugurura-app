@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_translate/flutter_translate.dart';
-import 'package:ivugurura_app/core/models/language.dart';
 import 'package:ivugurura_app/core/models/setting.dart';
 import 'package:ivugurura_app/core/utils/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -8,7 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../base_action.dart';
 import '../store.dart';
 
-Future<void> loadSettings() async {
+Future<void> loadSettings(BuildContext context) async {
   DispatchedAction<Setting, SettingInfo> dispatchedAction;
 
   dispatchedAction = DispatchedAction<Setting, SettingInfo>();
@@ -20,15 +19,16 @@ Future<void> loadSettings() async {
   final hasSet = (prefs.getBool(HAS_SET) ?? false);
 
   final setting = Setting(language: language, isDark: isDark, hasSet: hasSet);
-
+  changeLocale(context, setting.language!.short_name);
   appStore.dispatch(dispatchedAction.fulfilled(setting, dataType: 'object'));
 }
 
 Future<void> changeSettings(BuildContext context, {Setting? setting}) async {
   final prefs = await SharedPreferences.getInstance();
   if (setting!.language != null) {
-    prefs.setString(LANG_SHORT_NAME, setting.language!.short_name ?? 'kn');
-    changeLocale(context, setting.language!.short_name);
+    final shortName = setting.language!.short_name ?? 'kn';
+    prefs.setString(LANG_SHORT_NAME, shortName);
+    // changeLocale(context, shortName);
   }
   if (setting.isDark != null) {
     prefs.setBool(THEME_DARK, setting.isDark ?? false);
@@ -36,5 +36,5 @@ Future<void> changeSettings(BuildContext context, {Setting? setting}) async {
   if (setting.hasSet != null) {
     prefs.setBool(HAS_SET, setting.hasSet ?? false);
   }
-  await loadSettings();
+  loadSettings(context);
 }
