@@ -39,8 +39,8 @@ class AudioItem extends StatelessWidget {
           trailing: IconButton(
             onPressed: _launchURL,
             icon: currentAudio.slug == audio.slug
-                ? Icon(Icons.share, color: Colors.white)
-                : Icon(Icons.share, color: Colors.white),
+                ? Icon(Icons.download, color: Colors.white)
+                : Icon(Icons.download, color: Colors.white),
           ),
         ),
         Divider(
