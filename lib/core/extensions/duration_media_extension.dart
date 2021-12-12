@@ -5,10 +5,12 @@ extension FormatString on Duration {
       return '0$n';
     }
 
+    final twoDigitHours =
+    twoDigits(inHours.remainder(Duration.hoursPerDay));
     final twoDigitMinutes =
     twoDigits(inMinutes.remainder(Duration.minutesPerHour));
     final twoDigitSeconds =
     twoDigits(inSeconds.remainder(Duration.secondsPerMinute));
-    return '$twoDigitMinutes:$twoDigitSeconds';
+    return '$twoDigitHours:$twoDigitMinutes:$twoDigitSeconds';
   }
 }
