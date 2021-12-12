@@ -28,7 +28,7 @@ void main() async {
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
-  final String appTitle = 'Reformation Voice';
+  final String appTitle = 'Reformation/Ubugorozi';
 
   @override
   Widget build(BuildContext context) {

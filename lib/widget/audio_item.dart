@@ -9,39 +9,43 @@ class AudioItem extends StatelessWidget {
   final Function onSetCurrent;
   final Audio currentAudio;
 
-  const AudioItem({
-    Key? key,
+  const AudioItem(
+      {Key? key,
       required this.audio,
       required this.audioIndex,
       required this.onSetCurrent,
-      required this.currentAudio
-  }) : super(key: key);
+      required this.currentAudio})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    Color displayColor = currentAudio.slug == audio.slug
+        ? Colors.deepOrangeAccent
+        : Colors.white;
     return Column(
       children: <Widget>[
         ListTile(
-          onTap:(){ onSetCurrent();},
+          onTap: () {
+            onSetCurrent();
+          },
           leading: Text(
             '${audioIndex + 1}',
-            style: TextStyle(color: Colors.white, fontSize: 20),
+            style: TextStyle(
+                color: displayColor,
+                fontSize: 20),
           ),
           title: Text(
             audio.title!,
-            style: TextStyle(color: Colors.white, fontSize: 16),
+            style: TextStyle(color: displayColor, fontSize: 16),
           ),
           subtitle: Text(
             audio.author!,
             style: TextStyle(
-                color: Colors.white, fontSize: 12, fontWeight: FontWeight.w200),
+                color: displayColor, fontSize: 14, fontWeight: FontWeight.w200),
           ),
           trailing: IconButton(
-            onPressed: _launchURL,
-            icon: currentAudio.slug == audio.slug
-                ? Icon(Icons.download, color: Colors.white)
-                : Icon(Icons.download, color: Colors.white),
-          ),
+              onPressed: _launchURL,
+              icon: Icon(Icons.download, color: displayColor)),
         ),
         Divider(
           height: 1,
