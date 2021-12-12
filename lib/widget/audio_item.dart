@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ivugurura_app/core/models/audio.dart';
+import 'package:ivugurura_app/core/utils/constants.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class AudioItem extends StatelessWidget {
   final Audio audio;
@@ -20,7 +22,7 @@ class AudioItem extends StatelessWidget {
     return Column(
       children: <Widget>[
         ListTile(
-          onTap: () {},
+          onTap:(){ onSetCurrent();},
           leading: Text(
             '${audioIndex + 1}',
             style: TextStyle(color: Colors.white, fontSize: 20),
@@ -35,12 +37,10 @@ class AudioItem extends StatelessWidget {
                 color: Colors.white, fontSize: 12, fontWeight: FontWeight.w200),
           ),
           trailing: IconButton(
-            onPressed: () {
-              onSetCurrent();
-            },
+            onPressed: _launchURL,
             icon: currentAudio.slug == audio.slug
-                ? Icon(Icons.pause, color: Colors.white)
-                : Icon(Icons.play_arrow, color: Colors.white),
+                ? Icon(Icons.share, color: Colors.white)
+                : Icon(Icons.share, color: Colors.white),
           ),
         ),
         Divider(
@@ -49,5 +49,11 @@ class AudioItem extends StatelessWidget {
         )
       ],
     );
+  }
+
+  void _launchURL() async {
+    String mLink = audio.mediaLink ?? '';
+    String mediaUrl = Uri.encodeFull(AUDIO_PATH + mLink);
+    if (!await launch(mediaUrl)) throw 'Could not download ${audio.title}';
   }
 }
