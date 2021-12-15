@@ -35,10 +35,6 @@ Future<void> fetchTopics(BuildContext context,
 
     appStore.dispatch(dispatchedAction.fulfilled(topicsData));
   } catch (error) {
-    print('{=======================');
-    print(error);
-    print(error.runtimeType);
-    print('=========================}');
     appStore.dispatch(dispatchedAction.rejected(error));
   }
 }
@@ -60,10 +56,6 @@ Future<void> fetchTopicDetail(BuildContext context, String topicSlug) async {
     appStore
         .dispatch(dispatchedAction.fulfilled(topicData, dataType: 'object'));
   } catch (error) {
-    print('{=======================');
-    print(error.toString());
-    print(error.runtimeType);
-    print('=========================}');
     appStore.dispatch(dispatchedAction.rejected(error));
   }
 }
@@ -85,10 +77,6 @@ Future<void> fetchHomeContents(BuildContext context) async {
     appStore
         .dispatch(dispatchedAction.fulfilled(contentData, dataType: 'object'));
   } catch (error) {
-    print('{=======================');
-    print(error);
-    print(error.runtimeType);
-    print('=========================}');
     appStore.dispatch(dispatchedAction.rejected(error));
   }
 }

@@ -1,10 +1,6 @@
-import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
 import 'package:ivugurura_app/core/models/audio.dart';
 import 'package:ivugurura_app/utils/app_colors.dart' as appColors;
-import 'package:ivugurura_app/widget/audio_player_widget.dart';
-import 'package:ivugurura_app/widget/player_widget.dart';
 import 'package:ivugurura_app/widget/radio_widget.dart';
 
 class RadiolizePage extends StatefulWidget {
@@ -17,12 +13,12 @@ class RadiolizePage extends StatefulWidget {
 }
 
 class _RadiolizePageState extends State<RadiolizePage> {
-  bool _play = true;
+  // bool _play = true;
 
   @override
   Widget build(BuildContext context) {
     final double screenHeight = MediaQuery.of(context).size.height;
-    final double screenWeight = MediaQuery.of(context).size.width;
+    // final double screenWeight = MediaQuery.of(context).size.width;
 
     return Scaffold(
       backgroundColor: appColors.audioBluishBackground,

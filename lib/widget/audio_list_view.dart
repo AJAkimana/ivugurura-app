@@ -49,8 +49,6 @@ class _AudioListViewState extends State<AudioListView> {
         pagingController.appendPage(newItems, nextPageKey);
       }
     } catch (error) {
-      print(error);
-      print('==============================>');
       pagingController.error = error;
     }
   }
@@ -85,7 +83,7 @@ class _AudioListViewState extends State<AudioListView> {
             appBar: AppBar(
               title: Text('Audio'),
               actions: <Widget>[
-                IconButton(onPressed: (){}, icon: Icon(Icons.share))
+                IconButton(onPressed: () {}, icon: Icon(Icons.share))
               ],
             ),
             body: SafeArea(
@@ -269,13 +267,18 @@ class _AudioListViewState extends State<AudioListView> {
   void setCurrent(Audio _audio) {
     setCurrentAudio(_audio);
   }
-  void onSetNextOrPrev({String action = 'next'}){
+
+  void onSetNextOrPrev({String action = 'next'}) {
     int nextIndex = _currentIndex + 1;
-    if(_currentIndex==0||_currentIndex==pagingController.itemList!.length-1){
+    if (_currentIndex == pagingController.itemList!.length - 1 &&
+        action == 'next') {
       return;
     }
-    if(action=='prev'){
-      nextIndex = _currentIndex -1;
+    if (action == 'prev') {
+      if (_currentIndex == 0) {
+        return;
+      }
+      nextIndex = _currentIndex - 1;
     }
     setCurrent(pagingController.itemList![nextIndex]);
     setState(() {

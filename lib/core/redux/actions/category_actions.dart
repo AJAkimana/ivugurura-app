@@ -25,9 +25,6 @@ Future<void> fetchCategories(BuildContext context) async {
         jsonData.map((e) => Category.fromJson(e)).toList();
     appStore.dispatch(dispatchedAction.fulfilled(categoriesData));
   } catch (error) {
-    print('{=======================Category list');
-    print(error.toString());
-    print('=========================}');
     appStore.dispatch(dispatchedAction.rejected(error.toString()));
   }
 }

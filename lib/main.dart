@@ -1,4 +1,3 @@
-import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_redux/flutter_redux.dart';
@@ -14,10 +13,9 @@ bool? hasAlreadySetUp;
 void main() async {
   // loadSettings();
   WidgetsFlutterBinding.ensureInitialized();
-  AssetsAudioPlayer.setupNotificationsOpenAction((notification) {
-    print('===>Notification id: ${notification.audioId}');
-    return true;
-  });
+  // AssetsAudioPlayer.setupNotificationsOpenAction((notification) {
+  //   return true;
+  // });
   var delegate = await LocalizationDelegate.create(
       fallbackLocale: 'kn', supportedLocales: ['kn', 'en', 'sw', 'fr']);
   final prefs = await SharedPreferences.getInstance();

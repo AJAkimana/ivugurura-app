@@ -9,10 +9,8 @@ import 'package:ivugurura_app/core/custom_pagination_builder.dart';
 import 'package:ivugurura_app/core/language_selector.dart';
 import 'package:ivugurura_app/core/models/setting.dart';
 import 'package:ivugurura_app/core/page_layout.dart';
-import 'package:ivugurura_app/core/redux/actions/category_actions.dart';
 import 'package:ivugurura_app/core/redux/actions/setting_actions.dart';
 import 'package:ivugurura_app/core/rounded_container.dart';
-import 'package:ivugurura_app/core/utils/constants.dart';
 import 'package:ivugurura_app/widget/welcome_quote.dart';
 
 import 'home_page.dart';

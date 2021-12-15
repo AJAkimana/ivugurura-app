@@ -1,4 +1,3 @@
-
 class ListPage<ItemType> {
   ListPage({
     required this.grandTotalCount,

@@ -3,22 +3,15 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_translate/flutter_translate.dart';
 import 'package:ivugurura_app/core/data/dependencies_provider.dart';
 import 'package:ivugurura_app/core/keep_alive.dart';
-import 'package:ivugurura_app/core/redux/actions/category_actions.dart';
 import 'package:ivugurura_app/core/redux/base_state.dart';
 import 'package:ivugurura_app/core/redux/store.dart';
 import 'package:ivugurura_app/core/utils/constants.dart';
-// import 'package:ivugurura_app/widget/audio_player_widget.dart';
-// import 'package:ivugurura_app/pages/music_player_page.dart';
 import 'package:ivugurura_app/pages/radiolize_page.dart';
 import 'package:ivugurura_app/pages/all_topics_page.dart';
 import 'package:ivugurura_app/pages/audio_player_page.dart';
-import 'package:ivugurura_app/pages/home_page.dart';
 import 'package:ivugurura_app/pages/setting_page.dart';
 import 'package:ivugurura_app/utils/oval_right_clipper.dart';
-import 'package:ivugurura_app/widget/dots_loader.dart';
-// import 'package:provider/provider.dart';
 
-import 'models/audio.dart';
 import 'models/category.dart';
 import 'models/home_content.dart';
 
@@ -141,9 +134,9 @@ class _PageLayoutState extends State<PageLayout> {
                   _buildRow(AudioPlayerPage(), Icons.music_note,
                       translate('title.audio')),
                   _buildDivider(),
-                  _buildRow(HomePage(), Icons.contact_mail,
-                      translate('title.contact_us')),
-                  _buildDivider(),
+                  // _buildRow(HomePage(), Icons.contact_mail,
+                  //     translate('title.contact_us')),
+                  // _buildDivider(),
                   _buildRow(SettingPage(), Icons.settings,
                       translate('title.setting')),
                   _buildDivider(),
@@ -184,7 +177,6 @@ class _PageLayoutState extends State<PageLayout> {
             itemCount: categories.length,
             itemBuilder: (BuildContext context, int index) {
               Category category = categories[index];
-              print(category.language);
               return InkWell(
                 onTap: () {
                   Navigator.push(

@@ -9,7 +9,6 @@ import 'package:ivugurura_app/core/redux/base_state.dart';
 import 'package:ivugurura_app/core/redux/store.dart';
 import 'package:ivugurura_app/core/utils/constants.dart';
 import 'package:ivugurura_app/widget/display_error.dart';
-import 'package:ivugurura_app/widget/dots_loader.dart';
 import 'package:ivugurura_app/widget/network_image.dart';
 import 'package:ivugurura_app/core/extensions/string_cap_extension.dart';
 

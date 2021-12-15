@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_swiper_null_safety/flutter_swiper_null_safety.dart';
 import 'package:flutter_translate/flutter_translate.dart';
-import 'package:ivugurura_app/core/models/home_content.dart';
 import 'package:ivugurura_app/core/models/setting.dart';
 import 'package:ivugurura_app/core/models/topic.dart';
 import 'package:ivugurura_app/core/page_layout.dart';
@@ -26,13 +25,13 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
   @override
   void initState() {
     // TODO: implement initState
     loadSettings(context);
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, dynamic>(
