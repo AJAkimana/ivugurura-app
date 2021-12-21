@@ -24,51 +24,51 @@ class _AudioPlayerWidgetState extends State<AudioPlayerWidget> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.mediaUrl == '' || widget.mediaUrl == AUDIO_PATH){
-      return Center(child: Text('Loading,...'));
-    }
-    return AudioWidget.network(
-      url: widget.mediaUrl,
-      play: widget.play,
-      initialPosition: const Duration(),
-      onReadyToPlay: (total) {
-        setState(() {
-          _currentPosition = widget.isRadio
-              ? Duration().mmSSFormat
-              : '${Duration().mmSSFormat} / ${total.mmSSFormat}';
-        });
-      },
-      onPositionChanged: (current, total) {
-        setState(() {
-          _currentPosition = widget.isRadio
-              ? current.mmSSFormat
-              : '${current.mmSSFormat} / ${total.mmSSFormat}';
-        });
-      },
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        mainAxisSize: MainAxisSize.max,
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                shape: CircleBorder(),
-                padding: EdgeInsets.all(14),
-                primary: Theme.of(context).primaryColor,
-              ),
-              onPressed: widget.onPlay,
-              child: Icon(
-                widget.play ? Icons.pause : Icons.play_arrow,
-                color: Colors.white,
-                size: 44,
+    if (widget.mediaUrl != '' || widget.mediaUrl != AUDIO_PATH){
+      return AudioWidget.network(
+        url: widget.mediaUrl,
+        play: widget.play,
+        initialPosition: const Duration(),
+        onReadyToPlay: (total) {
+          setState(() {
+            _currentPosition = widget.isRadio
+                ? Duration().mmSSFormat
+                : '${Duration().mmSSFormat} / ${total.mmSSFormat}';
+          });
+        },
+        onPositionChanged: (current, total) {
+          setState(() {
+            _currentPosition = widget.isRadio
+                ? current.mmSSFormat
+                : '${current.mmSSFormat} / ${total.mmSSFormat}';
+          });
+        },
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.max,
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  shape: CircleBorder(),
+                  padding: EdgeInsets.all(14),
+                  primary: Theme.of(context).primaryColor,
+                ),
+                onPressed: widget.onPlay,
+                child: Icon(
+                  widget.play ? Icons.pause : Icons.play_arrow,
+                  color: Colors.white,
+                  size: 44,
+                ),
               ),
             ),
-          ),
-          Text(_currentPosition,
-              style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold)),
-        ],
-      ),
-    );
+            Text(_currentPosition,
+                style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold)),
+          ],
+        ),
+      );
+    }
+    return Center(child: Text('Loading,...'));
   }
 }

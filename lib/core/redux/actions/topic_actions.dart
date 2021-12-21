@@ -35,7 +35,7 @@ Future<void> fetchTopics(BuildContext context,
 
     appStore.dispatch(dispatchedAction.fulfilled(topicsData));
   } catch (error) {
-    appStore.dispatch(dispatchedAction.rejected(error));
+    appStore.dispatch(dispatchedAction.rejected(error.toString()));
   }
 }
 
@@ -56,7 +56,7 @@ Future<void> fetchTopicDetail(BuildContext context, String topicSlug) async {
     appStore
         .dispatch(dispatchedAction.fulfilled(topicData, dataType: 'object'));
   } catch (error) {
-    appStore.dispatch(dispatchedAction.rejected(error));
+    appStore.dispatch(dispatchedAction.rejected(error.toString()));
   }
 }
 
@@ -67,7 +67,7 @@ Future<void> fetchHomeContents(BuildContext context) async {
 
   appStore.dispatch(dispatchedAction.pending());
   try {
-    final uri = Uri.parse('$homeContentUrl');
+    final uri = Uri.parse(homeContentUrl);
     String? acceptLang = await getLangFromPrefs();
 
     final res = await http.get(uri, headers: {'Accept-Language': acceptLang});
@@ -77,6 +77,6 @@ Future<void> fetchHomeContents(BuildContext context) async {
     appStore
         .dispatch(dispatchedAction.fulfilled(contentData, dataType: 'object'));
   } catch (error) {
-    appStore.dispatch(dispatchedAction.rejected(error));
+    appStore.dispatch(dispatchedAction.rejected(error.toString()));
   }
 }

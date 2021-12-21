@@ -18,6 +18,7 @@ import 'package:ivugurura_app/widget/network_image.dart';
 import 'package:ivugurura_app/widget/topic_list_item.dart';
 
 import 'all_topics_page.dart';
+import 'one_topic_view.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -55,7 +56,8 @@ class _HomePageState extends State<HomePage> {
               !settingState.theObject!.hasSet!) {
             return OnBoardingPage();
           }
-          if (homeContentState.loading) {
+
+          if (homeContentState.theObject != null && homeContentState.loading) {
             return Center(
                 child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -68,7 +70,8 @@ class _HomePageState extends State<HomePage> {
               ],
             ));
           }
-          if (homeContentState.error != '') {
+          if (homeContentState.error != null &&
+              homeContentState.error.toString().isNotEmpty) {
             return DisplayError(
               error: homeContentState.error,
               onTryAgain: () {
@@ -193,35 +196,44 @@ class MostReadTopics extends StatelessWidget {
                 itemBuilder: (context, index) {
                   Topic topic = topics[index];
                   return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: RoundedContainer(
-                      borderRadius: BorderRadius.circular(4.0),
-                      margin: const EdgeInsets.only(bottom: 20),
-                      child: Row(
-                        children: <Widget>[
-                          Expanded(
-                            flex: 3,
-                            child: Text(
-                              topic.title,
-                              style: Theme.of(context).textTheme.bodyText1,
-                            ),
-                          ),
-                          const SizedBox(width: 10.0),
-                          Expanded(
-                            flex: 2,
-                            child: Container(
-                              color: Colors.blueAccent,
-                              child: PNetworkImage(
-                                "$IMAGE_PATH/${topic.coverImage}",
-                                fit: BoxFit.cover,
-                                height: 210,
+                      padding: const EdgeInsets.all(8.0),
+                      child: InkWell(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    OneTopicViewPage(topicSlug: topic.slug),
+                              ));
+                        },
+                        child: RoundedContainer(
+                          borderRadius: BorderRadius.circular(4.0),
+                          margin: const EdgeInsets.only(bottom: 20),
+                          child: Row(
+                            children: <Widget>[
+                              Expanded(
+                                flex: 3,
+                                child: Text(
+                                  topic.title,
+                                  style: Theme.of(context).textTheme.bodyText1,
+                                ),
                               ),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  );
+                              const SizedBox(width: 10.0),
+                              Expanded(
+                                flex: 2,
+                                child: Container(
+                                  color: Colors.blueAccent,
+                                  child: PNetworkImage(
+                                    "$IMAGE_PATH/${topic.coverImage}",
+                                    fit: BoxFit.cover,
+                                    height: 210,
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                      ));
                 },
               ))
             ]));
