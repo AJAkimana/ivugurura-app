@@ -56,14 +56,17 @@ class _PageLayoutState extends State<PageLayout> {
           },
         ),
         actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.radio),
-            onPressed: () {},
-          ),
-          IconButton(
-            icon: Icon(Icons.share),
-            onPressed: () {},
-          ),
+          // IconButton(
+          //   icon: Icon(Icons.radio),
+          //   onPressed: () {
+          //     onGoToPage(RadiolizePage(audio: audioRadiolize),
+          //         translate('title.radio'));
+          //   },
+          // ),
+          // IconButton(
+          //   icon: Icon(Icons.share),
+          //   onPressed: () {},
+          // ),
           PopupMenuButton<String>(
             icon: Icon(Icons.more_vert),
             itemBuilder: (BuildContext context) {
@@ -91,10 +94,10 @@ class _PageLayoutState extends State<PageLayout> {
                 )
               ];
             },
-            onSelected: (value){
-             setState(() {
-               _menuValue = value;
-             });
+            onSelected: (value) {
+              setState(() {
+                _menuValue = value;
+              });
             },
           )
         ],
@@ -165,10 +168,10 @@ class _PageLayoutState extends State<PageLayout> {
             return CircularProgressIndicator();
           }
           if (homeContentState.error != '') {
-            return Text('Something went wrong');
+            return Text(translate('app.error_title'));
           }
           if (categories.length < 1) {
-            return Text('Not data');
+            return Text(translate('app.no_data'));
           }
 
           return ListView.builder(
@@ -221,8 +224,10 @@ class _PageLayoutState extends State<PageLayout> {
     );
   }
 
-  void onGoToPage(Widget page, String title) {
-    Navigator.pop(context);
+  void onGoToPage(Widget page, String title, {bool setPop=true}) {
+    if(setPop){
+      Navigator.pop(context);
+    }
     Navigator.push(
         context,
         MaterialPageRoute(

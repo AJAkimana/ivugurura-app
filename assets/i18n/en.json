@@ -7,7 +7,13 @@
     "recent_topics": "Recent topics",
     "related_topics": "Related topics",
     "most_read_topics": "Most read topics",
-    "for_recent": "Recent"
+    "for_recent": "Recent",
+    "error_title": "It seems there was an error",
+    "error_description": "The application has encountered an unknown error. \nPlease try again later.",
+    "no_connection": "No connection",
+    "no_conn_msg": "Please check the internet connection and try again",
+    "try_btn": "Try again",
+    "no_data": "No data to display"
   },
   "title": {
     "setting": "Setting",

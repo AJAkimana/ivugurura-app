@@ -7,7 +7,13 @@
     "recent_topics": "Nakala za hivi karibuni",
     "related_topics": "Nakala zinazo husiana",
     "most_read_topics": "Nakala zilizo somwa zaidi",
-    "for_recent": "Hivi karibuni"
+    "for_recent": "Hivi karibuni",
+    "error_title": "Inaonekana kuna hitilafu",
+    "error_description": "Programu imekumbana na hitilafu isiyojulikana. \nTafadhali jaribu tena baadae.",
+    "no_connection": "Hakuna mtandao",
+    "no_conn_msg": "Tafadhali angalia muunganisho wa intaneti na ujaribu tena",
+    "try_btn": "Bonyeza tena",
+    "no_data": "Hakuna data ya kuonyesha"
   },
   "title": {
     "setting": "Mipangilio",

@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_translate/flutter_translate.dart';
 import 'package:ivugurura_app/core/rounded_container.dart';
 import 'package:ivugurura_app/widget/error_indicator.dart';
 
@@ -17,15 +18,15 @@ class DisplayError extends StatelessWidget {
   Widget build(BuildContext context) {
     if(error is SocketException){
       return ErrorIndicator(
-        title: 'No connection',
-        message: 'Please check the internet connection and try again',
+        title: translate('app.no_connection'),
+        message: translate('app.no_conn_msg'),
         assetName: 'assets/frustrated-face.png',
         onTryAgain: onTryAgain,
       );
     }
     return ErrorIndicator(
-      title: 'Something went wrong',
-      message: 'The application has encountered an unknown error.\nPlease try again later',
+      title: translate('app.error_title'),
+      message: translate('app.error_description'),
       assetName: 'assets/confused-face.png',
       onTryAgain: onTryAgain,
     );

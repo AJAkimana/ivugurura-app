@@ -60,7 +60,7 @@ class _RadiolizePageState extends State<RadiolizePage> {
               audio: widget.audio,
               top: screenHeight / 3,
               height: screenHeight * 0.4,
-            color: Colors.blueGrey,
+            color: Colors.green,
           )
         ],
       ),

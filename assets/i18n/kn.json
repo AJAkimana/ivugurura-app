@@ -7,7 +7,13 @@
     "recent_topics": "Ibyigisho biheruka",
     "related_topics": "Ibyigisho bijyanye",
     "most_read_topics": "Ibyigisho byasomwe cyane",
-    "for_recent": "Iziheruka"
+    "for_recent": "Iziheruka",
+    "error_title": "Habaye ikibazo",
+    "error_description": "Porogaramu yahuye n'ikibazo. \nMuze kwongera kugerageza mu kanya.",
+    "no_connection": "Nta interneti ihari",
+    "no_conn_msg": "Murebe umurongo wa interneti yanyu, \nMwongere kugerageza mukanya",
+    "try_btn": "Ongera ugerageze",
+    "no_data": "Nta info zihari"
   },
   "title": {
     "setting": "Igenamikorere",
