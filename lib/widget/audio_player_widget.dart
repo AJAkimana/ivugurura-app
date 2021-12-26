@@ -24,11 +24,10 @@ class _AudioPlayerWidgetState extends State<AudioPlayerWidget> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.mediaUrl != '' || widget.mediaUrl != AUDIO_PATH){
+    if (widget.mediaUrl.isNotEmpty || widget.mediaUrl != AUDIO_PATH){
       return AudioWidget.network(
         url: widget.mediaUrl,
         play: widget.play,
-        initialPosition: const Duration(),
         onReadyToPlay: (total) {
           setState(() {
             _currentPosition = widget.isRadio

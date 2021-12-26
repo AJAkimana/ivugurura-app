@@ -10,6 +10,7 @@ import 'package:ivugurura_app/pages/radiolize_page.dart';
 import 'package:ivugurura_app/pages/all_topics_page.dart';
 import 'package:ivugurura_app/pages/audio_player_page.dart';
 import 'package:ivugurura_app/pages/setting_page.dart';
+import 'package:ivugurura_app/utils/app_colors.dart';
 import 'package:ivugurura_app/utils/oval_right_clipper.dart';
 
 import 'models/category.dart';
@@ -31,8 +32,6 @@ class PageLayout extends StatefulWidget {
 
 class _PageLayoutState extends State<PageLayout> {
   final GlobalKey<ScaffoldState> _key = GlobalKey<ScaffoldState>();
-  final Color primary = Color(0xff172347);
-  final Color active = Color(0xffcdd2d7);
   String _menuValue = '';
 
   @override
@@ -121,7 +120,7 @@ class _PageLayoutState extends State<PageLayout> {
         child: Container(
           padding: const EdgeInsets.only(left: 16.0, right: 40),
           decoration: BoxDecoration(
-              color: primary, boxShadow: [BoxShadow(color: Colors.black45)]),
+              color: appPrimaryColor, boxShadow: [BoxShadow(color: Colors.black45)]),
           width: 300,
           child: SafeArea(
             child: SingleChildScrollView(
@@ -153,11 +152,11 @@ class _PageLayoutState extends State<PageLayout> {
   }
 
   Divider _buildDivider() {
-    return Divider(color: active);
+    return Divider(color: subTitleText);
   }
 
   Widget _buildCategoriesList() {
-    final TextStyle textStyle = TextStyle(color: active, fontSize: 16.0);
+    final TextStyle textStyle = TextStyle(color: subTitleText, fontSize: 16.0);
     return StoreConnector<AppState, BaseState<HomeContent, HomeContentObject>>(
         distinct: true,
         onInitialBuild: (store) {},
@@ -193,7 +192,7 @@ class _PageLayoutState extends State<PageLayout> {
                   padding: const EdgeInsets.symmetric(vertical: 8.0),
                   child: Row(
                     children: <Widget>[
-                      Icon(Icons.read_more, color: active),
+                      Icon(Icons.read_more, color: subTitleText),
                       SizedBox(width: 10),
                       Text(category.name as String, style: textStyle)
                     ],
@@ -206,13 +205,13 @@ class _PageLayoutState extends State<PageLayout> {
   }
 
   Widget _buildRow(Widget page, IconData icon, String title) {
-    final TextStyle textStyle = TextStyle(color: active, fontSize: 16.0);
+    final TextStyle textStyle = TextStyle(color: subTitleText, fontSize: 16.0);
     return InkWell(
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 8.0),
         child: Row(
           children: <Widget>[
-            Icon(icon, color: active),
+            Icon(icon, color: subTitleText),
             SizedBox(width: 10),
             Text(title, style: textStyle)
           ],
