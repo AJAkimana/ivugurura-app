@@ -8,31 +8,33 @@ class AudioPlayerWidget extends StatefulWidget {
   final bool isRadio;
   final bool play;
   final VoidCallback onPlay;
-  const AudioPlayerWidget({
-    Key? key,
-    required this.mediaUrl,
-    this.isRadio = false,
-    required this.play,
-    required this.onPlay
-  }): super(key: key);
+  const AudioPlayerWidget(
+      {Key? key,
+      required this.mediaUrl,
+      this.isRadio = false,
+      required this.play,
+      required this.onPlay})
+      : super(key: key);
   @override
   _AudioPlayerWidgetState createState() => _AudioPlayerWidgetState();
 }
 
 class _AudioPlayerWidgetState extends State<AudioPlayerWidget> {
-  String _currentPosition = '';
+  String _currentPosition = '...';
 
   @override
   Widget build(BuildContext context) {
-    if (widget.mediaUrl.isNotEmpty || widget.mediaUrl != AUDIO_PATH){
+    if (widget.mediaUrl.isNotEmpty || widget.mediaUrl != AUDIO_PATH) {
       return AudioWidget.network(
         url: widget.mediaUrl,
         play: widget.play,
         onReadyToPlay: (total) {
           setState(() {
-            _currentPosition = widget.isRadio
+            final timerDisplay = widget.isRadio
                 ? Duration().mmSSFormat
                 : '${Duration().mmSSFormat} / ${total.mmSSFormat}';
+            _currentPosition =
+                timerDisplay == '00:00 / 00:00' ? '...' : timerDisplay;
           });
         },
         onPositionChanged: (current, total) {
