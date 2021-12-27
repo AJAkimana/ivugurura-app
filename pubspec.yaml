@@ -41,7 +41,6 @@ dependencies:
   redux_thunk: ^0.4.0
   http: ^0.13.3
   carousel_slider: ^4.0.0
-  skeleton_loader: ^2.0.0+4
   flutter_html: ^2.1.1
   truncate: ^3.0.1
   intl: ^0.17.0
@@ -51,9 +50,7 @@ dependencies:
   flutter_translate: ^3.0.1
   dio: ^4.0.0
   infinite_scroll_pagination: ^3.1.0
-  audioplayers: ^0.20.1
   assets_audio_player: ^3.0.3+6
-  flutter_neumorphic: ^3.1.0
   flutter_svg: ^0.22.0
   flutter_native_splash: ^1.2.4
   url_launcher: ^6.0.17

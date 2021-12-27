@@ -57,13 +57,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.8.1"
-  audioplayers:
-    dependency: "direct main"
-    description:
-      name: audioplayers
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.20.1"
   boolean_selector:
     dependency: transitive
     description:
@@ -305,13 +298,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.3.2"
-  flutter_neumorphic:
-    dependency: "direct main"
-    description:
-      name: flutter_neumorphic
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "3.2.0"
   flutter_redux:
     dependency: "direct main"
     description:
@@ -735,20 +721,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.1"
-  shimmer:
-    dependency: transitive
-    description:
-      name: shimmer
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.0.0"
-  skeleton_loader:
-    dependency: "direct main"
-    description:
-      name: skeleton_loader
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.0.0+4"
   sky_engine:
     dependency: transitive
     description: flutter
