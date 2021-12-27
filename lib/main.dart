@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_translate/flutter_translate.dart';
@@ -20,6 +21,8 @@ void main() async {
       fallbackLocale: 'kn', supportedLocales: ['kn', 'en', 'sw', 'fr']);
   final prefs = await SharedPreferences.getInstance();
   hasAlreadySetUp = prefs.getBool(HAS_SET);
+  SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   runApp(
       LocalizedApp(delegate, StoreProvider(store: appStore, child: MyApp())));
 }

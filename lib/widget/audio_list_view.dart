@@ -76,7 +76,7 @@ class _AudioListViewState extends State<AudioListView> {
         converter: (store) => store.state.currentAudio,
         builder: (context, audioState) {
           final theAudio = audioState.theObject!;
-          String mLink = theAudio.mediaLink ?? '';
+          String mLink = theAudio.mediaLink??'';
           String mediaUrl = Uri.encodeFull(AUDIO_PATH + mLink);
           return Scaffold(
             backgroundColor: Colors.lightBlue,
