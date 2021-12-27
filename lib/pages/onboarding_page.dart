@@ -137,16 +137,16 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
   }
 
   void onGoHome() async {
-
     changeSettings(context, setting: Setting(hasSet: true));
     // await fetchCategories(context);
-    Navigator.push(
+    Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(
             builder: (_) => PageLayout(
                 page: HomePage(),
                 title: translate('app.title'),
-                useLayout: true)));
+                useLayout: true)),
+        (route) => false);
   }
 }
 
