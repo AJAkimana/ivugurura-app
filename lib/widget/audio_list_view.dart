@@ -76,8 +76,7 @@ class _AudioListViewState extends State<AudioListView> {
         converter: (store) => store.state.currentAudio,
         builder: (context, audioState) {
           final theAudio = audioState.theObject!;
-          String mLink = theAudio.mediaLink??'';
-          String mediaUrl = Uri.encodeFull(AUDIO_PATH + mLink);
+          String mediaUrl = "$AUDIO_PATH/${theAudio.mediaLink ?? ''}";
           return Scaffold(
             backgroundColor: Colors.lightBlue,
             appBar: AppBar(
@@ -105,7 +104,7 @@ class _AudioListViewState extends State<AudioListView> {
                                   height: topHeight,
                                   width: MediaQuery.of(context).size.width,
                                   child: AudioPlayerWidget(
-                                    mediaUrl: mediaUrl,
+                                    mediaUrl: Uri.encodeFull(mediaUrl),
                                     play: _play,
                                     onPlay: onSetPlay,
                                   ))
