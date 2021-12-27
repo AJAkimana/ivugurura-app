@@ -26,7 +26,7 @@ class _AudioPlayerWidgetState extends State<AudioPlayerWidget> {
   Widget build(BuildContext context) {
     if (widget.mediaUrl.isNotEmpty || widget.mediaUrl != AUDIO_PATH){
       return AudioWidget.network(
-        url: Uri.encodeFull(widget.mediaUrl),
+        url: widget.mediaUrl,
         play: widget.play,
         onReadyToPlay: (total) {
           setState(() {
