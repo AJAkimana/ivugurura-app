@@ -21,7 +21,7 @@ class RadioWidget extends StatefulWidget {
 }
 
 class _RadioWidgetState extends State<RadioWidget> {
-  bool _play = true;
+  bool _play = false;
 
   @override
   Widget build(BuildContext context) {

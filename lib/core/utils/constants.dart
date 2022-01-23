@@ -46,7 +46,7 @@ const String THEME_DARK = 'isDark';
 const HAS_SET = 'hasSet';
 
 Audio audioRadiolize = Audio(
-    title: 'Ijwi ry ubugorozi',
+    title: "Ijwi ry'ubugorozi",
     author: 'Radiolize',
     mediaLink: 'https://studio18.radiolize.com/radio/8220/radio.mp3'
 );

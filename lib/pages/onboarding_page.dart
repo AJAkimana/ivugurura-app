@@ -96,7 +96,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           _buildText('Revival and Reformation'),
-          _buildText('Ivugurura n Ubugorozi'),
+          _buildText("Ivugurura n'Ubugorozi"),
           _buildText('La Reveil et la Reforme'),
           swiperPage,
           SizedBox(height: 30)
