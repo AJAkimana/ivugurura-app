@@ -25,10 +25,10 @@ class CustomPaginationBuilder extends SwiperPlugin {
 
     List<Widget> list = [];
 
-    if (config.itemCount > 20) {
-      print('The itemCount is too big, we suggest FractionPaginationBuilder'
-          'instead of DotSwiperPaginationBuilder in this situation');
-    }
+    // if (config.itemCount > 20) {
+    //   print('The itemCount is too big, we suggest FractionPaginationBuilder'
+    //       'instead of DotSwiperPaginationBuilder in this situation');
+    // }
 
     int itemCount = config.itemCount;
     int activeIndex = config.activeIndex;

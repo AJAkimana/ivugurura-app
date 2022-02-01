@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:ivugurura_app/core/rounded_container.dart';
 import 'package:ivugurura_app/widget/error_indicator.dart';
 
 class NoDisplayData extends StatelessWidget {

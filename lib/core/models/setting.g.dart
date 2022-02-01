@@ -12,10 +12,12 @@ Setting _$SettingFromJson(Map<String, dynamic> json) {
         ? null
         : Language.fromJson(json['language'] as Map<String, dynamic>),
     isDark: json['isDark'] as bool?,
+    hasSet: json['hasSet'] as bool?,
   );
 }
 
 Map<String, dynamic> _$SettingToJson(Setting instance) => <String, dynamic>{
       'language': instance.language,
       'isDark': instance.isDark,
+      'hasSet': instance.hasSet,
     };

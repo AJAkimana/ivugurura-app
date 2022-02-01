@@ -6,10 +6,11 @@ import 'package:ivugurura_app/core/models/audio.dart';
 import 'package:ivugurura_app/core/redux/actions/audio_actions.dart';
 import 'package:ivugurura_app/core/redux/base_state.dart';
 import 'package:ivugurura_app/core/redux/store.dart';
+import 'package:ivugurura_app/core/utils/constants.dart';
 import 'package:ivugurura_app/widget/audio_item.dart';
+import 'package:ivugurura_app/widget/audio_player_widget.dart';
 import 'package:ivugurura_app/widget/display_error.dart';
 import 'package:ivugurura_app/widget/no_display_data.dart';
-import 'package:ivugurura_app/widget/player_widget.dart';
 
 class AudioListView extends StatefulWidget {
   final Repository repository;
@@ -24,7 +25,9 @@ class AudioListView extends StatefulWidget {
 class _AudioListViewState extends State<AudioListView> {
   Repository get _repository => widget.repository;
   final int pageSize = 10;
-  late Audio currentAudio = Audio();
+  Audio currentAudio = Audio();
+  bool _play = false;
+  int _currentIndex = 0;
 
   final pagingController = PagingController<int, Audio>(firstPageKey: 1);
 
@@ -37,7 +40,7 @@ class _AudioListViewState extends State<AudioListView> {
       final newItems = newPage.itemList;
 
       if (pageKey == 1 && newItems.length > 0) {
-        setCurrentAudio(newItems[0]);
+        setCurrentAudio(newItems[_currentIndex]);
       }
       if (isLastPage) {
         pagingController.appendLastPage(newItems);
@@ -46,8 +49,6 @@ class _AudioListViewState extends State<AudioListView> {
         pagingController.appendPage(newItems, nextPageKey);
       }
     } catch (error) {
-      print(error);
-      print('==============================>');
       pagingController.error = error;
     }
   }
@@ -69,91 +70,140 @@ class _AudioListViewState extends State<AudioListView> {
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
-    double topHeight = height * 0.4;
+    double topHeight = height * 0.3;
     return StoreConnector<AppState, BaseState<Audio, AudioDetail>>(
-      distinct: true,
-      converter: (store)=>store.state.currentAudio,
-      builder: (context, audioState){
-        Audio theAudio = audioState.theObject!;
-        return Stack(
-          children: <Widget>[
-            Column(
-              children: <Widget>[
-                Stack(
-                  children: <Widget>[
-                    Container(
-                        height: topHeight,
-                        width: MediaQuery.of(context).size.width,
-                        child: PlayerWidget(audio: theAudio))
-                  ],
-                ),
-                Container(
-                    height: height * 0.6,
-                    decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                            stops: [0, 0.5, 1],
-                            colors: [
-                              Color(0xFF014F82),
-                              Color(0xff00395f),
-                              Color(0xFF001726)
-                            ])),
-                    child: Column(
-                      children: <Widget>[
-                        SizedBox(height: 25),
-                        Text(' Buffering... ',
-                            style: TextStyle(color: Colors.white, fontSize: 25)),
-                        // _progress(),
-                        Expanded(
-                            child: RefreshIndicator(
-                              onRefresh: () =>
-                                  Future.sync(() => pagingController.refresh()),
-                              child: PagedListView.separated(
-                                physics: BouncingScrollPhysics(
-                                    parent: AlwaysScrollableScrollPhysics()),
-                                pagingController: pagingController,
-                                builderDelegate: PagedChildBuilderDelegate<Audio>(
-                                    itemBuilder: (context, audio, index) {
-                                      return AudioItem(
-                                        audio: audio,
-                                        audioIndex: index,
-                                        onSetCurrent: () {
-                                          setCurrent(audio);
-                                        },
-                                        currentAudio: theAudio,
-                                      );
-                                    },
-                                    firstPageErrorIndicatorBuilder: (context) {
-                                      return DisplayError(
-                                        error: pagingController.error,
-                                        onTryAgain: () => pagingController.refresh(),
-                                      );
-                                    },
-                                    noItemsFoundIndicatorBuilder: (context) =>
-                                        NoDisplayData()),
-                                padding: const EdgeInsets.all(8),
-                                separatorBuilder: (context, index) {
-                                  return const SizedBox(height: 1);
-                                },
-                              ),
-                            ))
-                      ],
-                    ))
+        distinct: true,
+        converter: (store) => store.state.currentAudio,
+        builder: (context, audioState) {
+          final theAudio = audioState.theObject!;
+          String mediaUrl = "$AUDIO_PATH/${theAudio.mediaLink ?? ''}";
+          return Scaffold(
+            backgroundColor: Colors.lightBlue,
+            appBar: AppBar(
+              title: Text('Audio'),
+              actions: <Widget>[
+                // IconButton(onPressed: () {}, icon: Icon(Icons.share))
               ],
             ),
-            Positioned(
-              left: MediaQuery.of(context).size.width * 0.15,
-              top: topHeight - 35,
-              child: FractionalTranslation(
-                translation: Offset(0, 0.5),
-                child: playerWidget(),
-              ),
-            )
-          ],
-        );
-      },
-    );
+            body: SafeArea(
+              child: SingleChildScrollView(
+                  physics: NeverScrollableScrollPhysics(),
+                  child: Stack(
+                    children: <Widget>[
+                      Center(
+                          child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 32, horizontal: 16),
+                        child: Text(theAudio.title ?? ''),
+                      )),
+                      Column(
+                        children: <Widget>[
+                          Stack(
+                            children: <Widget>[
+                              Container(
+                                  height: topHeight,
+                                  width: MediaQuery.of(context).size.width,
+                                  child: AudioPlayerWidget(
+                                    mediaUrl: Uri.encodeFull(mediaUrl),
+                                    play: _play,
+                                    onPlay: onSetPlay,
+                                  ))
+                            ],
+                          ),
+                          Container(
+                              height: height * 0.6,
+                              decoration: BoxDecoration(
+                                  gradient: LinearGradient(
+                                      begin: Alignment.topLeft,
+                                      end: Alignment.bottomRight,
+                                      stops: [
+                                    0,
+                                    0.5,
+                                    1
+                                  ],
+                                      colors: [
+                                    Color(0xFF014F82),
+                                    Color(0xff00395f),
+                                    Color(0xFF001726)
+                                  ])),
+                              child: Column(
+                                children: <Widget>[
+                                  SizedBox(height: 25),
+                                  // Text(' Buffering... ',
+                                  //     style: TextStyle(color: Colors.white, fontSize: 25)),
+                                  // _progress(),
+                                  Expanded(
+                                      child: RefreshIndicator(
+                                    onRefresh: () => Future.sync(
+                                        () => pagingController.refresh()),
+                                    child: PagedListView.separated(
+                                      physics: BouncingScrollPhysics(
+                                          parent:
+                                              AlwaysScrollableScrollPhysics()),
+                                      pagingController: pagingController,
+                                      builderDelegate:
+                                          PagedChildBuilderDelegate<Audio>(
+                                              itemBuilder:
+                                                  (context, audio, index) {
+                                                int audioIndex =
+                                                    pagingController.itemList!
+                                                        .indexWhere((au) =>
+                                                            au.slug ==
+                                                            audio.slug);
+                                                return AudioItem(
+                                                  audio: audio,
+                                                  audioIndex: index,
+                                                  onSetCurrent: () {
+                                                    setCurrent(audio);
+                                                    setState(() {
+                                                      _play = true;
+                                                      _currentIndex =
+                                                          audioIndex;
+                                                    });
+                                                  },
+                                                  currentAudio: theAudio,
+                                                );
+                                              },
+                                              firstPageErrorIndicatorBuilder:
+                                                  (context) {
+                                                return DisplayError(
+                                                  error: pagingController.error,
+                                                  onTryAgain: () =>
+                                                      pagingController
+                                                          .refresh(),
+                                                );
+                                              },
+                                              noItemsFoundIndicatorBuilder:
+                                                  (context) => NoDisplayData()),
+                                      padding: const EdgeInsets.all(8),
+                                      separatorBuilder: (context, index) {
+                                        return const SizedBox(height: 1);
+                                      },
+                                    ),
+                                  ))
+                                ],
+                              ))
+                        ],
+                      ),
+                      Positioned(
+                        left: MediaQuery.of(context).size.width * 0.15,
+                        top: topHeight - 35,
+                        child: FractionalTranslation(
+                          translation: Offset(0, 0.5),
+                          child: playerWidget(),
+                        ),
+                      )
+                    ],
+                  )),
+            ),
+          );
+        });
+  }
+
+  onSetPlay() {
+    setState(() {
+      _play = !_play;
+    });
   }
 
   playerWidget() {
@@ -177,30 +227,34 @@ class _AudioListViewState extends State<AudioListView> {
                   Icons.skip_previous,
                   color: Colors.white,
                 ),
-                onPressed: () {},
+                enableFeedback: _currentIndex != 0,
+                onPressed: () {
+                  onSetNextOrPrev(action: 'prev');
+                },
               ),
               IconButton(
-                icon: Icon(
-                  Icons.fast_rewind,
-                  color: Colors.white,
-                ),
-                onPressed: () {},
+                icon: _play
+                    ? Icon(
+                        Icons.pause,
+                        color: Colors.white,
+                      )
+                    : Icon(
+                        Icons.play_circle,
+                        color: Colors.white,
+                      ),
+                onPressed: onSetPlay,
               ),
-              SizedBox(
-                width: 25,
-              ),
-              IconButton(
-                  icon: Icon(
-                    Icons.fast_forward,
-                    color: Colors.white,
-                  ),
-                  onPressed: () {}),
               IconButton(
                 icon: Icon(
                   Icons.skip_next,
                   color: Colors.white,
                 ),
-                onPressed: () {},
+                enableFeedback: pagingController.itemList != null
+                    ? _currentIndex != pagingController.itemList!.length - 1
+                    : false,
+                onPressed: () {
+                  onSetNextOrPrev();
+                },
               ),
             ],
           ),
@@ -211,5 +265,24 @@ class _AudioListViewState extends State<AudioListView> {
 
   void setCurrent(Audio _audio) {
     setCurrentAudio(_audio);
+  }
+
+  void onSetNextOrPrev({String action = 'next'}) {
+    int nextIndex = _currentIndex + 1;
+    if (_currentIndex == pagingController.itemList!.length - 1 &&
+        action == 'next') {
+      return;
+    }
+    if (action == 'prev') {
+      if (_currentIndex == 0) {
+        return;
+      }
+      nextIndex = _currentIndex - 1;
+    }
+    setCurrent(pagingController.itemList![nextIndex]);
+    setState(() {
+      _currentIndex = nextIndex;
+      _play = true;
+    });
   }
 }

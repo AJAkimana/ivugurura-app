@@ -4,9 +4,11 @@ import 'package:flutter_translate/flutter_translate.dart';
 import 'package:ivugurura_app/core/custom_alert_dialog.dart';
 import 'package:ivugurura_app/core/language_selector.dart';
 import 'package:ivugurura_app/core/models/setting.dart';
+import 'package:ivugurura_app/core/page_layout.dart';
 import 'package:ivugurura_app/core/redux/base_state.dart';
 import 'package:ivugurura_app/core/redux/store.dart';
 import 'package:ivugurura_app/core/res/assets.dart';
+import 'package:ivugurura_app/pages/home_page.dart';
 
 class SettingPage extends StatefulWidget {
   @override
@@ -28,7 +30,7 @@ class SettingPageState extends State<SettingPage> {
           backgroundColor: _dark ? null : Colors.grey.shade500,
           appBar: AppBar(
             elevation: 0,
-            brightness: _getBrightness(),
+            // brightness: _getBrightness(),
             iconTheme: IconThemeData(
                 color: _dark ? Colors.white : Colors.grey.shade200),
             backgroundColor: Colors.transparent,
@@ -51,10 +53,7 @@ class SettingPageState extends State<SettingPage> {
             converter: (store) => store.state.settingState,
             builder: (context, settingState) {
               Setting setting = settingState.theObject as Setting;
-              String langName = '';
-              if (setting.language != null) {
-                langName = setting.language!.name;
-              }
+              String langName =  setting.language!.name;
               return Stack(
                 fit: StackFit.expand,
                 children: <Widget>[
@@ -105,7 +104,13 @@ class SettingPageState extends State<SettingPage> {
                                           content: 'Some information',
                                           widget: LanguageSelector(),
                                           onPressOk: (){
-                                            Navigator.of(context).pushReplacementNamed('home');
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (_) => PageLayout(
+                                                        page: HomePage(),
+                                                        title: translate('app.title'),
+                                                        useLayout: true)));
                                           },
                                         );
                                       });

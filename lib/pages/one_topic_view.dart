@@ -9,7 +9,6 @@ import 'package:ivugurura_app/core/redux/base_state.dart';
 import 'package:ivugurura_app/core/redux/store.dart';
 import 'package:ivugurura_app/core/utils/constants.dart';
 import 'package:ivugurura_app/widget/display_error.dart';
-import 'package:ivugurura_app/widget/dots_loader.dart';
 import 'package:ivugurura_app/widget/network_image.dart';
 import 'package:ivugurura_app/core/extensions/string_cap_extension.dart';
 
@@ -32,33 +31,39 @@ class OneTopicViewPageState extends State<OneTopicViewPage> {
           },
           converter: (store) => store.state.topicDetailState,
           builder: (context, topicDetail) {
-            if (topicDetail.loading) {
-              return Container(
+            if (topicDetail.theObject != null && topicDetail.loading) {
+              return Center(
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      DotsLoader(),
-                      SizedBox(height: 10.0,),
-                    ],
-                  )
-              );
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  CircularProgressIndicator(),
+                  SizedBox(
+                    height: 10.0,
+                  ),
+                ],
+              ));
             }
-            if (topicDetail.error != '') {
-              return DisplayError(error: topicDetail.error);
+            if (topicDetail.error.toString().isNotEmpty) {
+              return DisplayError(
+                  error: topicDetail.error,
+                  onTryAgain: () {
+                    fetchTopicDetail(context, widget.topicSlug);
+                  });
             }
             if (topicDetail.theObject!.title.isEmpty) {
               return Text('Nothing to display');
             } else {
               Topic topic = topicDetail.theObject!;
               DateTime dateTime = DateTime.parse(topic.createdAt as String);
+              final title = topic.title.capitalizeFirstOfEach;
               return CustomScrollView(
                 slivers: <Widget>[
                   SliverAppBar(
                     expandedHeight: 150.0,
                     pinned: true,
                     flexibleSpace: FlexibleSpaceBar(
-                      title: Text(topic.title),
+                      title: Text(title),
                       background: PNetworkImage(
                           '$IMAGE_PATH/${topic.coverImage}',
                           fit: BoxFit.cover),
@@ -92,12 +97,12 @@ class OneTopicViewPageState extends State<OneTopicViewPage> {
                           children: <Widget>[
                             Expanded(
                                 child: Text(
-                                    DateFormat.yMMMMEEEEd().format(dateTime))),
+                                    'Published at ${DateFormat('dd-MM-yyyy').format(dateTime)}')),
                             IconButton(
                                 onPressed: () {}, icon: Icon(Icons.access_time))
                           ],
                         ),
-                        Text(topic.title.inCaps,
+                        Text(title,
                             style: Theme.of(context).textTheme.headline4),
                         Divider(),
                         SizedBox(height: 10.0),

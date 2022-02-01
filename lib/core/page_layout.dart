@@ -3,19 +3,18 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_translate/flutter_translate.dart';
 import 'package:ivugurura_app/core/data/dependencies_provider.dart';
 import 'package:ivugurura_app/core/keep_alive.dart';
-import 'package:ivugurura_app/core/redux/actions/category_actions.dart';
 import 'package:ivugurura_app/core/redux/base_state.dart';
 import 'package:ivugurura_app/core/redux/store.dart';
+import 'package:ivugurura_app/core/utils/constants.dart';
 import 'package:ivugurura_app/pages/radiolize_page.dart';
 import 'package:ivugurura_app/pages/all_topics_page.dart';
 import 'package:ivugurura_app/pages/audio_player_page.dart';
-import 'package:ivugurura_app/pages/home_page.dart';
 import 'package:ivugurura_app/pages/setting_page.dart';
+import 'package:ivugurura_app/utils/app_colors.dart';
 import 'package:ivugurura_app/utils/oval_right_clipper.dart';
-import 'package:ivugurura_app/widget/dots_loader.dart';
 
-import 'models/audio.dart';
 import 'models/category.dart';
+import 'models/home_content.dart';
 
 class PageLayout extends StatefulWidget {
   final String title;
@@ -33,8 +32,7 @@ class PageLayout extends StatefulWidget {
 
 class _PageLayoutState extends State<PageLayout> {
   final GlobalKey<ScaffoldState> _key = GlobalKey<ScaffoldState>();
-  final Color primary = Color(0xff172347);
-  final Color active = Color(0xffcdd2d7);
+  String _menuValue = '';
 
   @override
   Widget build(BuildContext context) {
@@ -56,6 +54,52 @@ class _PageLayoutState extends State<PageLayout> {
             _key.currentState!.openDrawer();
           },
         ),
+        actions: <Widget>[
+          // IconButton(
+          //   icon: Icon(Icons.radio),
+          //   onPressed: () {
+          //     onGoToPage(RadiolizePage(audio: audioRadiolize),
+          //         translate('title.radio'));
+          //   },
+          // ),
+          // IconButton(
+          //   icon: Icon(Icons.share),
+          //   onPressed: () {},
+          // ),
+          PopupMenuButton<String>(
+            icon: Icon(Icons.more_vert),
+            itemBuilder: (BuildContext context) {
+              return <PopupMenuEntry<String>>[
+                PopupMenuItem(
+                  child: ListTile(
+                    leading: Icon(Icons.radio),
+                    title: Text('Radiolize'),
+                    onTap: () {
+                      onGoToPage(RadiolizePage(audio: audioRadiolize),
+                          translate('title.radio'));
+                    },
+                  ),
+                  value: 'radiolize',
+                ),
+                PopupMenuItem(
+                  child: ListTile(
+                    leading: Icon(Icons.settings),
+                    title: Text(translate('title.setting')),
+                    onTap: () {
+                      onGoToPage(SettingPage(), translate('title.setting'));
+                    },
+                  ),
+                  value: 'setting',
+                )
+              ];
+            },
+            onSelected: (value) {
+              setState(() {
+                _menuValue = value;
+              });
+            },
+          )
+        ],
       ),
       drawer: _buildDrawer(),
       body: Stack(
@@ -76,7 +120,7 @@ class _PageLayoutState extends State<PageLayout> {
         child: Container(
           padding: const EdgeInsets.only(left: 16.0, right: 40),
           decoration: BoxDecoration(
-              color: primary, boxShadow: [BoxShadow(color: Colors.black45)]),
+              color: appPrimaryColor, boxShadow: [BoxShadow(color: Colors.black45)]),
           width: 300,
           child: SafeArea(
             child: SingleChildScrollView(
@@ -86,22 +130,15 @@ class _PageLayoutState extends State<PageLayout> {
                   _buildDivider(),
                   _buildCategoriesList(),
                   _buildDivider(),
-                  _buildRow(
-                      RadiolizePage(
-                          audio: Audio(
-                              title: 'Ijwi ry ubugorozi',
-                              author: 'Radiolize',
-                              mediaLink:
-                                  'https://studio18.radiolize.com/radio/8220/radio.mp3')),
-                      Icons.radio,
+                  _buildRow(RadiolizePage(audio: audioRadiolize), Icons.radio,
                       translate('title.radio')),
                   _buildDivider(),
                   _buildRow(AudioPlayerPage(), Icons.music_note,
                       translate('title.audio')),
                   _buildDivider(),
-                  _buildRow(HomePage(), Icons.contact_mail,
-                      translate('title.contact_us')),
-                  _buildDivider(),
+                  // _buildRow(HomePage(), Icons.contact_mail,
+                  //     translate('title.contact_us')),
+                  // _buildDivider(),
                   _buildRow(SettingPage(), Icons.settings,
                       translate('title.setting')),
                   _buildDivider(),
@@ -115,34 +152,33 @@ class _PageLayoutState extends State<PageLayout> {
   }
 
   Divider _buildDivider() {
-    return Divider(color: active);
+    return Divider(color: subTitleText);
   }
 
   Widget _buildCategoriesList() {
-    final TextStyle textStyle = TextStyle(color: active, fontSize: 16.0);
-    return StoreConnector<AppState, BaseState<Category, CategoriesList>>(
+    final TextStyle textStyle = TextStyle(color: subTitleText, fontSize: 16.0);
+    return StoreConnector<AppState, BaseState<HomeContent, HomeContentObject>>(
         distinct: true,
-        onInitialBuild: (store) {
-          fetchCategories(context);
-        },
-        converter: (store) => store.state.categoriesState,
-        builder: (context, categoriesState) {
-          if (categoriesState.loading && categoriesState.theList!.length == 0) {
-            return DotsLoader();
+        onInitialBuild: (store) {},
+        converter: (store) => store.state.homeContent,
+        builder: (context, homeContentState) {
+          final categories = homeContentState.theObject!.categories;
+          if (homeContentState.loading) {
+            return CircularProgressIndicator();
           }
-          if (categoriesState.error != '') {
-            return Text('Something went wrong');
+          if (homeContentState.error != '') {
+            return Text(translate('app.error_title'));
           }
-          if (categoriesState.theList!.length < 1) {
-            return Text('Not data');
+          if (categories.length < 1) {
+            return Text(translate('app.no_data'));
           }
+
           return ListView.builder(
             shrinkWrap: true,
             physics: NeverScrollableScrollPhysics(),
-            itemCount: categoriesState.theList!.length,
+            itemCount: categories.length,
             itemBuilder: (BuildContext context, int index) {
-              Category category = categoriesState.theList![index];
-              print(category.language);
+              Category category = categories[index];
               return InkWell(
                 onTap: () {
                   Navigator.push(
@@ -156,7 +192,7 @@ class _PageLayoutState extends State<PageLayout> {
                   padding: const EdgeInsets.symmetric(vertical: 8.0),
                   child: Row(
                     children: <Widget>[
-                      Icon(Icons.read_more, color: active),
+                      Icon(Icons.read_more, color: subTitleText),
                       SizedBox(width: 10),
                       Text(category.name as String, style: textStyle)
                     ],
@@ -169,24 +205,31 @@ class _PageLayoutState extends State<PageLayout> {
   }
 
   Widget _buildRow(Widget page, IconData icon, String title) {
-    final TextStyle textStyle = TextStyle(color: active, fontSize: 16.0);
+    final TextStyle textStyle = TextStyle(color: subTitleText, fontSize: 16.0);
     return InkWell(
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 8.0),
         child: Row(
           children: <Widget>[
-            Icon(icon, color: active),
+            Icon(icon, color: subTitleText),
             SizedBox(width: 10),
             Text(title, style: textStyle)
           ],
         ),
       ),
       onTap: () {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (_) => PageLayout(title: title, page: page)));
+        onGoToPage(page, title);
       },
     );
+  }
+
+  void onGoToPage(Widget page, String title, {bool setPop=true}) {
+    if(setPop){
+      Navigator.pop(context);
+    }
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (_) => PageLayout(title: title, page: page)));
   }
 }

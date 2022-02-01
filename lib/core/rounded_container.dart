@@ -1,19 +1,18 @@
-
 import 'package:flutter/material.dart';
 
-class RoundedContainer extends StatelessWidget{
-  const RoundedContainer({
-    Key? key,
-    required this.child,
-    this.height,
-    this.width,
-    this.color = Colors.white,
-    this.padding = const EdgeInsets.all(16.0),
-    this.margin,
-    this.borderRadius,
-    this.alignment,
-    this.elevation
-  }) : super(key: key);
+class RoundedContainer extends StatelessWidget {
+  const RoundedContainer(
+      {Key? key,
+      required this.child,
+      this.height,
+      this.width,
+      this.color = Colors.white,
+      this.padding = const EdgeInsets.all(16.0),
+      this.margin,
+      this.borderRadius,
+      this.alignment,
+      this.elevation})
+      : super(key: key);
   final Widget child;
   final double? width;
   final double? height;
@@ -32,8 +31,7 @@ class RoundedContainer extends StatelessWidget{
       elevation: elevation ?? 0,
       clipBehavior: Clip.antiAlias,
       shape: RoundedRectangleBorder(
-        borderRadius: borderRadius ?? BorderRadius.circular(20.0)
-      ),
+          borderRadius: borderRadius ?? BorderRadius.circular(20.0)),
       child: Container(
         alignment: alignment,
         height: height,
