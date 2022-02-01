@@ -54,6 +54,7 @@ dependencies:
   flutter_svg: ^0.22.0
   flutter_native_splash: ^1.2.4
   url_launcher: ^6.0.17
+  flutter_downloader: ^1.7.2
 
 dev_dependencies:
   flutter_test:
