@@ -6,6 +6,7 @@ import 'package:ivugurura_app/core/keep_alive.dart';
 import 'package:ivugurura_app/core/redux/base_state.dart';
 import 'package:ivugurura_app/core/redux/store.dart';
 import 'package:ivugurura_app/core/utils/constants.dart';
+import 'package:ivugurura_app/pages/offline_downloads.dart';
 import 'package:ivugurura_app/pages/radiolize_page.dart';
 import 'package:ivugurura_app/pages/all_topics_page.dart';
 import 'package:ivugurura_app/pages/audio_player_page.dart';
@@ -142,6 +143,8 @@ class _PageLayoutState extends State<PageLayout> {
                   _buildRow(SettingPage(), Icons.settings,
                       translate('title.setting')),
                   _buildDivider(),
+                  _buildRow(OfflineDownloads(), Icons.download,
+                      'Downloads'),
                 ],
               ),
             ),
