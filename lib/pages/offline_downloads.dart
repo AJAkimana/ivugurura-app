@@ -1,6 +1,9 @@
+import 'dart:io';
+import 'dart:isolate';
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:ivugurura_app/core/models/audio.dart';
 import 'package:ivugurura_app/core/utils/constants.dart';
 import 'package:ivugurura_app/utils/app_colors.dart';
@@ -12,9 +15,28 @@ class OfflineDownloads extends StatefulWidget{
 }
 
 class _OfflineDownloads extends State<OfflineDownloads>{
+  ReceivePort _port = ReceivePort();
+  List<Map> downloadsListMap = [];
+  static const DOWNLOADER_PORT_NAME = 'downloader_send_port';
+
   List<Audio> downloaded=[
-    Audio(title: 'A verrrry long text title with a lot of characters', author: 'Mugunga Pierre')
+    Audio(title: 'A text title with a lot of characters text title with a lot of characters text title with a lot of characters', author: 'Mugunga Pierre'),
+    Audio(title: 'A text title with a lot of characters', author: 'Mugunga Pierre')
   ];
+
+  @override
+  void initState() {
+    loadAllTask();
+    _bindBackgroundIsolate();
+    FlutterDownloader.registerCallback(downloadCallback);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _unbindBackgroundIsolate();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -67,43 +89,6 @@ class _OfflineDownloads extends State<OfflineDownloads>{
                   ),
                 ),
               ),
-              Container(
-                child: Column(
-                  children: <Widget>[
-                    SizedBox(
-                    height: 110,
-                  ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 20),
-                    child: Material(
-                      elevation: 5.0,
-                      borderRadius: BorderRadius.all(Radius.circular(30)),
-                      child: TextField(
-                        // controller: TextEditingController(text: locations[0]),
-                        cursorColor: Theme.of(context).primaryColor,
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 18
-                        ),
-                        decoration: InputDecoration(
-                            hintText: "Search School",
-                            hintStyle: TextStyle(
-                                color: Colors.black38, fontSize: 16),
-                            prefixIcon: Material(
-                              elevation: 0.0,
-                              borderRadius:
-                              BorderRadius.all(Radius.circular(30)),
-                              child: Icon(Icons.search),
-                            ),
-                            border: InputBorder.none,
-                            contentPadding: EdgeInsets.symmetric(
-                                horizontal: 25, vertical: 13)),
-                      ),
-                    ),
-                  ),
-                ],
-                ),
-              )
             ],
           ),
         ),
@@ -112,31 +97,26 @@ class _OfflineDownloads extends State<OfflineDownloads>{
   }
 
   Widget buildList(BuildContext context, Audio audio){
+    // Map _map = Map();
+    // String _filename = _map['filename'];
+    // int _progress = _map['progress'];
+    // DownloadTaskStatus _status = _map['status'];
+    // String _id = _map['id'];
+    // String _savedDirectory = _map['savedDirectory'];
+    // List<FileSystemEntity> _directories = Directory(_savedDirectory).listSync(followLinks: true);
+    // FileSystemEntity? _file = _directories.isNotEmpty ? _directories?.first : null;
+
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(25),
         color: Colors.white
       ),
       width: double.infinity,
-      height: 110,
       margin: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
       padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Container(
-            width: 50,
-            height: 50,
-            margin: EdgeInsets.only(right: 15),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(50),
-              border: Border.all(width: 3, color: secondaryColor),
-              image: DecorationImage(
-                image: NetworkImage(''),
-                fit: BoxFit.fill
-              )
-            ),
-          ),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -161,12 +141,69 @@ class _OfflineDownloads extends State<OfflineDownloads>{
                       ),
                     )
                   ],
-                )
+                ),
+                Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: <Widget>[
+                      Text('23%'),
+                      Row(
+                        children: <Widget>[
+                          Expanded(
+                            child: LinearProgressIndicator(
+                              value: 23 / 100,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
               ],
             ),
           )
         ],
       ),
     );
+  }
+  void _bindBackgroundIsolate(){
+    bool isSuccess = IsolateNameServer.registerPortWithName(
+        _port.sendPort, DOWNLOADER_PORT_NAME);
+    if(!isSuccess){
+      _unbindBackgroundIsolate();
+      _bindBackgroundIsolate();
+      return;
+    }
+
+    _port.listen((data) {
+      String id = data[0];
+      DownloadTaskStatus status = data[1];
+      int progress = data[2];
+      var task = downloadsListMap.where((e) => e['id'] == id);
+      task.forEach((element) {
+        element['progress'] = progress;
+        element['status'] = status;
+        setState(() {});
+      });
+    });
+  }
+  void _unbindBackgroundIsolate(){
+    IsolateNameServer.removePortNameMapping(DOWNLOADER_PORT_NAME);
+  }
+  static void downloadCallback(String id, DownloadTaskStatus status, int progress){
+    final SendPort? sendPort = IsolateNameServer.lookupPortByName(DOWNLOADER_PORT_NAME);
+    sendPort!.send([id, status, progress]);
+  }
+  Future loadAllTask() async {
+    List<DownloadTask>? allTasks = await FlutterDownloader.loadTasks();
+    allTasks!.forEach((element) {
+      Map task = Map();
+      task['status'] = element.status;
+      task['progress'] = element.progress;
+      task['id'] = element.taskId;
+      task['filename'] = element.filename;
+      task['savedDirectory'] = element.savedDir;
+      downloadsListMap.add(task);
+    });
+    setState(() {});
   }
 }

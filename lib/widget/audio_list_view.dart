@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:ivugurura_app/core/data/repository.dart';
@@ -11,6 +14,7 @@ import 'package:ivugurura_app/widget/audio_item.dart';
 import 'package:ivugurura_app/widget/audio_player_widget.dart';
 import 'package:ivugurura_app/widget/display_error.dart';
 import 'package:ivugurura_app/widget/no_display_data.dart';
+import 'package:path_provider/path_provider.dart';
 
 class AudioListView extends StatefulWidget {
   final Repository repository;
@@ -116,11 +120,7 @@ class _AudioListViewState extends State<AudioListView> {
                                   gradient: LinearGradient(
                                       begin: Alignment.topLeft,
                                       end: Alignment.bottomRight,
-                                      stops: [
-                                    0,
-                                    0.5,
-                                    1
-                                  ],
+                                      stops: [0, 0.5, 1],
                                       colors: [
                                     Color(0xFF014F82),
                                     Color(0xff00395f),
@@ -283,6 +283,25 @@ class _AudioListViewState extends State<AudioListView> {
     setState(() {
       _currentIndex = nextIndex;
       _play = true;
+    });
+  }
+
+  Future<void> addToDownload(Audio audio) async {
+    String mediaUrl = "$AUDIO_PATH/${(audio!.mediaLink?? '')}";
+    final dir = await getApplicationDocumentsDirectory();
+    var localPath = dir.path + (audio!.title as String);
+    final savedDir = Directory(localPath);
+
+    await savedDir.create(recursive: true).then((value) async {
+      String? taskId = await FlutterDownloader.enqueue(
+        url: Uri.encodeFull(mediaUrl),
+        fileName: audio.title,
+        savedDir: localPath,
+        showNotification: true,
+        openFileFromNotification: false
+      );
+      print('=========================>TaskId');
+      print(taskId);
     });
   }
 }
