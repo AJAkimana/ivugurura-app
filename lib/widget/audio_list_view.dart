@@ -10,8 +10,10 @@ import 'package:ivugurura_app/core/redux/actions/audio_actions.dart';
 import 'package:ivugurura_app/core/redux/base_state.dart';
 import 'package:ivugurura_app/core/redux/store.dart';
 import 'package:ivugurura_app/core/utils/constants.dart';
+import 'package:ivugurura_app/pages/offline_downloads.dart';
 import 'package:ivugurura_app/widget/audio_item.dart';
 import 'package:ivugurura_app/widget/audio_player_widget.dart';
+import 'package:ivugurura_app/widget/badge.dart';
 import 'package:ivugurura_app/widget/display_error.dart';
 import 'package:ivugurura_app/widget/no_display_data.dart';
 import 'package:path_provider/path_provider.dart';
@@ -32,6 +34,7 @@ class _AudioListViewState extends State<AudioListView> {
   Audio currentAudio = Audio();
   bool _play = false;
   int _currentIndex = 0;
+  int _totalDownLoads = 0;
 
   final pagingController = PagingController<int, Audio>(firstPageKey: 1);
 
@@ -59,6 +62,8 @@ class _AudioListViewState extends State<AudioListView> {
 
   @override
   void initState() {
+    FlutterDownloader.registerCallback(DownloadClass.callback);
+    _countDownloads();
     pagingController.addPageRequestListener((pageKey) {
       fetchPage(pageKey);
     });
@@ -86,6 +91,13 @@ class _AudioListViewState extends State<AudioListView> {
             appBar: AppBar(
               title: Text('Audio'),
               actions: <Widget>[
+                BadgeIcon(
+                    child: IconButton(
+                        onPressed: _goToDownloadScreen,
+                        icon: Icon(Icons.download)
+                    ),
+                    value: '$_totalDownLoads'
+                )
                 // IconButton(onPressed: () {}, icon: Icon(Icons.share))
               ],
             ),
@@ -162,6 +174,7 @@ class _AudioListViewState extends State<AudioListView> {
                                                     });
                                                   },
                                                   currentAudio: theAudio,
+                                                  onDownloadCurrent: _addToDownload,
                                                 );
                                               },
                                               firstPageErrorIndicatorBuilder:
@@ -286,22 +299,49 @@ class _AudioListViewState extends State<AudioListView> {
     });
   }
 
-  Future<void> addToDownload(Audio audio) async {
-    String mediaUrl = "$AUDIO_PATH/${(audio!.mediaLink?? '')}";
+  Future _countDownloads() async {
+    List<DownloadTask>? allTasks = await FlutterDownloader.loadTasks();
+    setState(() {
+      _totalDownLoads = allTasks!.length;
+    });
+  }
+
+  void _goToDownloadScreen(){
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (_) => OfflineDownloads()));
+  }
+
+  Future<void> _addToDownload(Audio audio) async {
+    String mediaUrl = "$AUDIO_PATH/${(audio.mediaLink?? '')}";
     final dir = await getApplicationDocumentsDirectory();
-    var localPath = dir.path + (audio!.title as String);
+    var localPath = dir.path + (audio.title?? '');
     final savedDir = Directory(localPath);
 
-    await savedDir.create(recursive: true).then((value) async {
-      String? taskId = await FlutterDownloader.enqueue(
-        url: Uri.encodeFull(mediaUrl),
-        fileName: audio.title,
-        savedDir: localPath,
-        showNotification: true,
-        openFileFromNotification: false
+    bool hasExisted = await savedDir.exists();
+    if (!hasExisted) {
+      setState(() {
+        _totalDownLoads += 1;
+      });
+      await savedDir.create(recursive: true).then((value) async {
+        await FlutterDownloader.enqueue(
+            url: Uri.encodeFull(mediaUrl),
+            fileName: audio.title,
+            savedDir: localPath,
+            showNotification: true,
+            openFileFromNotification: true
+        );
+      });
+    }else{
+      final snackBar = SnackBar(
+        content: Text('The song "${(audio.title?? '')}" is in download list'),
+        action: SnackBarAction(
+          label: 'Check it out',
+          onPressed: _goToDownloadScreen,
+        ),
       );
-      print('=========================>TaskId');
-      print(taskId);
-    });
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    }
   }
 }
