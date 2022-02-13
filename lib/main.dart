@@ -1,3 +1,4 @@
+import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
@@ -15,10 +16,10 @@ bool? hasAlreadySetUp;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // Downloader
-  // await FlutterDownloader.initialize(debug: true);
-  // AssetsAudioPlayer.setupNotificationsOpenAction((notification) {
-  //   return true;
-  // });
+  await FlutterDownloader.initialize(debug: true);
+  AssetsAudioPlayer.setupNotificationsOpenAction((notification) {
+    return true;
+  });
   var delegate = await LocalizationDelegate.create(
       fallbackLocale: 'kn', supportedLocales: ['kn', 'en', 'sw', 'fr']);
   final prefs = await SharedPreferences.getInstance();
