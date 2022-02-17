@@ -55,3 +55,9 @@ Future<String> getLangFromPrefs() async {
   final prefs = await SharedPreferences.getInstance();
   return (prefs.getString(LANG_SHORT_NAME) ?? 'kn');
 }
+
+const String youtubeChannel = 'https://www.youtube.com/channel/UCCzVYqdLwgNMLMsP-NKNnIQ';
+const String fbPage = 'https://www.youtube.com/channel/UCCzVYqdLwgNMLMsP-NKNnIQ';
+const String twitterPage = 'https://www.youtube.com/channel/UCCzVYqdLwgNMLMsP-NKNnIQ';
+const String flickPage = 'https://www.youtube.com/channel/UCCzVYqdLwgNMLMsP-NKNnIQ';
+const String igPage = 'https://www.youtube.com/channel/UCCzVYqdLwgNMLMsP-NKNnIQ';
