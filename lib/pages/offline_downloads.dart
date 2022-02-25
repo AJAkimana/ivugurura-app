@@ -35,57 +35,57 @@ class _OfflineDownloads extends State<OfflineDownloads> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text('Downloaded audios'),
+      ),
       backgroundColor: audioBluishBackground,
       body: SingleChildScrollView(
-        child: Container(
-          height: MediaQuery.of(context).size.height,
-          width: MediaQuery.of(context).size.width,
-          child: Stack(
-            children: <Widget>[
-              Container(
-                padding: EdgeInsets.only(top: 120),
-                height: MediaQuery.of(context).size.height,
-                width: double.infinity,
-                child: downloadsListMap.length > 0
-                    ? ListView.builder(
-                        itemCount: downloadsListMap.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          return buildList(context, downloadsListMap[index]);
-                        },
-                      )
-                    : Center(child: Text("No Downloads yet")),
-              ),
-              Container(
-                height: 140,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                    color: primaryColor,
-                    borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(30),
-                        bottomRight: Radius.circular(30))),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 30),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      IconButton(
-                        onPressed: () {},
-                        icon: Icon(Icons.menu, color: Colors.white),
-                      ),
-                      Text(
-                        'Downloaded audio',
-                        style: TextStyle(color: Colors.white, fontSize: 24),
-                      ),
-                      IconButton(
-                        onPressed: () {},
-                        icon: Icon(Icons.menu, color: Colors.white),
-                      ),
-                    ],
-                  ),
+        child: Stack(
+          children: <Widget>[
+            Container(
+              // height: 140,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                  color: primaryColor,
+                  borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(30),
+                      bottomRight: Radius.circular(30))),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 30),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    IconButton(
+                      onPressed: () {},
+                      icon: Icon(Icons.audiotrack, color: Colors.white),
+                    ),
+                    Flexible(child: Text(
+                      'Songs and preachings',
+                      style: TextStyle(color: Colors.white, fontSize: 20),
+                    )),
+                    IconButton(
+                      onPressed: () {},
+                      icon: Icon(Icons.audiotrack, color: Colors.white),
+                    ),
+                  ],
                 ),
               ),
-            ],
-          ),
+            ),
+            SizedBox(height: 5),
+            Container(
+              padding: EdgeInsets.only(top: 50),
+              height: MediaQuery.of(context).size.height,
+              width: double.infinity,
+              child: downloadsListMap.length > 0
+                  ? ListView.builder(
+                      itemCount: downloadsListMap.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return buildList(context, downloadsListMap[index]);
+                      },
+                    )
+                  : Center(child: Text("No Downloads yet")),
+            )
+          ],
         ),
       ),
     );
@@ -120,12 +120,10 @@ class _OfflineDownloads extends State<OfflineDownloads> {
                     Icon(Icons.supervised_user_circle_outlined,
                         color: secondaryColor, size: 20),
                     SizedBox(width: 5),
-                    Text('Author',
+                    Text(
+                      'Author',
                       style: TextStyle(
-                          color: primaryColor,
-                          fontSize: 13,
-                          letterSpacing: 3
-                      ),
+                          color: primaryColor, fontSize: 13, letterSpacing: 3),
                     )
                   ],
                 ),
