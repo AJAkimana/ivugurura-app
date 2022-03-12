@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ivugurura_app/core/models/audio.dart';
+import 'package:ivugurura_app/core/utils/constants.dart';
 
 import 'audio_player_widget.dart';
 
@@ -57,7 +58,49 @@ class _RadioWidgetState extends State<RadioWidget> {
                   _play = !_play;
                 });
               },
-            )
+            ),
+            Expanded(
+              child: ListView.builder(
+                physics: BouncingScrollPhysics(
+                    parent: AlwaysScrollableScrollPhysics()),
+                itemCount: radios.length,
+                itemBuilder: (BuildContext context, int index) {
+                  Audio theAudio = radios[index];
+                  return Column(
+                    children: <Widget>[
+                      ListTile(
+                        onTap: () {},
+                        leading: Text(
+                          '${index + 1}.',
+                          style: TextStyle( fontSize: 20),
+                        ),
+                        title: Text(
+                          ' ${theAudio.title}',
+                          style: TextStyle( fontSize: 20),
+                        ),
+                        subtitle: Text(
+                          ' ${theAudio.author}',
+                          style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600),
+                        ),
+                        trailing: IconButton(
+                          onPressed: () {},
+                          icon: Icon(
+                            Icons.play_arrow,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                      Divider(
+                        height: 1,
+                        color: Colors.white,
+                      ),
+                    ],
+                  );
+                },
+              ),
+            ),
           ],
         ),
       ),
