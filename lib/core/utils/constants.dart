@@ -51,6 +51,24 @@ Audio audioRadiolize = Audio(
     mediaLink: 'https://studio18.radiolize.com/radio/8220/radio.mp3'
 );
 
+List<Audio> radios = [
+  Audio(
+      title: "Ijwi ry'ubugorozi",
+      author: 'RadioLize',
+      mediaLink: 'https://studio18.radiolize.com/radio/8220/radio.mp3'
+  ),
+  Audio(
+      title: "Radio(Burundi)",
+      author: 'RadioLize',
+      mediaLink: 'https://studio18.radiolize.com/radio/8220/radio.mp3'
+  ),
+  Audio(
+      title: "Radio(Congo)",
+      author: 'RadioKing',
+      mediaLink: 'https://listen.radioking.com/radio/461093/stream/516359'
+  )
+];
+
 Future<String> getLangFromPrefs() async {
   final prefs = await SharedPreferences.getInstance();
   return (prefs.getString(LANG_SHORT_NAME) ?? 'kn');
