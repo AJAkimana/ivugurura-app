@@ -39,6 +39,7 @@ class _OfflineDownloads extends State<OfflineDownloads> {
         title: Text('Downloaded audios'),
       ),
       backgroundColor: audioBluishBackground,
+      bottomNavigationBar: Text('THis is supposed to be on bottom'),
       body: SingleChildScrollView(
         child: Stack(
           children: <Widget>[

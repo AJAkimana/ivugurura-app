@@ -23,6 +23,7 @@ class RadioWidget extends StatefulWidget {
 
 class _RadioWidgetState extends State<RadioWidget> {
   bool _play = false;
+  Audio currentPlayingAudio = radios[0];
 
   @override
   Widget build(BuildContext context) {
@@ -37,20 +38,20 @@ class _RadioWidgetState extends State<RadioWidget> {
             borderRadius: BorderRadius.circular(40), color: widget.color),
         child: Column(
           children: <Widget>[
-            SizedBox(height: screenHeight * 0.05),
+            SizedBox(height: screenHeight * 0.01),
             Text(
-              widget.audio.title ?? '',
+              currentPlayingAudio.title ?? '',
               style: TextStyle(
                   fontSize: 30,
                   fontWeight: FontWeight.bold,
                   fontFamily: 'Avenir'),
             ),
             Text(
-              widget.audio.author ?? '',
+              currentPlayingAudio.author ?? '',
               style: TextStyle(fontSize: 20),
             ),
             AudioPlayerWidget(
-              mediaUrl: widget.audio.mediaLink ?? '',
+              mediaUrl: currentPlayingAudio.mediaLink ?? '',
               isRadio: true,
               play: _play,
               onPlay: () {
@@ -85,10 +86,12 @@ class _RadioWidgetState extends State<RadioWidget> {
                               fontWeight: FontWeight.w600),
                         ),
                         trailing: IconButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            onPlayAudio(radios[index]);
+                          },
                           icon: Icon(
-                            Icons.play_arrow,
-                            color: Colors.white,
+                            _play&&currentPlayingAudio==radios[index] ? Icons.pause_circle_filled_outlined : Icons.play_circle_fill_outlined,
+                            color: Colors.black,
                           ),
                         ),
                       ),
@@ -105,5 +108,13 @@ class _RadioWidgetState extends State<RadioWidget> {
         ),
       ),
     );
+  }
+  void onPlayAudio(Audio audio){
+    setState(() {
+      if(currentPlayingAudio!=audio) {
+        currentPlayingAudio = audio;
+      }
+      _play = true;
+    });
   }
 }
