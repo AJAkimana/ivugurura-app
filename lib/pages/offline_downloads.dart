@@ -2,9 +2,11 @@ import 'dart:isolate';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:ivugurura_app/core/utils/constants.dart';
 import 'package:ivugurura_app/utils/app_colors.dart';
+import 'package:ivugurura_app/widget/player_controls.dart';
 
 const DOWNLOADER_PORT_NAME = 'downloader_send_port';
 
@@ -39,7 +41,6 @@ class _OfflineDownloads extends State<OfflineDownloads> {
         title: Text('Downloaded audios'),
       ),
       backgroundColor: audioBluishBackground,
-      bottomNavigationBar: Text('THis is supposed to be on bottom'),
       body: SingleChildScrollView(
         child: Stack(
           children: <Widget>[
@@ -53,21 +54,25 @@ class _OfflineDownloads extends State<OfflineDownloads> {
                       bottomRight: Radius.circular(30))),
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 30),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    IconButton(
-                      onPressed: () {},
-                      icon: Icon(Icons.audiotrack, color: Colors.white),
-                    ),
-                    Flexible(child: Text(
-                      'Songs and preachings',
-                      style: TextStyle(color: Colors.white, fontSize: 20),
-                    )),
-                    IconButton(
-                      onPressed: () {},
-                      icon: Icon(Icons.audiotrack, color: Colors.white),
-                    ),
+                child: Column(
+                  children: <Widget>[
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        IconButton(
+                          onPressed: () {},
+                          icon: Icon(Icons.audiotrack, color: Colors.white),
+                        ),
+                        Flexible(child: Text(
+                          'Songs and preachings',
+                          style: TextStyle(color: Colors.white, fontSize: 20),
+                        )),
+                        IconButton(
+                          onPressed: () {},
+                          icon: Icon(Icons.audiotrack, color: Colors.white),
+                        ),
+                      ],
+                    )
                   ],
                 ),
               ),
@@ -89,6 +94,12 @@ class _OfflineDownloads extends State<OfflineDownloads> {
           ],
         ),
       ),
+      bottomNavigationBar: PlayControls(
+              width: 1,
+              onSetPrev: (){},
+              onSetPlay: (){},
+              onSetNext: (){},
+            )
     );
   }
 

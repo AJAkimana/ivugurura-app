@@ -16,6 +16,7 @@ import 'package:ivugurura_app/widget/audio_player_widget.dart';
 import 'package:ivugurura_app/widget/badge.dart';
 import 'package:ivugurura_app/widget/display_error.dart';
 import 'package:ivugurura_app/widget/no_display_data.dart';
+import 'package:ivugurura_app/widget/player_controls.dart';
 import 'package:path_provider/path_provider.dart';
 
 class AudioListView extends StatefulWidget {
@@ -195,7 +196,8 @@ class _AudioListViewState extends State<AudioListView> {
                                     ),
                                   ))
                                 ],
-                              ))
+                              )
+                          )
                         ],
                       ),
                       Positioned(
@@ -203,7 +205,20 @@ class _AudioListViewState extends State<AudioListView> {
                         top: topHeight - 35,
                         child: FractionalTranslation(
                           translation: Offset(0, 0.5),
-                          child: playerWidget(),
+                          child: PlayControls(
+                            isPlaying: _play,
+                            prevEnableFeedback: _currentIndex != 0,
+                            nextEnableFeedback: pagingController.itemList != null
+                                ? _currentIndex != pagingController.itemList!.length - 1
+                                : false,
+                            onSetPrev: () {
+                              onSetNextOrPrev(action: 'prev');
+                            },
+                            onSetPlay: onSetPlay,
+                            onSetNext: () {
+                              onSetNextOrPrev();
+                            },
+                          ),
                         ),
                       )
                     ],
@@ -219,62 +234,6 @@ class _AudioListViewState extends State<AudioListView> {
     });
   }
 
-  playerWidget() {
-    return Stack(
-      clipBehavior: Clip.none,
-      children: <Widget>[
-        Container(
-          alignment: Alignment.topCenter,
-          height: 35,
-          width: MediaQuery.of(context).size.width * 0.7,
-          margin: EdgeInsets.only(bottom: 6),
-          decoration: BoxDecoration(
-              boxShadow: [BoxShadow(blurRadius: 5)],
-              borderRadius: BorderRadius.circular(50),
-              color: Colors.blue),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              IconButton(
-                icon: Icon(
-                  Icons.skip_previous,
-                  color: Colors.white,
-                ),
-                enableFeedback: _currentIndex != 0,
-                onPressed: () {
-                  onSetNextOrPrev(action: 'prev');
-                },
-              ),
-              IconButton(
-                icon: _play
-                    ? Icon(
-                        Icons.pause,
-                        color: Colors.white,
-                      )
-                    : Icon(
-                        Icons.play_circle,
-                        color: Colors.white,
-                      ),
-                onPressed: onSetPlay,
-              ),
-              IconButton(
-                icon: Icon(
-                  Icons.skip_next,
-                  color: Colors.white,
-                ),
-                enableFeedback: pagingController.itemList != null
-                    ? _currentIndex != pagingController.itemList!.length - 1
-                    : false,
-                onPressed: () {
-                  onSetNextOrPrev();
-                },
-              ),
-            ],
-          ),
-        )
-      ],
-    );
-  }
 
   void setCurrent(Audio _audio) {
     setCurrentAudio(_audio);
