@@ -180,6 +180,8 @@ class _AudioListViewState extends State<AudioListView> {
                                               },
                                               firstPageErrorIndicatorBuilder:
                                                   (context) {
+                                                print('============>');
+                                                print(pagingController.error);
                                                 return DisplayError(
                                                   error: pagingController.error,
                                                   onTryAgain: () =>
@@ -275,7 +277,7 @@ class _AudioListViewState extends State<AudioListView> {
   Future<void> _addToDownload(Audio audio) async {
     String mediaUrl = "$AUDIO_PATH/${(audio.mediaLink?? '')}";
     final dir = await getApplicationDocumentsDirectory();
-    var localPath = dir.path + (audio.title?? '');
+    var localPath = dir.path + '/' + (audio.title?? '');
     final savedDir = Directory(localPath);
 
     bool hasExisted = await savedDir.exists();

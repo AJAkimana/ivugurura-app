@@ -32,7 +32,7 @@ class _DioProvider extends SingleChildStatelessWidget {
     final acceptLang = LocalizedApp.of(context).delegate.currentLocale.languageCode;
     final configuration = BaseOptions(
       baseUrl: API_APP_URL,
-      connectTimeout: 5000,
+      connectTimeout: 10000,
       receiveTimeout: 3000,
       headers: {'Accept-Language': acceptLang}
     );

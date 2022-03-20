@@ -37,78 +37,74 @@ class _OfflineDownloads extends State<OfflineDownloads> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Downloaded audios'),
-      ),
-      backgroundColor: audioBluishBackground,
-      body: SingleChildScrollView(
-        child: Stack(
-          children: <Widget>[
-            Container(
-              // height: 140,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                  color: primaryColor,
-                  borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(30),
-                      bottomRight: Radius.circular(30))),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 30),
-                child: Column(
-                  children: <Widget>[
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        IconButton(
-                          onPressed: () {},
-                          icon: Icon(Icons.audiotrack, color: Colors.white),
-                        ),
-                        Flexible(child: Text(
-                          'Songs and preachings',
-                          style: TextStyle(color: Colors.white, fontSize: 20),
-                        )),
-                        IconButton(
-                          onPressed: () {},
-                          icon: Icon(Icons.audiotrack, color: Colors.white),
-                        ),
-                      ],
-                    )
-                  ],
+        appBar: AppBar(
+          title: Text('Downloaded audios'),
+        ),
+        backgroundColor: audioBluishBackground,
+        body: SingleChildScrollView(
+          child: Stack(
+            children: <Widget>[
+              Container(
+                // height: 140,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                    color: primaryColor,
+                    borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(30),
+                        bottomRight: Radius.circular(30))),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 30),
+                  child: Column(
+                    children: <Widget>[
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Flexible(
+                              child: Text(
+                            'Songs and preachings',
+                            style: TextStyle(color: Colors.white, fontSize: 20),
+                          )),
+                        ],
+                      ),
+                      SizedBox(height: 5),
+                      PlayControls(
+                        width: 1,
+                        onSetPrev: () {},
+                        onSetPlay: () {},
+                        onSetNext: () {},
+                      )
+                    ],
+                  ),
                 ),
               ),
-            ),
-            SizedBox(height: 5),
-            Container(
-              padding: EdgeInsets.only(top: 50),
-              height: MediaQuery.of(context).size.height,
-              width: double.infinity,
-              child: downloadsListMap.length > 0
-                  ? ListView.builder(
-                      itemCount: downloadsListMap.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return buildList(context, downloadsListMap[index]);
-                      },
-                    )
-                  : Center(child: Text("No Downloads yet")),
-            )
-          ],
-        ),
-      ),
-      bottomNavigationBar: PlayControls(
-              width: 1,
-              onSetPrev: (){},
-              onSetPlay: (){},
-              onSetNext: (){},
-            )
+              SizedBox(height: 5),
+              Container(
+                padding: EdgeInsets.only(top: 80),
+                height: MediaQuery.of(context).size.height,
+                width: double.infinity,
+                child: downloadsListMap.length > 0
+                    ? ListView.builder(
+                        itemCount: downloadsListMap.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return buildList(context, downloadsListMap[index]);
+                        },
+                      )
+                    : Center(child: Text("No Downloads yet")),
+              )
+            ],
+          ),
+        )
     );
   }
 
   Widget buildList(BuildContext context, Map audio) {
+    String taskId = audio['id'];
     String fileName = audio['filename'];
     int progress = audio['progress'];
+    DownloadTaskStatus status = audio['status'];
     return Container(
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(5), color: Colors.white),
+          borderRadius: BorderRadius.circular(5), color: Colors.white60),
       width: double.infinity,
       margin: EdgeInsets.symmetric(vertical: 3, horizontal: 5),
       padding: EdgeInsets.symmetric(vertical: 3, horizontal: 5),
@@ -119,12 +115,18 @@ class _OfflineDownloads extends State<OfflineDownloads> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Text(
-                  fileName,
-                  style: TextStyle(
-                      color: primaryColor,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Flexible(child: Text(
+                      fileName,
+                      style: TextStyle(
+                          color: primaryColor,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18),
+                    )),
+                    _buttons(status, taskId)
+                  ],
                 ),
                 SizedBox(height: 6),
                 Row(
@@ -139,22 +141,24 @@ class _OfflineDownloads extends State<OfflineDownloads> {
                     )
                   ],
                 ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: <Widget>[
-                    Text('$progress%'),
-                    Row(
-                      children: <Widget>[
-                        Expanded(
-                          child: LinearProgressIndicator(
-                            value: progress / 100,
+                status == DownloadTaskStatus.complete
+                    ? Container()
+                    : Column(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: <Widget>[
+                          Text('$progress%'),
+                          Row(
+                            children: <Widget>[
+                              Expanded(
+                                child: LinearProgressIndicator(
+                                  value: progress / 100,
+                                ),
+                              ),
+                            ],
                           ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
+                        ],
+                      ),
               ],
             ),
           )
@@ -201,6 +205,107 @@ class _OfflineDownloads extends State<OfflineDownloads> {
       downloadsListMap.add(task);
     });
     setState(() {});
+  }
+
+  Widget _downloadStatus(DownloadTaskStatus _status) {
+    return _status == DownloadTaskStatus.canceled
+        ? Text('Download canceled')
+        : _status == DownloadTaskStatus.complete
+            ? Text('Download completed')
+            : _status == DownloadTaskStatus.failed
+                ? Text('Download failed')
+                : _status == DownloadTaskStatus.paused
+                    ? Text('Download paused')
+                    : _status == DownloadTaskStatus.running
+                        ? Text('Downloading..')
+                        : Text('Download waiting');
+  }
+
+  Widget _buttons(DownloadTaskStatus _status, String taskId) {
+    void changeTaskID(String taskId, String newTaskID) {
+      Map task =
+          downloadsListMap.firstWhere((element) => element['id'] == taskId);
+      task['id'] = newTaskID;
+      setState(() {});
+    }
+    int index = downloadsListMap.indexWhere((item) => item['id'] == taskId);
+    print('=======================>');
+    Map task =
+    downloadsListMap.firstWhere((element) => element['id'] == taskId);
+    print(task);
+    return _status == DownloadTaskStatus.canceled
+        ? GestureDetector(
+            child: Icon(Icons.cached, size: 20, color: Colors.green),
+            onTap: () {
+              FlutterDownloader.retry(taskId: taskId).then((newTaskID) {
+                changeTaskID(taskId, newTaskID!);
+              });
+            },
+          )
+        : _status == DownloadTaskStatus.failed
+            ? GestureDetector(
+                child: Icon(Icons.cached, size: 20, color: Colors.green),
+                onTap: () {
+                  FlutterDownloader.retry(taskId: taskId).then((newTaskID) {
+                    changeTaskID(taskId, newTaskID!);
+                  });
+                },
+              )
+            : _status == DownloadTaskStatus.paused
+                ? Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      GestureDetector(
+                        child: Icon(Icons.play_arrow,
+                            size: 20, color: Colors.blue),
+                        onTap: () {
+                          FlutterDownloader.resume(taskId: taskId).then(
+                            (newTaskID) => changeTaskID(taskId, newTaskID!),
+                          );
+                        },
+                      ),
+                      GestureDetector(
+                        child: Icon(Icons.close, size: 20, color: Colors.red),
+                        onTap: () {
+                          FlutterDownloader.cancel(taskId: taskId);
+                        },
+                      )
+                    ],
+                  )
+                : _status == DownloadTaskStatus.running
+                    ? Row(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          GestureDetector(
+                            child: Icon(Icons.pause,
+                                size: 20, color: Colors.green),
+                            onTap: () {
+                              FlutterDownloader.pause(taskId: taskId);
+                            },
+                          ),
+                          GestureDetector(
+                            child:
+                                Icon(Icons.close, size: 20, color: Colors.red),
+                            onTap: () {
+                              FlutterDownloader.cancel(taskId: taskId);
+                            },
+                          )
+                        ],
+                      )
+                    : _status == DownloadTaskStatus.complete
+                        ? GestureDetector(
+                            child:
+                                Icon(Icons.delete, size: 20, color: Colors.red),
+                            onTap: () {
+                              downloadsListMap.removeAt(index);
+                              FlutterDownloader.remove(
+                                  taskId: taskId, shouldDeleteContent: true);
+                              setState(() {});
+                            },
+                          )
+                        : Container();
   }
 }
 

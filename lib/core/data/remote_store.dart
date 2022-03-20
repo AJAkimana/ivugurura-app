@@ -4,14 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:ivugurura_app/core/models/audio.dart';
 import 'package:ivugurura_app/core/models/list_page.dart';
 import 'package:ivugurura_app/core/models/topic.dart';
-import 'package:ivugurura_app/core/utils/constants.dart';
 
-final options = BaseOptions(
-  baseUrl: API_APP_URL,
-  connectTimeout: 5000,
-  receiveTimeout: 3000,
-);
-Dio dio = Dio(options);
 
 class RemoteStore {
   final Dio dio;
