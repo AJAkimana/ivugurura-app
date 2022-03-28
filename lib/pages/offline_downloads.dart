@@ -22,10 +22,10 @@ class _OfflineDownloads extends State<OfflineDownloads> {
 
   @override
   void initState() {
+    super.initState();
     loadAllTask();
     _bindBackgroundIsolate();
     FlutterDownloader.registerCallback(DownloadClass.callback);
-    super.initState();
   }
 
   @override
@@ -86,7 +86,7 @@ class _OfflineDownloads extends State<OfflineDownloads> {
                     ? ListView.builder(
                         itemCount: downloadsListMap.length,
                         itemBuilder: (BuildContext context, int index) {
-                          return buildList(context, downloadsListMap[index]);
+                          return buildList(context, index);
                         },
                       )
                     : Center(child: Text("No Downloads yet")),
@@ -97,11 +97,14 @@ class _OfflineDownloads extends State<OfflineDownloads> {
     );
   }
 
-  Widget buildList(BuildContext context, Map audio) {
+  Widget buildList(BuildContext context, int index) {
+    Map audio = downloadsListMap[index];
     String taskId = audio['id'];
     String fileName = audio['filename'];
     int progress = audio['progress'];
     DownloadTaskStatus status = audio['status'];
+    print('=======>');
+    print(status==DownloadTaskStatus.running);
     return Container(
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(5), color: Colors.white60),
@@ -125,7 +128,7 @@ class _OfflineDownloads extends State<OfflineDownloads> {
                           fontWeight: FontWeight.bold,
                           fontSize: 18),
                     )),
-                    _buttons(status, taskId)
+                    _buttons(status, taskId, index)
                   ],
                 ),
                 SizedBox(height: 6),
@@ -141,7 +144,7 @@ class _OfflineDownloads extends State<OfflineDownloads> {
                     )
                   ],
                 ),
-                status == DownloadTaskStatus.complete
+                progress == 100
                     ? Container()
                     : Column(
                         mainAxisAlignment: MainAxisAlignment.end,
@@ -221,24 +224,27 @@ class _OfflineDownloads extends State<OfflineDownloads> {
                         : Text('Download waiting');
   }
 
-  Widget _buttons(DownloadTaskStatus _status, String taskId) {
-    void changeTaskID(String taskId, String newTaskID) {
+  Widget _buttons(DownloadTaskStatus _status, String _id, int index) {
+    void changeTaskID(String oldTaskId, String newTaskID) {
       Map task =
-          downloadsListMap.firstWhere((element) => element['id'] == taskId);
+          downloadsListMap.firstWhere((element) => element['id'] == oldTaskId);
       task['id'] = newTaskID;
+      print(task);
       setState(() {});
     }
-    int index = downloadsListMap.indexWhere((item) => item['id'] == taskId);
+    Map task = downloadsListMap[index];
     print('=======================>');
-    Map task =
-    downloadsListMap.firstWhere((element) => element['id'] == taskId);
-    print(task);
+    print(_status);
+    // Map task =
+    // downloadsListMap.firstWhere((element) => element['id'] == taskId);
+    // print(task);
+    // print(_status == DownloadTaskStatus.complete);
     return _status == DownloadTaskStatus.canceled
         ? GestureDetector(
             child: Icon(Icons.cached, size: 20, color: Colors.green),
             onTap: () {
-              FlutterDownloader.retry(taskId: taskId).then((newTaskID) {
-                changeTaskID(taskId, newTaskID!);
+              FlutterDownloader.retry(taskId: _id).then((newTaskID) {
+                changeTaskID(_id, newTaskID!);
               });
             },
           )
@@ -246,8 +252,8 @@ class _OfflineDownloads extends State<OfflineDownloads> {
             ? GestureDetector(
                 child: Icon(Icons.cached, size: 20, color: Colors.green),
                 onTap: () {
-                  FlutterDownloader.retry(taskId: taskId).then((newTaskID) {
-                    changeTaskID(taskId, newTaskID!);
+                  FlutterDownloader.retry(taskId: _id).then((newTaskID) {
+                    changeTaskID(_id, newTaskID!);
                   });
                 },
               )
@@ -260,20 +266,20 @@ class _OfflineDownloads extends State<OfflineDownloads> {
                         child: Icon(Icons.play_arrow,
                             size: 20, color: Colors.blue),
                         onTap: () {
-                          FlutterDownloader.resume(taskId: taskId).then(
-                            (newTaskID) => changeTaskID(taskId, newTaskID!),
+                          FlutterDownloader.resume(taskId: _id).then(
+                            (newTaskID) => changeTaskID(_id, newTaskID!),
                           );
                         },
                       ),
                       GestureDetector(
                         child: Icon(Icons.close, size: 20, color: Colors.red),
                         onTap: () {
-                          FlutterDownloader.cancel(taskId: taskId);
+                          FlutterDownloader.cancel(taskId: _id);
                         },
                       )
                     ],
                   )
-                : _status == DownloadTaskStatus.running
+                : _status == DownloadTaskStatus.running && task['progress'] != 100
                     ? Row(
                         mainAxisSize: MainAxisSize.min,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -282,26 +288,26 @@ class _OfflineDownloads extends State<OfflineDownloads> {
                             child: Icon(Icons.pause,
                                 size: 20, color: Colors.green),
                             onTap: () {
-                              FlutterDownloader.pause(taskId: taskId);
+                              FlutterDownloader.pause(taskId: _id);
                             },
                           ),
                           GestureDetector(
                             child:
                                 Icon(Icons.close, size: 20, color: Colors.red),
                             onTap: () {
-                              FlutterDownloader.cancel(taskId: taskId);
+                              FlutterDownloader.cancel(taskId: _id);
                             },
                           )
                         ],
                       )
-                    : _status == DownloadTaskStatus.complete
+                    : task['progress'] == 100
                         ? GestureDetector(
                             child:
                                 Icon(Icons.delete, size: 20, color: Colors.red),
                             onTap: () {
                               downloadsListMap.removeAt(index);
                               FlutterDownloader.remove(
-                                  taskId: taskId, shouldDeleteContent: true);
+                                  taskId: _id, shouldDeleteContent: true);
                               setState(() {});
                             },
                           )

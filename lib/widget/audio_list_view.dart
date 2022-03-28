@@ -280,8 +280,9 @@ class _AudioListViewState extends State<AudioListView> {
     var localPath = dir.path + '/' + (audio.title?? '');
     final savedDir = Directory(localPath);
 
-    bool hasExisted = await savedDir.exists();
-    if (!hasExisted) {
+    List<DownloadTask>? tasks = await FlutterDownloader.loadTasks();
+    bool exist = tasks!.map((el) => el.filename).contains(audio.title);
+    if (exist) {
       setState(() {
         _totalDownLoads += 1;
       });
