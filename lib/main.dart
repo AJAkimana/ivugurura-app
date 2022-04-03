@@ -21,13 +21,17 @@ void main() async {
     return true;
   });
   var delegate = await LocalizationDelegate.create(
-      fallbackLocale: 'kn', supportedLocales: ['kn', 'en', 'sw', 'fr']);
+      fallbackLocale: 'kn',
+      supportedLocales: ['kn', 'en', 'sw', 'fr']
+  );
   final prefs = await SharedPreferences.getInstance();
   hasAlreadySetUp = prefs.getBool(HAS_SET);
-  SystemChrome.setPreferredOrientations(
-      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp, DeviceOrientation.portraitDown
+  ]);
   runApp(
-      LocalizedApp(delegate, StoreProvider(store: appStore, child: MyApp())));
+      LocalizedApp(delegate, StoreProvider(store: appStore, child: MyApp()))
+  );
 }
 
 class MyApp extends StatelessWidget {
