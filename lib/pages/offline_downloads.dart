@@ -1,6 +1,8 @@
+import 'dart:io';
 import 'dart:isolate';
 import 'dart:ui';
 
+import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
@@ -19,6 +21,8 @@ class OfflineDownloads extends StatefulWidget {
 class _OfflineDownloads extends State<OfflineDownloads> {
   ReceivePort _port = ReceivePort();
   List<Map> downloadsListMap = [];
+  final assetsAudioPlayer = AssetsAudioPlayer();
+  Map currentAudio = {};
 
   @override
   void initState() {
@@ -61,7 +65,7 @@ class _OfflineDownloads extends State<OfflineDownloads> {
                         children: [
                           Flexible(
                               child: Text(
-                            'Songs and preachings',
+                            currentAudio.isEmpty?'Songs and preachings':currentAudio['filename'],
                             style: TextStyle(color: Colors.white, fontSize: 20),
                           )),
                         ],
@@ -103,8 +107,6 @@ class _OfflineDownloads extends State<OfflineDownloads> {
     String fileName = audio['filename'];
     int progress = audio['progress'];
     DownloadTaskStatus status = audio['status'];
-    print('=======>');
-    print(status==DownloadTaskStatus.running);
     return Container(
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(5), color: Colors.white60),
@@ -144,7 +146,7 @@ class _OfflineDownloads extends State<OfflineDownloads> {
                     )
                   ],
                 ),
-                progress == 100
+                status == DownloadTaskStatus.complete
                     ? Container()
                     : Column(
                         mainAxisAlignment: MainAxisAlignment.end,
@@ -199,6 +201,7 @@ class _OfflineDownloads extends State<OfflineDownloads> {
   Future loadAllTask() async {
     List<DownloadTask>? allTasks = await FlutterDownloader.loadTasks();
     allTasks!.forEach((element) {
+      // print(element);
       Map task = Map();
       task['status'] = element.status;
       task['progress'] = element.progress;
@@ -229,12 +232,12 @@ class _OfflineDownloads extends State<OfflineDownloads> {
       Map task =
           downloadsListMap.firstWhere((element) => element['id'] == oldTaskId);
       task['id'] = newTaskID;
-      print(task);
+      // print(task);
       setState(() {});
     }
     Map task = downloadsListMap[index];
-    print('=======================>');
-    print(_status);
+    // print('=======================>');
+    // print(_status);
     // Map task =
     // downloadsListMap.firstWhere((element) => element['id'] == taskId);
     // print(task);
@@ -279,7 +282,7 @@ class _OfflineDownloads extends State<OfflineDownloads> {
                       )
                     ],
                   )
-                : _status == DownloadTaskStatus.running && task['progress'] != 100
+                : _status == DownloadTaskStatus.running
                     ? Row(
                         mainAxisSize: MainAxisSize.min,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -300,18 +303,34 @@ class _OfflineDownloads extends State<OfflineDownloads> {
                           )
                         ],
                       )
-                    : task['progress'] == 100
+                    : _status == DownloadTaskStatus.complete
                         ? GestureDetector(
                             child:
-                                Icon(Icons.delete, size: 20, color: Colors.red),
+                                Icon(Icons.pause_circle_filled_outlined, size: 20, color: Colors.black),
                             onTap: () {
-                              downloadsListMap.removeAt(index);
-                              FlutterDownloader.remove(
-                                  taskId: _id, shouldDeleteContent: true);
-                              setState(() {});
+                              playAudio(downloadsListMap[index]);
+                              // downloadsListMap.removeAt(index);
+                              // FlutterDownloader.remove(
+                              //     taskId: _id, shouldDeleteContent: true);
+                              // setState(() {});
                             },
                           )
                         : Container();
+  }
+  
+  void playAudio(Map audio){
+    String audioPath = '${audio['savedDirectory']}/${audio['filename']}';
+    if(audio['filename']!=currentAudio['filename']) {
+      setState(() {
+        currentAudio = audio;
+      });
+      File _file = new File(audioPath);
+      assetsAudioPlayer.stop();
+      assetsAudioPlayer.open(
+          Audio.file(_file.path),
+        headPhoneStrategy: HeadPhoneStrategy.pauseOnUnplug
+      );
+    }
   }
 }
 
