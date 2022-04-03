@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
@@ -18,6 +19,7 @@ import 'package:ivugurura_app/widget/display_error.dart';
 import 'package:ivugurura_app/widget/no_display_data.dart';
 import 'package:ivugurura_app/widget/player_controls.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class AudioListView extends StatefulWidget {
   final Repository repository;
@@ -275,33 +277,39 @@ class _AudioListViewState extends State<AudioListView> {
   }
 
   Future<void> _addToDownload(Audio audio) async {
-    String mediaUrl = "$AUDIO_PATH/${(audio.mediaLink?? '')}";
-    final dir = await getApplicationDocumentsDirectory();
-    var localPath = dir.path + '/' + (audio.title?? '');
-    final savedDir = Directory(localPath);
+    final status = await Permission.storage.request();
+    if(status.isGranted){
+      String mediaUrl = "$AUDIO_PATH/${(audio.mediaLink?? '')}";
+      final dir = await getExternalStorageDirectory();
+      // var localPath = dir.path + '/' + (audio.title?? '');
+      // final savedDir = Directory(localPath);
 
-    List<DownloadTask>? tasks = await FlutterDownloader.loadTasks();
-    bool exist = tasks!.map((el) => el.filename).contains(audio.title);
-    if (exist) {
-      setState(() {
-        _totalDownLoads += 1;
-      });
-      await savedDir.create(recursive: true).then((value) async {
+      List<DownloadTask>? tasks = await FlutterDownloader.loadTasks();
+      bool exist = tasks!.map((el) => el.filename).contains(audio.title);
+      if (exist==false) {
+        setState(() {
+          _totalDownLoads = tasks.length + 1;
+        });
         await FlutterDownloader.enqueue(
             url: Uri.encodeFull(mediaUrl),
-            fileName: audio.title,
-            savedDir: localPath,
+            fileName: '${audio.title!}.mp3',
+            savedDir: dir!.path,
             showNotification: true,
             openFileFromNotification: true
         );
-      });
+      }else{
+        final snackBar = SnackBar(
+          content: Text('The song "${(audio.title?? '')}" is in download list'),
+          action: SnackBarAction(
+            label: 'Check it out',
+            onPressed: _goToDownloadScreen,
+          ),
+        );
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      }
     }else{
       final snackBar = SnackBar(
-        content: Text('The song "${(audio.title?? '')}" is in download list'),
-        action: SnackBarAction(
-          label: 'Check it out',
-          onPressed: _goToDownloadScreen,
-        ),
+        content: Text('Need permission')
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
