@@ -1,5 +1,6 @@
 {
   "app": {
+    "app": "Ivugurura n Ubugorozi",
     "title": "Reformation/Ubugorozi",
     "home": "Ahabanza",
     "topics": "Ibyigisho",
@@ -19,10 +20,26 @@
     "setting": "Igenamikorere",
     "audio": "Ama audio",
     "radio": "Umva radio",
-    "contact_us": "Twandikire"
+    "contact_us": "Twandikire",
+    "about_us": "Abo turibo",
+    "downloads": "Downloads"
   },
   "lesson": {
     "mathew24_14_book": "Matayo 24:14",
     "mathew24_14": "Kandi ubu butumwa bwiza bw'ubwami buzigishwa amahanga yose nibwo imperuka izaherako ize"
+  },
+  "about_us": {
+    "about_us_title": "About RRV",
+    "about_us_description": "Evangelists willingly carry out the work of Revival and Reformation",
+    "about_us_visit_web": "Visit our website for more about gospel of the Kingdom",
+    "about_us_youtube": "Our Youtube channel",
+    "about_us_youtube_desc": "Visit our Youtube channel for more videos about gospel of the Kingdom",
+    "about_us_contact": "Contact Us"
+  },
+  "downloads": {
+    "download_title": "Downloaded audios",
+    "download_exist": "The song {song_title} is in download list",
+    "download_no_data": "No Downloads yet",
+    "songs_and_preachings": "Songs and preachings"
   }
 }
