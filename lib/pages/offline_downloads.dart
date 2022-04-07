@@ -9,6 +9,7 @@ import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:ivugurura_app/core/utils/constants.dart';
 import 'package:ivugurura_app/utils/app_colors.dart';
 import 'package:ivugurura_app/widget/player_controls.dart';
+import 'package:ivugurura_app/core/extensions/string_cap_extension.dart';
 
 const DOWNLOADER_PORT_NAME = 'downloader_send_port';
 
@@ -23,6 +24,8 @@ class _OfflineDownloads extends State<OfflineDownloads> {
   List<Map> downloadsListMap = [];
   final assetsAudioPlayer = AssetsAudioPlayer();
   Map currentAudio = {};
+  int _currentIndex = 0;
+  bool _isPlaying = false;
 
   @override
   void initState() {
@@ -65,7 +68,9 @@ class _OfflineDownloads extends State<OfflineDownloads> {
                         children: [
                           Flexible(
                               child: Text(
-                            currentAudio.isEmpty?'Songs and preachings':currentAudio['filename'],
+                            currentAudio.isEmpty
+                                ? 'Songs and preachings'
+                                : currentAudio['filename'],
                             style: TextStyle(color: Colors.white, fontSize: 20),
                           )),
                         ],
@@ -73,9 +78,21 @@ class _OfflineDownloads extends State<OfflineDownloads> {
                       SizedBox(height: 5),
                       PlayControls(
                         width: 1,
-                        onSetPrev: () {},
-                        onSetPlay: () {},
-                        onSetNext: () {},
+                        onSetPrev: () {
+                          onSetNextOrPrev(action: 'prev');
+                        },
+                        onSetPlay: () {
+                          if(currentAudio.isNotEmpty){
+                            assetsAudioPlayer.playOrPause();
+                            setState(() {
+                              _isPlaying = !_isPlaying;
+                            });
+                          }
+                        },
+                        onSetNext: () {
+                          onSetNextOrPrev();
+                        },
+                        isPlaying: _isPlaying,
                       )
                     ],
                   ),
@@ -97,8 +114,7 @@ class _OfflineDownloads extends State<OfflineDownloads> {
               )
             ],
           ),
-        )
-    );
+        ));
   }
 
   Widget buildList(BuildContext context, int index) {
@@ -109,7 +125,7 @@ class _OfflineDownloads extends State<OfflineDownloads> {
     DownloadTaskStatus status = audio['status'];
     return Container(
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(5), color: Colors.white60),
+          borderRadius: BorderRadius.circular(5), color: audio['filename']==currentAudio['filename']?Colors.lightBlueAccent: Colors.white60),
       width: double.infinity,
       margin: EdgeInsets.symmetric(vertical: 3, horizontal: 5),
       padding: EdgeInsets.symmetric(vertical: 3, horizontal: 5),
@@ -123,8 +139,9 @@ class _OfflineDownloads extends State<OfflineDownloads> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Flexible(child: Text(
-                      fileName,
+                    Flexible(
+                        child: Text(
+                      fileName.capitalizeFirstOfEach,
                       style: TextStyle(
                           color: primaryColor,
                           fontWeight: FontWeight.bold,
@@ -140,7 +157,7 @@ class _OfflineDownloads extends State<OfflineDownloads> {
                         color: secondaryColor, size: 20),
                     SizedBox(width: 5),
                     Text(
-                      'Author',
+                      'Reformation Voice',
                       style: TextStyle(
                           color: primaryColor, fontSize: 13, letterSpacing: 3),
                     )
@@ -213,35 +230,14 @@ class _OfflineDownloads extends State<OfflineDownloads> {
     setState(() {});
   }
 
-  Widget _downloadStatus(DownloadTaskStatus _status) {
-    return _status == DownloadTaskStatus.canceled
-        ? Text('Download canceled')
-        : _status == DownloadTaskStatus.complete
-            ? Text('Download completed')
-            : _status == DownloadTaskStatus.failed
-                ? Text('Download failed')
-                : _status == DownloadTaskStatus.paused
-                    ? Text('Download paused')
-                    : _status == DownloadTaskStatus.running
-                        ? Text('Downloading..')
-                        : Text('Download waiting');
-  }
-
   Widget _buttons(DownloadTaskStatus _status, String _id, int index) {
     void changeTaskID(String oldTaskId, String newTaskID) {
       Map task =
           downloadsListMap.firstWhere((element) => element['id'] == oldTaskId);
       task['id'] = newTaskID;
-      // print(task);
       setState(() {});
     }
-    Map task = downloadsListMap[index];
-    // print('=======================>');
-    // print(_status);
-    // Map task =
-    // downloadsListMap.firstWhere((element) => element['id'] == taskId);
-    // print(task);
-    // print(_status == DownloadTaskStatus.complete);
+
     return _status == DownloadTaskStatus.canceled
         ? GestureDetector(
             child: Icon(Icons.cached, size: 20, color: Colors.green),
@@ -305,10 +301,10 @@ class _OfflineDownloads extends State<OfflineDownloads> {
                       )
                     : _status == DownloadTaskStatus.complete
                         ? GestureDetector(
-                            child:
-                                Icon(Icons.pause_circle_filled_outlined, size: 20, color: Colors.black),
+                            child: Icon(Icons.pause_circle_filled_outlined,
+                                size: 20, color: Colors.black),
                             onTap: () {
-                              playAudio(downloadsListMap[index]);
+                              playAudio(index);
                               // downloadsListMap.removeAt(index);
                               // FlutterDownloader.remove(
                               //     taskId: _id, shouldDeleteContent: true);
@@ -317,20 +313,56 @@ class _OfflineDownloads extends State<OfflineDownloads> {
                           )
                         : Container();
   }
-  
-  void playAudio(Map audio){
+
+  void playAudio(int index) {
+    Map audio = downloadsListMap[index];
     String audioPath = '${audio['savedDirectory']}/${audio['filename']}';
-    if(audio['filename']!=currentAudio['filename']) {
-      setState(() {
-        currentAudio = audio;
-      });
-      File _file = new File(audioPath);
+    File _file = new File(audioPath);
+    Audio _audio = Audio.file(_file.path);
+    if (currentAudio.isEmpty) {
+      _audio = Audio.file(_file.path,
+          metas: Metas(
+              title: audio['filename'],
+              artist: 'Reformation voice',
+              album: 'Audios'));
+    } else if (audio['filename'] != currentAudio['filename']) {
       assetsAudioPlayer.stop();
-      assetsAudioPlayer.open(
-          Audio.file(_file.path),
-        headPhoneStrategy: HeadPhoneStrategy.pauseOnUnplug
+      _audio.updateMetas(
+        title: audio['filename'],
       );
     }
+    setState(() {
+      _isPlaying = true;
+      _currentIndex = index;
+      currentAudio = audio;
+    });
+    assetsAudioPlayer.open(_audio,
+        headPhoneStrategy: HeadPhoneStrategy.pauseOnUnplug,
+        showNotification: true,
+      notificationSettings: NotificationSettings(
+        customNextAction: (_){
+          onSetNextOrPrev();
+        },
+        customPrevAction: (_){
+          onSetNextOrPrev(action: 'prev');
+        }
+      )
+    );
+  }
+
+  void onSetNextOrPrev({String action = 'next'}) {
+    int nextIndex = _currentIndex + 1;
+    if (_currentIndex == downloadsListMap.length - 1 &&
+        action == 'next') {
+      return;
+    }
+    if (action == 'prev') {
+      if (_currentIndex == 0) {
+        return;
+      }
+      nextIndex = _currentIndex - 1;
+    }
+    playAudio(nextIndex);
   }
 }
 
