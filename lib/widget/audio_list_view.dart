@@ -301,7 +301,7 @@ class _AudioListViewState extends State<AudioListView> {
         final snackBar = SnackBar(
           content: Text('The song "${(audio.title?? '')}" is in download list'),
           action: SnackBarAction(
-            label: 'Check it out',
+            label: 'Downloads',
             onPressed: _goToDownloadScreen,
           ),
         );
@@ -309,7 +309,13 @@ class _AudioListViewState extends State<AudioListView> {
       }
     }else{
       final snackBar = SnackBar(
-        content: Text('Need permission')
+        content: Text('Need permission'),
+        action: SnackBarAction(
+          label: 'Enable permission',
+          onPressed: () async {
+            await openAppSettings();
+          },
+        ),
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
