@@ -57,17 +57,6 @@ class _PageLayoutState extends State<PageLayout> {
           },
         ),
         actions: <Widget>[
-          // IconButton(
-          //   icon: Icon(Icons.radio),
-          //   onPressed: () {
-          //     onGoToPage(RadiolizePage(audio: audioRadiolize),
-          //         translate('title.radio'));
-          //   },
-          // ),
-          // IconButton(
-          //   icon: Icon(Icons.share),
-          //   onPressed: () {},
-          // ),
           PopupMenuButton<String>(
             icon: Icon(Icons.more_vert),
             itemBuilder: (BuildContext context) {
@@ -141,11 +130,12 @@ class _PageLayoutState extends State<PageLayout> {
                   // _buildRow(HomePage(), Icons.contact_mail,
                   //     translate('title.contact_us')),
                   // _buildDivider(),
+                  _buildRow(OfflineDownloads(), Icons.download,
+                      'Downloads'),
+                  _buildDivider(),
                   _buildRow(SettingPage(), Icons.settings,
                       translate('title.setting')),
                   _buildDivider(),
-                  _buildRow(OfflineDownloads(), Icons.download,
-                      'Downloads'),
                   _buildRow(About(), Icons.people,
                       'About us', ),
                 ],
