@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_translate/flutter_translate.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:ivugurura_app/core/utils/constants.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -6,6 +7,7 @@ import 'package:url_launcher/url_launcher.dart';
 class About extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final langSocials = socialMedias['en'];
     return Theme(
         data: Theme.of(context).copyWith(primaryColor: primaryColor),
         child: Builder(builder: (context) {
@@ -21,23 +23,22 @@ class About extends StatelessWidget {
                     Container(
                       padding: const EdgeInsets.all(16.0),
                       decoration: BoxDecoration(color: bgColor),
-                      child: Text(
-                          'Ababwirizabutumwa bwiza b ubushake bakora umurimo w Ivugurura n Ubugorozi'),
+                      child: Text(translate('about_us.about_us_description'), style: TextStyle(fontSize: 20, letterSpacing: 1.5)),
                     ),
                     const SizedBox(height: 10.0),
                     _buildCardInfo(
                         context,
                         Icons.web,
-                        'Ivugurura n Ubugorozi',
-                        'Sura urubuga rwacu uboneho ibyigisho byinshi kandi byiza',
+                        translate('app.app'),
+                        translate('about_us.about_us_visit_web'),
                         BASE_URL),
                     SizedBox(height: 10.0),
                     _buildCardInfo(
                         context,
                         Icons.yard_outlined,
-                        'Our youtube channel',
-                        'Sura Youtube channel yacu ubone ibyigisho byinshi bitandukanye mu buryo bw amashusho',
-                        youtubeChannel),
+                        translate('about_us.about_us_youtube'),
+                        translate('about_us.about_us_youtube_desc'),
+                        langSocials!.firstWhere((item) => item.title=='Youtube').url??''),
                     SizedBox(height: 10.0),
                     MaterialButton(
                         color: bgColor,
@@ -47,7 +48,7 @@ class About extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisSize: MainAxisSize.min,
                             children: <Widget>[
-                              _buildTitle('Contact'),
+                              _buildTitle(translate('about_us.about_us_contact')),
                               SizedBox(height: 5.0),
                               _buildContact(Icons.phone, '+250786853257'),
                               SizedBox(height: 10.0),

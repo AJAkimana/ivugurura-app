@@ -29,17 +29,17 @@
     "mathew24_14": "Tena habari njema ya ufalme itahubiriwa katika ulimwengu wote, kuwa ushuhuda kwa mataifa yote hapo ndipo ule mwisho utakapokuja"
   },
   "about_us": {
-    "about_us_title": "About RRV",
-    "about_us_description": "Evangelists willingly carry out the work of Revival and Reformation",
-    "about_us_visit_web": "Visit our website for more about gospel of the Kingdom",
-    "about_us_youtube": "Our Youtube channel",
-    "about_us_youtube_desc": "Visit our Youtube channel for more videos about gospel of the Kingdom",
-    "about_us_contact": "Contact Us"
+    "about_us_title": "Kuhusu sisi",
+    "about_us_description": "Wanamatengenezo ambao kazi yao ni Uhuisho na matengenezo",
+    "about_us_visit_web": "Tembelea tovuti yetu kwa habari zaidi kuhusu injili",
+    "about_us_youtube": "Chaneli yetu ya Youtube",
+    "about_us_youtube_desc": "Tembelea chaneli yetu ya Youtube kwa video zaidi kuhusu injili",
+    "about_us_contact": "Wasiliana nasi"
   },
   "downloads": {
-    "download_title": "Downloaded audios",
-    "download_exist": "The song {song_title} is in download list",
-    "download_no_data": "No Downloads yet",
-    "songs_and_preachings": "Songs and preachings"
+    "download_title": "Sauti zilizopakuliwa",
+    "download_exist": "Wimbo {song_title} uko kwenye orodha ya upakuaji",
+    "download_no_data": "Bado hakuna Vipakuliwa",
+    "songs_and_preachings": "Nyimbo na mahubiri"
   }
 }

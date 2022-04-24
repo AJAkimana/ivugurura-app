@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:ivugurura_app/core/models/audio.dart';
 import 'package:ivugurura_app/core/models/language.dart';
+import 'package:ivugurura_app/core/models/social_media.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 const bool isLocal = false;
@@ -60,7 +62,7 @@ List<Audio> radios = [
   Audio(
       title: "Radio(Burundi)",
       author: 'RadioLize',
-      mediaLink: 'https://studio18.radiolize.com/radio/8220/radio.mp3'
+      mediaLink: 'https://my4.radiolize.com/radio/8020/radio.mp3'
   ),
   Audio(
       title: "Radio(Congo)",
@@ -79,3 +81,84 @@ const String fbPage = 'https://www.youtube.com/channel/UCCzVYqdLwgNMLMsP-NKNnIQ'
 const String twitterPage = 'https://www.youtube.com/channel/UCCzVYqdLwgNMLMsP-NKNnIQ';
 const String flickPage = 'https://www.youtube.com/channel/UCCzVYqdLwgNMLMsP-NKNnIQ';
 const String igPage = 'https://www.youtube.com/channel/UCCzVYqdLwgNMLMsP-NKNnIQ';
+
+Map<String, List<SocialMedia>> socialMedias = {
+  'en':<SocialMedia>[
+    SocialMedia(
+        title: 'Youtube',
+        url: 'https://youtube.com/channel/UCCzVYqdLwgNMLMsP-NKNnIQ',
+        iconData: FontAwesomeIcons.youtube,
+        language: systemLanguages[0]
+    ),
+    SocialMedia(
+        title: 'Facebook',
+        url: 'https://facebook.com/ivugurura.ubugorozi.10',
+        iconData: FontAwesomeIcons.facebookF,
+        language: systemLanguages[0]
+    ),
+    SocialMedia(
+        title: 'Twitter',
+        url: 'https://twitter.com/Rev_Reformation',
+        iconData: FontAwesomeIcons.twitter,
+        language: systemLanguages[0]
+    ),
+    SocialMedia(
+        title: 'Instagram',
+        url: 'https://instagram.com/reformation_voice',
+        iconData: FontAwesomeIcons.instagram,
+        language: systemLanguages[0]
+    ),
+  ],
+  'kn':<SocialMedia>[
+    SocialMedia(
+        title: 'Youtube',
+        url: 'https://youtube.com/channel/UCCzVYqdLwgNMLMsP-NKNnIQ',
+        iconData: FontAwesomeIcons.youtube,
+        language: systemLanguages[1]
+    ),
+    SocialMedia(
+        title: 'Facebook',
+        url: 'https://facebook.com/ivugurura.ubugorozi.10',
+        iconData: FontAwesomeIcons.facebookF,
+        language: systemLanguages[1]
+    ),
+    SocialMedia(
+        title: 'Twitter',
+        url: 'https://twitter.com/Rev_Reformation',
+        iconData: FontAwesomeIcons.twitter,
+        language: systemLanguages[1]
+    ),
+    SocialMedia(
+        title: 'Instagram',
+        url: 'https://instagram.com/reformation_voice',
+        iconData: FontAwesomeIcons.instagram,
+        language: systemLanguages[1]
+    ),
+  ],
+  'sw':<SocialMedia>[
+    SocialMedia(
+        title: 'Youtube',
+        url: 'https://youtube.com/channel/UC0YYf2qv2gUhueHvStXBYwQ',
+        iconData: FontAwesomeIcons.youtube,
+        language: systemLanguages[2]
+    ),
+    SocialMedia(
+        title: 'Facebook',
+        url: 'https://facebook.com/ivugurura.ubugorozi.10',
+        iconData: FontAwesomeIcons.facebookF,
+        language: systemLanguages[2]
+    ),
+    SocialMedia(
+        title: 'Twitter',
+        url: 'https://twitter.com/Rev_Reformation',
+        iconData: FontAwesomeIcons.twitter,
+        language: systemLanguages[2]
+    ),
+    SocialMedia(
+        title: 'Instagram',
+        url: 'https://instagram.com/reformation_voice',
+        iconData: FontAwesomeIcons.instagram,
+        language: systemLanguages[2]
+    ),
+  ]
+};

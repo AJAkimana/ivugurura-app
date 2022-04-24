@@ -20,6 +20,7 @@ import 'package:ivugurura_app/widget/no_display_data.dart';
 import 'package:ivugurura_app/widget/player_controls.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:ivugurura_app/core/extensions/string_cap_extension.dart';
 
 class AudioListView extends StatefulWidget {
   final Repository repository;
@@ -292,7 +293,7 @@ class _AudioListViewState extends State<AudioListView> {
         });
         await FlutterDownloader.enqueue(
             url: Uri.encodeFull(mediaUrl),
-            fileName: '${audio.title!}.mp3',
+            fileName: '${audio.title!.trim().toLowerCase().capitalizeFirstOfEach}.mp3',
             savedDir: dir!.path,
             showNotification: true,
             openFileFromNotification: true
