@@ -9,12 +9,14 @@ class SocialMedia{
   String? title;
   String? url;
   IconData? iconData;
+  Color? color;
   Language? language;
 
   SocialMedia({
     this.title,
     this.url,
     this.iconData,
+    this.color,
     this.language
   });
 
