@@ -6,10 +6,11 @@ import 'package:ivugurura_app/core/models/social_media.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 const bool isLocal = false;
-const String BASE_REMOTE_URL = "https://reformationvoice.org";
-const String BASE_LOCAL_URL = "http://192.168.88.46:5600";
+const String PROTOCAL = isLocal ? 'http' : 'https';
+const String BASE_REMOTE_URL = "reformationvoice.org";
+const String BASE_LOCAL_URL = "192.168.88.46:5600";
 
-const BASE_URL = isLocal ? BASE_LOCAL_URL : BASE_REMOTE_URL;
+const BASE_URL = '$PROTOCAL://${isLocal ? BASE_LOCAL_URL : BASE_REMOTE_URL}';
 
 const String API_APP_URL = "$BASE_URL/api/v1";
 
@@ -50,25 +51,21 @@ const HAS_SET = 'hasSet';
 Audio audioRadiolize = Audio(
     title: "Ijwi ry'ubugorozi",
     author: 'Radiolize',
-    mediaLink: 'https://studio18.radiolize.com/radio/8220/radio.mp3'
-);
+    mediaLink: 'https://studio18.radiolize.com/radio/8220/radio.mp3');
 
 List<Audio> radios = [
   Audio(
       title: "Ijwi ry'ubugorozi",
       author: 'RadioLize',
-      mediaLink: 'https://studio18.radiolize.com/radio/8220/radio.mp3'
-  ),
+      mediaLink: 'https://studio18.radiolize.com/radio/8220/radio.mp3'),
   Audio(
       title: "Radio(Burundi)",
       author: 'RadioLize',
-      mediaLink: 'https://my4.radiolize.com/radio/8020/radio.mp3'
-  ),
+      mediaLink: 'https://my4.radiolize.com/radio/8020/radio.mp3'),
   Audio(
       title: "Radio(Congo)",
       author: 'RadioKing',
-      mediaLink: 'https://listen.radioking.com/radio/461093/stream/516359'
-  )
+      mediaLink: 'https://listen.radioking.com/radio/461093/stream/516359')
 ];
 
 Future<String> getLangFromPrefs() async {
@@ -76,89 +73,114 @@ Future<String> getLangFromPrefs() async {
   return (prefs.getString(LANG_SHORT_NAME) ?? 'kn');
 }
 
-const String youtubeChannel = 'https://www.youtube.com/channel/UCCzVYqdLwgNMLMsP-NKNnIQ';
-const String fbPage = 'https://www.youtube.com/channel/UCCzVYqdLwgNMLMsP-NKNnIQ';
-const String twitterPage = 'https://www.youtube.com/channel/UCCzVYqdLwgNMLMsP-NKNnIQ';
-const String flickPage = 'https://www.youtube.com/channel/UCCzVYqdLwgNMLMsP-NKNnIQ';
-const String igPage = 'https://www.youtube.com/channel/UCCzVYqdLwgNMLMsP-NKNnIQ';
+const String youtubeChannel =
+    'https://www.youtube.com/channel/UCCzVYqdLwgNMLMsP-NKNnIQ';
+const String fbPage =
+    'https://www.youtube.com/channel/UCCzVYqdLwgNMLMsP-NKNnIQ';
+const String twitterPage =
+    'https://www.youtube.com/channel/UCCzVYqdLwgNMLMsP-NKNnIQ';
+const String flickPage =
+    'https://www.youtube.com/channel/UCCzVYqdLwgNMLMsP-NKNnIQ';
+const String igPage =
+    'https://www.youtube.com/channel/UCCzVYqdLwgNMLMsP-NKNnIQ';
+
+enum Lang { en, kn, sw }
 
 Map<String, List<SocialMedia>> socialMedias = {
-  'en':<SocialMedia>[
+  'en': <SocialMedia>[
     SocialMedia(
         title: 'Youtube',
-        url: 'https://youtube.com/channel/UCCzVYqdLwgNMLMsP-NKNnIQ',
+        url: 'youtube.com/channel/UCFAmpfZEX6e1rerKkIZDAUg',
         iconData: FontAwesomeIcons.youtube,
-        language: systemLanguages[0]
-    ),
+        color: Colors.red,
+        language: systemLanguages[0]),
     SocialMedia(
         title: 'Facebook',
-        url: 'https://facebook.com/ivugurura.ubugorozi.10',
+        url: 'facebook.com/ivugurura.ubugorozi.10',
         iconData: FontAwesomeIcons.facebookF,
-        language: systemLanguages[0]
-    ),
+        color: Colors.indigo,
+        language: systemLanguages[0]),
     SocialMedia(
         title: 'Twitter',
-        url: 'https://twitter.com/Rev_Reformation',
+        url: 'twitter.com/Rev_Reformation',
         iconData: FontAwesomeIcons.twitter,
-        language: systemLanguages[0]
-    ),
+        color: Colors.blue,
+        language: systemLanguages[0]),
     SocialMedia(
         title: 'Instagram',
-        url: 'https://instagram.com/reformation_voice',
+        url: 'instagram.com/reformation_voice',
         iconData: FontAwesomeIcons.instagram,
-        language: systemLanguages[0]
-    ),
+        color: Colors.deepOrange,
+        language: systemLanguages[0]),
+    SocialMedia(
+        title: 'Frickr',
+        url: 'flickr.com/photos/tags/ubugorozi',
+        iconData: FontAwesomeIcons.flickr,
+        color: Colors.blue,
+        language: systemLanguages[0]),
   ],
-  'kn':<SocialMedia>[
+  'kn': <SocialMedia>[
     SocialMedia(
         title: 'Youtube',
-        url: 'https://youtube.com/channel/UCCzVYqdLwgNMLMsP-NKNnIQ',
+        url: 'youtube.com/channel/UCCzVYqdLwgNMLMsP-NKNnIQ',
         iconData: FontAwesomeIcons.youtube,
-        language: systemLanguages[1]
-    ),
+        color: Colors.red,
+        language: systemLanguages[1]),
     SocialMedia(
         title: 'Facebook',
-        url: 'https://facebook.com/ivugurura.ubugorozi.10',
+        url: 'facebook.com/ivugurura.ubugorozi.10',
         iconData: FontAwesomeIcons.facebookF,
-        language: systemLanguages[1]
-    ),
+        color: Colors.indigo,
+        language: systemLanguages[1]),
     SocialMedia(
         title: 'Twitter',
-        url: 'https://twitter.com/Rev_Reformation',
+        url: 'twitter.com/Rev_Reformation',
         iconData: FontAwesomeIcons.twitter,
-        language: systemLanguages[1]
-    ),
+        color: Colors.blue,
+        language: systemLanguages[1]),
     SocialMedia(
         title: 'Instagram',
-        url: 'https://instagram.com/reformation_voice',
+        url: 'instagram.com/reformation_voice',
         iconData: FontAwesomeIcons.instagram,
-        language: systemLanguages[1]
-    ),
+        color: Colors.deepOrange,
+        language: systemLanguages[1]),
+    SocialMedia(
+        title: 'Frickr',
+        url: 'flickr.com/photos/tags/ubugorozi',
+        iconData: FontAwesomeIcons.flickr,
+        color: Colors.blue,
+        language: systemLanguages[1]),
   ],
-  'sw':<SocialMedia>[
+  'sw': <SocialMedia>[
     SocialMedia(
         title: 'Youtube',
-        url: 'https://youtube.com/channel/UC0YYf2qv2gUhueHvStXBYwQ',
+        url: 'youtube.com/channel/UC0YYf2qv2gUhueHvStXBYwQ',
         iconData: FontAwesomeIcons.youtube,
-        language: systemLanguages[2]
-    ),
+        color: Colors.red,
+        language: systemLanguages[2]),
     SocialMedia(
         title: 'Facebook',
-        url: 'https://facebook.com/ivugurura.ubugorozi.10',
+        url: 'facebook.com/ivugurura.ubugorozi.10',
         iconData: FontAwesomeIcons.facebookF,
-        language: systemLanguages[2]
-    ),
+        color: Colors.indigo,
+        language: systemLanguages[2]),
     SocialMedia(
         title: 'Twitter',
-        url: 'https://twitter.com/Rev_Reformation',
+        url: 'twitter.com/Rev_Reformation',
         iconData: FontAwesomeIcons.twitter,
-        language: systemLanguages[2]
-    ),
+        color: Colors.blue,
+        language: systemLanguages[2]),
     SocialMedia(
         title: 'Instagram',
-        url: 'https://instagram.com/reformation_voice',
+        url: 'instagram.com/reformation_voice',
         iconData: FontAwesomeIcons.instagram,
-        language: systemLanguages[2]
-    ),
+        color: Colors.deepOrange,
+        language: systemLanguages[2]),
+    SocialMedia(
+        title: 'Frickr',
+        url: 'flickr.com/photos/tags/ubugorozi',
+        iconData: FontAwesomeIcons.flickr,
+        color: Colors.blue,
+        language: systemLanguages[2]),
   ]
 };
