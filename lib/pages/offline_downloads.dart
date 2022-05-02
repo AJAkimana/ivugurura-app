@@ -6,6 +6,7 @@ import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
+import 'package:flutter_translate/flutter_translate.dart';
 import 'package:ivugurura_app/core/utils/constants.dart';
 import 'package:ivugurura_app/utils/app_colors.dart';
 import 'package:ivugurura_app/widget/player_controls.dart';
@@ -43,9 +44,11 @@ class _OfflineDownloads extends State<OfflineDownloads> {
 
   @override
   Widget build(BuildContext context) {
+    var completed = downloadsListMap
+        .where((element) => element['status'] == DownloadTaskStatus.complete);
     return Scaffold(
         appBar: AppBar(
-          title: Text('Downloaded audios'),
+          title: Text(translate('downloads.download_title')),
         ),
         backgroundColor: audioBluishBackground,
         body: SingleChildScrollView(
@@ -61,41 +64,47 @@ class _OfflineDownloads extends State<OfflineDownloads> {
                         bottomRight: Radius.circular(30))),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 30),
-                  child: Column(
-                    children: <Widget>[
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Flexible(
-                              child: Text(
-                            currentAudio.isEmpty
-                                ? 'Songs and preachings'
-                                : currentAudio['filename'],
-                            style: TextStyle(color: Colors.white, fontSize: 20),
-                          )),
-                        ],
-                      ),
-                      SizedBox(height: 5),
-                      PlayControls(
-                        width: 1,
-                        onSetPrev: () {
-                          onSetNextOrPrev(action: 'prev');
-                        },
-                        onSetPlay: () {
-                          if(currentAudio.isNotEmpty){
-                            assetsAudioPlayer.playOrPause();
-                            setState(() {
-                              _isPlaying = !_isPlaying;
-                            });
-                          }
-                        },
-                        onSetNext: () {
-                          onSetNextOrPrev();
-                        },
-                        isPlaying: _isPlaying,
-                      )
-                    ],
-                  ),
+                  child: downloadsListMap.length > 0
+                      ? Column(
+                          children: <Widget>[
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Flexible(
+                                    child: Text(
+                                  currentAudio.isEmpty
+                                      ? translate(
+                                          'downloads.songs_and_preachings')
+                                      : currentAudio['filename'],
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 20),
+                                )),
+                              ],
+                            ),
+                            SizedBox(height: 5),
+                            completed.length > 0
+                                ? PlayControls(
+                                    width: 1,
+                                    onSetPrev: () {
+                                      onSetNextOrPrev(action: 'prev');
+                                    },
+                                    onSetPlay: () {
+                                      if (currentAudio.isNotEmpty) {
+                                        assetsAudioPlayer.playOrPause();
+                                        setState(() {
+                                          _isPlaying = !_isPlaying;
+                                        });
+                                      }
+                                    },
+                                    onSetNext: () {
+                                      onSetNextOrPrev();
+                                    },
+                                    isPlaying: _isPlaying,
+                                  )
+                                : SizedBox(height: 5)
+                          ],
+                        )
+                      : null,
                 ),
               ),
               SizedBox(height: 5),
@@ -110,7 +119,8 @@ class _OfflineDownloads extends State<OfflineDownloads> {
                           return buildList(context, index);
                         },
                       )
-                    : Center(child: Text("No Downloads yet")),
+                    : Center(
+                        child: Text(translate('downloads.download_no_data'))),
               )
             ],
           ),
@@ -125,7 +135,10 @@ class _OfflineDownloads extends State<OfflineDownloads> {
     DownloadTaskStatus status = audio['status'];
     return Container(
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(5), color: audio['filename']==currentAudio['filename']?Colors.lightBlueAccent: Colors.white60),
+          borderRadius: BorderRadius.circular(5),
+          color: audio['filename'] == currentAudio['filename']
+              ? Colors.lightBlueAccent
+              : Colors.white60),
       width: double.infinity,
       margin: EdgeInsets.symmetric(vertical: 3, horizontal: 5),
       padding: EdgeInsets.symmetric(vertical: 3, horizontal: 5),
@@ -136,19 +149,27 @@ class _OfflineDownloads extends State<OfflineDownloads> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Flexible(
+                InkWell(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Flexible(
                         child: Text(
-                      fileName.capitalizeFirstOfEach,
-                      style: TextStyle(
-                          color: primaryColor,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18),
-                    )),
-                    _buttons(status, taskId, index)
-                  ],
+                          fileName.capitalizeFirstOfEach,
+                          style: TextStyle(
+                              color: primaryColor,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18),
+                        ),
+                      ),
+                      _buttons(status, taskId, index)
+                    ],
+                  ),
+                  onTap: () {
+                    if (status == DownloadTaskStatus.complete) {
+                      playAudio(index);
+                    }
+                  },
                 ),
                 SizedBox(height: 6),
                 Row(
@@ -339,21 +360,16 @@ class _OfflineDownloads extends State<OfflineDownloads> {
     assetsAudioPlayer.open(_audio,
         headPhoneStrategy: HeadPhoneStrategy.pauseOnUnplug,
         showNotification: true,
-      notificationSettings: NotificationSettings(
-        customNextAction: (_){
+        notificationSettings: NotificationSettings(customNextAction: (_) {
           onSetNextOrPrev();
-        },
-        customPrevAction: (_){
+        }, customPrevAction: (_) {
           onSetNextOrPrev(action: 'prev');
-        }
-      )
-    );
+        }));
   }
 
   void onSetNextOrPrev({String action = 'next'}) {
     int nextIndex = _currentIndex + 1;
-    if (_currentIndex == downloadsListMap.length - 1 &&
-        action == 'next') {
+    if (_currentIndex == downloadsListMap.length - 1 && action == 'next') {
       return;
     }
     if (action == 'prev') {
