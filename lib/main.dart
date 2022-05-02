@@ -16,7 +16,7 @@ bool? hasAlreadySetUp;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // Downloader
-  await FlutterDownloader.initialize(debug: true);
+  await FlutterDownloader.initialize(debug: isLocal);
   AssetsAudioPlayer.setupNotificationsOpenAction((notification) {
     return true;
   });
