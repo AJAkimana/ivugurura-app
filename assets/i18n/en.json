@@ -16,6 +16,9 @@
     "try_btn": "Try again",
     "no_data": "No data to display"
   },
+  "topic": {
+    "createdAt": "Created at "
+  },
   "title": {
     "setting": "Setting",
     "audio": "Audios",

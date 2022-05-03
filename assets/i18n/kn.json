@@ -16,6 +16,9 @@
     "try_btn": "Ongera ugerageze",
     "no_data": "Nta info zihari"
   },
+  "topic": {
+    "createdAt": "Cyateguwe kuri "
+  },
   "title": {
     "setting": "Igenamikorere",
     "audio": "Ama audio",

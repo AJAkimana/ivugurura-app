@@ -16,6 +16,9 @@
     "try_btn": "Bonyeza tena",
     "no_data": "Hakuna data ya kuonyesha"
   },
+  "topic": {
+    "createdAt": "ilitengenezwa "
+  },
   "title": {
     "setting": "Mipangilio",
     "audio": "Audio",
