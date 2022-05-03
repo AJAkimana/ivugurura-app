@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:flutter_translate/flutter_translate.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:ivugurura_app/core/data/repository.dart';
 import 'package:ivugurura_app/core/models/audio.dart';
@@ -280,26 +281,27 @@ class _AudioListViewState extends State<AudioListView> {
     final status = await Permission.storage.request();
     if(status.isGranted){
       String mediaUrl = "$AUDIO_PATH/${(audio.mediaLink?? '')}";
+      String title = '${audio.title!.trim().toLowerCase().capitalizeFirstOfEach}.mp3';
       final dir = await getExternalStorageDirectory();
       // var localPath = dir.path + '/' + (audio.title?? '');
       // final savedDir = Directory(localPath);
 
       List<DownloadTask>? tasks = await FlutterDownloader.loadTasks();
-      bool exist = tasks!.map((el) => el.filename).contains(audio.title);
+      bool exist = tasks!.map((el) => el.filename).contains(title);
       if (exist==false) {
         setState(() {
           _totalDownLoads = tasks.length + 1;
         });
         await FlutterDownloader.enqueue(
             url: Uri.encodeFull(mediaUrl),
-            fileName: '${audio.title!.trim().toLowerCase().capitalizeFirstOfEach}.mp3',
+            fileName: title,
             savedDir: dir!.path,
             showNotification: true,
             openFileFromNotification: true
         );
       }else{
         final snackBar = SnackBar(
-          content: Text('The song "${(audio.title?? '')}" is in download list'),
+          content: Text(translate('downloads.download_exist', args: {'song_title':audio.title})),
           action: SnackBarAction(
             label: 'Downloads',
             onPressed: _goToDownloadScreen,
