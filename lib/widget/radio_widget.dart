@@ -67,23 +67,26 @@ class _RadioWidgetState extends State<RadioWidget> {
                 itemCount: radios.length,
                 itemBuilder: (BuildContext context, int index) {
                   Audio theAudio = radios[index];
+                  Color displayColor = currentPlayingAudio == theAudio
+                      ? Colors.deepOrangeAccent
+                      : Colors.black54;
                   return Column(
                     children: <Widget>[
                       ListTile(
                         onTap: () {},
                         leading: Text(
                           '${index + 1}.',
-                          style: TextStyle( fontSize: 20),
+                          style: TextStyle( fontSize: 20, color: displayColor),
                         ),
                         title: Text(
                           ' ${theAudio.title}',
-                          style: TextStyle( fontSize: 20),
+                          style: TextStyle( fontSize: 20, color: displayColor),
                         ),
                         subtitle: Text(
                           ' ${theAudio.author}',
                           style: TextStyle(
                               fontSize: 14,
-                              fontWeight: FontWeight.w600),
+                              fontWeight: FontWeight.w600, color: displayColor),
                         ),
                         trailing: IconButton(
                           onPressed: () {
@@ -91,7 +94,7 @@ class _RadioWidgetState extends State<RadioWidget> {
                           },
                           icon: Icon(
                             _play&&currentPlayingAudio==radios[index] ? Icons.pause_circle_filled_outlined : Icons.play_circle_fill_outlined,
-                            color: Colors.black,
+                            color: displayColor,
                           ),
                         ),
                       ),
