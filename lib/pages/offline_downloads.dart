@@ -13,6 +13,7 @@ import 'package:ivugurura_app/widget/player_controls.dart';
 import 'package:ivugurura_app/core/extensions/string_cap_extension.dart';
 
 const DOWNLOADER_PORT_NAME = 'downloader_send_port';
+final assetsAudioPlayer = AssetsAudioPlayer();
 
 class OfflineDownloads extends StatefulWidget {
   OfflineDownloads({Key? key}) : super(key: key);
@@ -23,7 +24,6 @@ class OfflineDownloads extends StatefulWidget {
 class _OfflineDownloads extends State<OfflineDownloads> {
   ReceivePort _port = ReceivePort();
   List<Map> downloadsListMap = [];
-  final assetsAudioPlayer = AssetsAudioPlayer();
   Map currentAudio = {};
   int _currentIndex = 0;
   bool _isPlaying = false;
@@ -46,6 +46,9 @@ class _OfflineDownloads extends State<OfflineDownloads> {
   Widget build(BuildContext context) {
     var completed = downloadsListMap
         .where((element) => element['status'] == DownloadTaskStatus.complete);
+    if (completed.length > 0 && currentAudio.isEmpty) {
+      playAudio(0, false);
+    }
     return Scaffold(
         appBar: AppBar(
           title: Text(translate('downloads.download_title')),
@@ -167,7 +170,7 @@ class _OfflineDownloads extends State<OfflineDownloads> {
                   ),
                   onTap: () {
                     if (status == DownloadTaskStatus.complete) {
-                      playAudio(index);
+                      playAudio(index, true);
                     }
                   },
                 ),
@@ -325,7 +328,7 @@ class _OfflineDownloads extends State<OfflineDownloads> {
                             child: Icon(Icons.pause_circle_filled_outlined,
                                 size: 20, color: Colors.black),
                             onTap: () {
-                              playAudio(index);
+                              playAudio(index, true);
                               // downloadsListMap.removeAt(index);
                               // FlutterDownloader.remove(
                               //     taskId: _id, shouldDeleteContent: true);
@@ -335,7 +338,7 @@ class _OfflineDownloads extends State<OfflineDownloads> {
                         : Container();
   }
 
-  void playAudio(int index) {
+  void playAudio(int index, bool play) {
     Map audio = downloadsListMap[index];
     String audioPath = '${audio['savedDirectory']}/${audio['filename']}';
     File _file = new File(audioPath);
@@ -346,25 +349,27 @@ class _OfflineDownloads extends State<OfflineDownloads> {
               title: audio['filename'],
               artist: 'Reformation voice',
               album: 'Audios'));
-    } else if (audio['filename'] != currentAudio['filename']) {
+    } else if (play && (audio['filename'] != currentAudio['filename'])) {
       assetsAudioPlayer.stop();
       _audio.updateMetas(
         title: audio['filename'],
       );
     }
     setState(() {
-      _isPlaying = true;
+      _isPlaying = play;
       _currentIndex = index;
       currentAudio = audio;
     });
-    assetsAudioPlayer.open(_audio,
-        headPhoneStrategy: HeadPhoneStrategy.pauseOnUnplug,
-        showNotification: true,
-        notificationSettings: NotificationSettings(customNextAction: (_) {
-          onSetNextOrPrev();
-        }, customPrevAction: (_) {
-          onSetNextOrPrev(action: 'prev');
-        }));
+    if (play) {
+      assetsAudioPlayer.open(_audio,
+          headPhoneStrategy: HeadPhoneStrategy.pauseOnUnplug,
+          showNotification: true,
+          notificationSettings: NotificationSettings(customNextAction: (_) {
+            onSetNextOrPrev();
+          }, customPrevAction: (_) {
+            onSetNextOrPrev(action: 'prev');
+          }));
+    }
   }
 
   void onSetNextOrPrev({String action = 'next'}) {
@@ -378,7 +383,7 @@ class _OfflineDownloads extends State<OfflineDownloads> {
       }
       nextIndex = _currentIndex - 1;
     }
-    playAudio(nextIndex);
+    playAudio(nextIndex, true);
   }
 }
 
