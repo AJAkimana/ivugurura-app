@@ -7,12 +7,14 @@ class AudioPlayerWidget extends StatefulWidget {
   final String mediaUrl;
   final bool isRadio;
   final bool play;
+  final bool isNetwork;
   final VoidCallback onPlay;
   const AudioPlayerWidget(
       {Key? key,
       required this.mediaUrl,
       this.isRadio = false,
       required this.play,
+      this.isNetwork = true,
       required this.onPlay})
       : super(key: key);
   @override
@@ -25,18 +27,31 @@ class _AudioPlayerWidgetState extends State<AudioPlayerWidget> {
   @override
   Widget build(BuildContext context) {
     if (widget.mediaUrl != '' && widget.mediaUrl != AUDIO_PATH + '/') {
-      return AudioWidget.network(
-        url: widget.mediaUrl,
+      if (widget.isNetwork) {
+        return AudioWidget.network(
+          url: widget.mediaUrl,
+          play: widget.play,
+          onReadyToPlay: (total) {
+            setState(() {
+              final timerDisplay = widget.isRadio
+                  ? Duration().mmSSFormat
+                  : '${Duration().mmSSFormat} / ${total.mmSSFormat}';
+              _currentPosition = timerDisplay == '00:00 / 00:00' ? '...' : timerDisplay;
+            });
+          },
+          onPositionChanged: (current, total) {
+            setState(() {
+              _currentPosition = widget.isRadio
+                  ? current.mmSSFormat
+                  : '${current.mmSSFormat} / ${total.mmSSFormat}';
+            });
+          },
+          child: _audioWidget(),
+        );
+      }
+      return AudioWidget.file(
+        path: widget.mediaUrl,
         play: widget.play,
-        onReadyToPlay: (total) {
-          setState(() {
-            final timerDisplay = widget.isRadio
-                ? Duration().mmSSFormat
-                : '${Duration().mmSSFormat} / ${total.mmSSFormat}';
-            _currentPosition =
-                timerDisplay == '00:00 / 00:00' ? '...' : timerDisplay;
-          });
-        },
         onPositionChanged: (current, total) {
           setState(() {
             _currentPosition = widget.isRadio
@@ -44,32 +59,44 @@ class _AudioPlayerWidgetState extends State<AudioPlayerWidget> {
                 : '${current.mmSSFormat} / ${total.mmSSFormat}';
           });
         },
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.max,
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  shape: CircleBorder(),
-                  padding: EdgeInsets.all(14),
-                  primary: Theme.of(context).primaryColor,
-                ),
-                onPressed: widget.onPlay,
-                child: Icon(
-                  widget.play ? Icons.pause : Icons.play_arrow,
-                  color: Colors.white,
-                  size: 44,
-                ),
-              ),
-            ),
-            Text(_currentPosition,
-                style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold)),
-          ],
-        ),
+        onReadyToPlay: (total) {
+          setState(() {
+            final timerDisplay = widget.isRadio
+                ? Duration().mmSSFormat
+                : '${Duration().mmSSFormat} / ${total.mmSSFormat}';
+            _currentPosition = timerDisplay == '00:00 / 00:00' ? '...' : timerDisplay;
+          });
+        },
+        child: _audioWidget(),
       );
     }
     return Center(child: Text('Loading,...'));
+  }
+
+  Widget _audioWidget() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisSize: MainAxisSize.max,
+      children: <Widget>[
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              shape: CircleBorder(),
+              padding: EdgeInsets.all(14),
+              primary: Theme.of(context).primaryColor,
+            ),
+            onPressed: widget.onPlay,
+            child: Icon(
+              widget.play ? Icons.pause : Icons.play_arrow,
+              color: Colors.white,
+              size: 44,
+            ),
+          ),
+        ),
+        Text(_currentPosition,
+            style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold)),
+      ],
+    );
   }
 }
