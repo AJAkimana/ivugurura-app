@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
@@ -184,7 +183,6 @@ class _AudioListViewState extends State<AudioListView> {
                                               },
                                               firstPageErrorIndicatorBuilder:
                                                   (context) {
-                                                print(pagingController.error);
                                                 return DisplayError(
                                                   error: pagingController.error,
                                                   onTryAgain: () =>
