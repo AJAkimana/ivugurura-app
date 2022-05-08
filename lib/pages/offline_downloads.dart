@@ -3,7 +3,6 @@ import 'dart:ui';
 
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_translate/flutter_translate.dart';
 import 'package:ivugurura_app/core/models/audio.dart' as theAudio;
@@ -58,7 +57,7 @@ class _OfflineDownloads extends State<OfflineDownloads> {
                   child: Padding(
                 padding:
                     const EdgeInsets.symmetric(vertical: 32, horizontal: 16),
-                child: Text(currentAudio.title??''),
+                child: Text(currentAudio.title ?? ''),
               )),
               Column(children: <Widget>[
                 Stack(
@@ -67,12 +66,11 @@ class _OfflineDownloads extends State<OfflineDownloads> {
                         height: height * 0.3,
                         width: MediaQuery.of(context).size.width,
                         child: AudioPlayerWidget(
-                          mediaUrl: currentAudio.mediaLink??'',
-                          play: _isPlaying,
+                          mediaUrl: currentAudio.mediaLink ?? '',
+                          play: false,
                           isNetwork: false,
                           onPlay: onSetPlay,
-                        )
-                    )
+                        ))
                   ],
                 ),
                 Container(
@@ -81,10 +79,16 @@ class _OfflineDownloads extends State<OfflineDownloads> {
                         gradient: LinearGradient(
                             begin: Alignment.topLeft,
                             end: Alignment.bottomRight,
-                            stops: [0, 0.5, 1],
-                            colors: [Color(0xFF014F82), Color(0xff00395f), Color(0xFF001726)]
-                        )
-                    ),
+                            stops: [
+                          0,
+                          0.5,
+                          1
+                        ],
+                            colors: [
+                          Color(0xFF014F82),
+                          Color(0xff00395f),
+                          Color(0xFF001726)
+                        ])),
                     child: Column(children: <Widget>[
                       SizedBox(height: 5),
                       Expanded(
@@ -146,6 +150,9 @@ class _OfflineDownloads extends State<OfflineDownloads> {
                     if (status == DownloadTaskStatus.complete) {
                       setPlayAudio(index);
                     }
+                  },
+                  onLongPress: () {
+                    showDeleteSnackbar(index);
                   },
                 ),
                 SizedBox(height: 6),
@@ -223,15 +230,14 @@ class _OfflineDownloads extends State<OfflineDownloads> {
       task['filename'] = element.filename;
       task['savedDirectory'] = element.savedDir;
       downloadsListMap.add(task);
-      if(element.status == DownloadTaskStatus.complete){
+      if (element.status == DownloadTaskStatus.complete) {
         downloaded.add(theAudio.Audio(
-          title:element.filename,
-          mediaLink: '${element.savedDir}/${element.filename}'
-        ));
+            title: element.filename,
+            mediaLink: '${element.savedDir}/${element.filename}'));
       }
     });
     setState(() {
-      if(downloaded.length>0){
+      if (downloaded.length > 0) {
         currentAudio = downloaded[0];
       }
     });
@@ -322,32 +328,63 @@ class _OfflineDownloads extends State<OfflineDownloads> {
                         : Container();
   }
 
-  void setPlayAudio(int index){
+  void setPlayAudio(int index) async {
     Map audio = downloadsListMap[index];
-    setState(() {
-      currentAudio = theAudio.Audio(
-          title:audio['filename'],
-          mediaLink: '${audio['savedDirectory']}/${audio['filename']}',
-          author: 'Reformation voice'
-      );
-      _isPlaying = true;
-    });
+    // print('${audio['savedDirectory']}/${audio['filename']}');
+    // setState(() {
+    //   currentAudio = theAudio.Audio(
+    //       title: audio['filename'],
+    //       mediaLink: '${audio['savedDirectory']}/${audio['filename']}',
+    //       author: 'Reformation voice');
+    //   _isPlaying = true;
+    // });
+    // var filePath = "${audio['savedDirectory']}/${audio['filename']}";
+    // final Uri uri = Uri.file(Uri.encodeFull(filePath));
+    //
+    // if (await File(uri.toFilePath()).exists()) {
+    //   if (!await launchUrl(uri)) {
+    //     throw 'Could not launch $uri';
+    //   }
+    // }else{
+    //   throw 'No audio';
+    // }
+    // launchURL("file:${audio['savedDirectory']}/${audio['filename']}");
+    FlutterDownloader.open(taskId: audio['id']);
   }
 
   void onSetPlay() {
     setState(() {
-      if(currentAudio.title!=null){
+      if (currentAudio.title != null) {
         _isPlaying = !_isPlaying;
       }
     });
   }
 
-  bool isCurrentAudioEmpty(){
+  showDeleteSnackbar(int index) {
+    Map audio = downloadsListMap[index];
+    final snackBar = SnackBar(
+      content: Text(translate('downloads.delete_download',
+          args: {'song_title': audio['filename']})),
+      action: SnackBarAction(
+        label: 'Yes',
+        onPressed: () async {
+          FlutterDownloader.remove(
+              taskId: audio['id'], shouldDeleteContent: false);
+          downloadsListMap = [];
+          await loadAllTask();
+        },
+      ),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
+  bool isCurrentAudioEmpty() {
     return currentAudio.title != null;
   }
 }
 
 class DownloadClass {
+  @pragma('vm:entry-point')
   static void callback(String id, DownloadTaskStatus status, int progress) {
     final SendPort? sendPort =
         IsolateNameServer.lookupPortByName(DOWNLOADER_PORT_NAME);
