@@ -42,6 +42,7 @@
   "downloads": {
     "download_title": "Sauti zilizopakuliwa",
     "download_exist": "Wimbo {song_title} uko kwenye orodha ya upakuaji",
+    "delete_download": "Ungependa kufuta {song_title}?",
     "download_no_data": "Bado hakuna Vipakuliwa",
     "songs_and_preachings": "Nyimbo na mahubiri"
   }

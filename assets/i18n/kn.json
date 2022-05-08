@@ -42,6 +42,7 @@
   "downloads": {
     "download_title": "Indirimbo n ibyigisho",
     "download_exist": "Indirimbo {song_title} irahari",
+    "delete_download": "Urashaka gusiba {song_title}?",
     "download_no_data": "Nta ndirimbo cyangwa ikigisho bihari",
     "songs_and_preachings": "Indirimbo n ibyigisho"
   }

@@ -42,6 +42,7 @@
   "downloads": {
     "download_title": "Downloaded audios",
     "download_exist": "The song {song_title} is in download list",
+    "delete_download": "Delete {song_title}?",
     "download_no_data": "No Downloads yet",
     "songs_and_preachings": "Songs and preachings"
   }
