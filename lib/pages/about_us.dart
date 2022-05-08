@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_translate/flutter_translate.dart';
 import 'package:ivugurura_app/core/models/social_media.dart';
 import 'package:ivugurura_app/core/utils/constants.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class About extends StatelessWidget {
   @override
@@ -73,7 +72,7 @@ class About extends StatelessWidget {
       color: bgColor,
       padding: const EdgeInsets.all(16.0),
       onPressed: () {
-        _launchURL(url);
+        launchURL(url);
       },
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -99,14 +98,6 @@ class About extends StatelessWidget {
     );
   }
 
-  _launchURL(String url) async {
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
-      throw 'Could not launch $url';
-    }
-  }
-
   List<Widget> _buildSocials(List<SocialMedia> langSocials) {
     List<Widget> socials = [SizedBox(width: 20.0)];
     for (var social in langSocials) {
@@ -114,7 +105,7 @@ class About extends StatelessWidget {
         color: social.color,
         icon: Icon(social.iconData),
         onPressed: () {
-          _launchURL('https://${social.url}');
+          launchURL('https://${social.url}');
         },
       ));
     }
@@ -138,7 +129,7 @@ class About extends StatelessWidget {
         ],
       ),
       onTap: (){
-        _launchURL('$type:$contact');
+        launchURL('$type:$contact');
       },
     );
   }

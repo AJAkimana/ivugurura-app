@@ -4,6 +4,7 @@ import 'package:ivugurura_app/core/models/audio.dart';
 import 'package:ivugurura_app/core/models/language.dart';
 import 'package:ivugurura_app/core/models/social_media.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 const bool isLocal = false;
 const String PROTOCAL = isLocal ? 'http' : 'https';
@@ -184,3 +185,11 @@ Map<String, List<SocialMedia>> socialMedias = {
         language: systemLanguages[2]),
   ]
 };
+
+launchURL(String url) async {
+  if (await canLaunch(url)) {
+    await launch(url);
+  } else {
+    throw 'Could not launch $url';
+  }
+}
