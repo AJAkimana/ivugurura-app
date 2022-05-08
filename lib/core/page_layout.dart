@@ -34,7 +34,7 @@ class PageLayout extends StatefulWidget {
 
 class _PageLayoutState extends State<PageLayout> {
   final GlobalKey<ScaffoldState> _key = GlobalKey<ScaffoldState>();
-  String _menuValue = '';
+  String menuValue = '';
 
   @override
   Widget build(BuildContext context) {
@@ -86,7 +86,7 @@ class _PageLayoutState extends State<PageLayout> {
             },
             onSelected: (value) {
               setState(() {
-                _menuValue = value;
+                menuValue = value;
               });
             },
           )
