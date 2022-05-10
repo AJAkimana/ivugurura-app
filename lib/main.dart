@@ -1,5 +1,7 @@
+import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_translate/flutter_translate.dart';
@@ -12,19 +14,24 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 bool? hasAlreadySetUp;
 void main() async {
-  // loadSettings();
   WidgetsFlutterBinding.ensureInitialized();
-  // AssetsAudioPlayer.setupNotificationsOpenAction((notification) {
-  //   return true;
-  // });
+  // Downloader
+  await FlutterDownloader.initialize(debug: isLocal);
+  AssetsAudioPlayer.setupNotificationsOpenAction((notification) {
+    return true;
+  });
   var delegate = await LocalizationDelegate.create(
-      fallbackLocale: 'kn', supportedLocales: ['kn', 'en', 'sw', 'fr']);
+      fallbackLocale: 'kn',
+      supportedLocales: ['kn', 'en', 'sw', 'fr']
+  );
   final prefs = await SharedPreferences.getInstance();
   hasAlreadySetUp = prefs.getBool(HAS_SET);
-  SystemChrome.setPreferredOrientations(
-      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp, DeviceOrientation.portraitDown
+  ]);
   runApp(
-      LocalizedApp(delegate, StoreProvider(store: appStore, child: MyApp())));
+      LocalizedApp(delegate, StoreProvider(store: appStore, child: MyApp()))
+  );
 }
 
 class MyApp extends StatelessWidget {

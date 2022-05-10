@@ -41,7 +41,7 @@ dependencies:
   redux_thunk: ^0.4.0
   http: ^0.13.3
   carousel_slider: ^4.0.0
-  flutter_html: ^2.1.1
+  flutter_html: ^2.0.0
   truncate: ^3.0.1
   intl: ^0.17.0
   shared_preferences: ^2.0.6
@@ -49,11 +49,16 @@ dependencies:
   font_awesome_flutter: ^9.1.0
   flutter_translate: ^3.0.1
   dio: ^4.0.0
+  assets_audio_player: ^3.0.2
   infinite_scroll_pagination: ^3.1.0
-  assets_audio_player: ^3.0.3+6
   flutter_svg: ^0.22.0
   flutter_native_splash: ^1.2.4
   url_launcher: ^6.0.17
+  flutter_downloader: ^1.7.0
+  path_provider: ^2.0.8
+  permission_handler: ^7.2.0
+  android_path_provider: ^0.3.0
+  device_info_plus: ^3.2.3
 
 dev_dependencies:
   flutter_test:

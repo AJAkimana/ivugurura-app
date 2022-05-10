@@ -43,5 +43,13 @@
 		<false/>
 		<key>UIStatusBarHidden</key>
 		<false/>
+		<key>NSAppTransportSecurity</key>
+		<dict>
+			<key>NSAllowsArbitraryLoads</key>
+			<true/>
+		</dict>
+		<!-- changes this number to configure the maximum number of concurrent tasks -->
+		<key>FDMaximumConcurrentTasks</key>
+		<integer>5</integer>
 	</dict>
 </plist>

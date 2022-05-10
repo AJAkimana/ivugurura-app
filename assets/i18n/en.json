@@ -1,5 +1,6 @@
 {
   "app": {
+    "app": "Revival and Reformation",
     "title": "Reformation/Ubugorozi",
     "home": "Home",
     "topics": "Topics",
@@ -15,14 +16,34 @@
     "try_btn": "Try again",
     "no_data": "No data to display"
   },
+  "topic": {
+    "createdAt": "Created at "
+  },
   "title": {
     "setting": "Setting",
     "audio": "Audios",
     "radio": "Listen to radio",
-    "contact_us": "Contact us"
+    "contact_us": "Contact us",
+    "about_us": "About us",
+    "downloads": "Downloads"
   },
   "lesson": {
     "mathew24_14_book": "Mathew 24:14",
     "mathew24_14": "And this gospel of the Kingdom shall be preached in all the World for a witness unto all the nations; and then shall the end come"
+  },
+  "about_us": {
+    "about_us_title": "About RRV",
+    "about_us_description": "Reformers whose work is revival and reformation",
+    "about_us_visit_web": "Visit our website for further contents",
+    "about_us_youtube": "Our Youtube channel",
+    "about_us_youtube_desc": "Visit our Youtube channel for more videos about the gospel",
+    "about_us_contact": "Contact Us"
+  },
+  "downloads": {
+    "download_title": "Downloaded audios",
+    "download_exist": "The song {song_title} is in download list",
+    "delete_download": "Delete {song_title}?",
+    "download_no_data": "No Downloads yet",
+    "songs_and_preachings": "Songs and preachings"
   }
 }

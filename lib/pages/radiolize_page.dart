@@ -28,9 +28,9 @@ class _RadiolizePageState extends State<RadiolizePage> {
             top: 0,
             left: 0,
             right: 0,
-            height: screenHeight / 2,
+            height: screenHeight * 0.5,
             child: Container(
-              color: appColors.audioBlueBackground,
+              color: appColors.appPrimaryColor,
             ),
           ),
           Positioned(
@@ -58,10 +58,10 @@ class _RadiolizePageState extends State<RadiolizePage> {
           ),
           RadioWidget(
               audio: widget.audio,
-              top: screenHeight / 3,
-              height: screenHeight * 0.4,
-            color: Colors.green,
-          )
+              top: screenHeight / 4,
+              height: screenHeight * 0.75,
+            color: Colors.black12,
+          ),
         ],
       ),
     );

@@ -97,13 +97,13 @@ class OneTopicViewPageState extends State<OneTopicViewPage> {
                           children: <Widget>[
                             Expanded(
                                 child: Text(
-                                    'Published at ${DateFormat('dd-MM-yyyy').format(dateTime)}')),
+                                    '${translate('topic.createdAt')} ${DateFormat('dd-MM-yyyy').format(dateTime)}')),
                             IconButton(
                                 onPressed: () {}, icon: Icon(Icons.access_time))
                           ],
                         ),
                         Text(title,
-                            style: Theme.of(context).textTheme.headline4),
+                            style: Theme.of(context).textTheme.headline6),
                         Divider(),
                         SizedBox(height: 10.0),
                         Html(data: topic.content),
