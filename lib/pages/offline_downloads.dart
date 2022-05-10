@@ -30,9 +30,9 @@ class _OfflineDownloads extends State<OfflineDownloads> {
   @override
   void initState() {
     super.initState();
-    loadAllTask();
+
     _bindBackgroundIsolate();
-    FlutterDownloader.registerCallback(DownloadClass.callback);
+    loadAllTask();
   }
 
   @override
@@ -207,12 +207,14 @@ class _OfflineDownloads extends State<OfflineDownloads> {
       String id = data[0];
       DownloadTaskStatus status = data[1];
       int progress = data[2];
-      var task = downloadsListMap.where((e) => e['id'] == id);
-      task.forEach((element) {
-        element['progress'] = progress;
-        element['status'] = status;
-        setState(() {});
-      });
+
+      if(downloadsListMap.isNotEmpty){
+        var task = downloadsListMap.firstWhere((e) => e['id'] == id);
+        setState(() {
+          task['progress'] = progress;
+          task['status'] = status;
+        });
+      }
     });
   }
 
@@ -233,7 +235,7 @@ class _OfflineDownloads extends State<OfflineDownloads> {
       if (element.status == DownloadTaskStatus.complete) {
         downloaded.add(theAudio.Audio(
             title: element.filename,
-            mediaLink: '${element.savedDir}/${element.filename}'));
+            mediaLink: ''));
       }
     });
     setState(() {
@@ -330,25 +332,6 @@ class _OfflineDownloads extends State<OfflineDownloads> {
 
   void setPlayAudio(int index) async {
     Map audio = downloadsListMap[index];
-    // print('${audio['savedDirectory']}/${audio['filename']}');
-    // setState(() {
-    //   currentAudio = theAudio.Audio(
-    //       title: audio['filename'],
-    //       mediaLink: '${audio['savedDirectory']}/${audio['filename']}',
-    //       author: 'Reformation voice');
-    //   _isPlaying = true;
-    // });
-    // var filePath = "${audio['savedDirectory']}/${audio['filename']}";
-    // final Uri uri = Uri.file(Uri.encodeFull(filePath));
-    //
-    // if (await File(uri.toFilePath()).exists()) {
-    //   if (!await launchUrl(uri)) {
-    //     throw 'Could not launch $uri';
-    //   }
-    // }else{
-    //   throw 'No audio';
-    // }
-    // launchURL("file:${audio['savedDirectory']}/${audio['filename']}");
     FlutterDownloader.open(taskId: audio['id']);
   }
 
@@ -380,14 +363,5 @@ class _OfflineDownloads extends State<OfflineDownloads> {
 
   bool isCurrentAudioEmpty() {
     return currentAudio.title != null;
-  }
-}
-
-class DownloadClass {
-  @pragma('vm:entry-point')
-  static void callback(String id, DownloadTaskStatus status, int progress) {
-    final SendPort? sendPort =
-        IsolateNameServer.lookupPortByName(DOWNLOADER_PORT_NAME);
-    sendPort!.send([id, status, progress]);
   }
 }
