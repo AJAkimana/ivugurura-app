@@ -49,26 +49,9 @@ class _AudioPlayerWidgetState extends State<AudioPlayerWidget> {
           child: _audioWidget(),
         );
       }
-      return AudioWidget.file(
-        path: widget.mediaUrl,
-        play: widget.play,
-        onPositionChanged: (current, total) {
-          setState(() {
-            _currentPosition = widget.isRadio
-                ? current.mmSSFormat
-                : '${current.mmSSFormat} / ${total.mmSSFormat}';
-          });
-        },
-        onReadyToPlay: (total) {
-          setState(() {
-            final timerDisplay = widget.isRadio
-                ? Duration().mmSSFormat
-                : '${Duration().mmSSFormat} / ${total.mmSSFormat}';
-            _currentPosition = timerDisplay == '00:00 / 00:00' ? '...' : timerDisplay;
-          });
-        },
-        child: _audioWidget(),
-      );
+    }
+    if(!widget.isNetwork){
+      return Center(child: _audioWidget());
     }
     return Center(child: Text('Loading,...'));
   }
