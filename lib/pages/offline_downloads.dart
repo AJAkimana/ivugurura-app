@@ -1,7 +1,6 @@
 import 'dart:isolate';
 import 'dart:ui';
 
-import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_translate/flutter_translate.dart';
@@ -12,7 +11,19 @@ import 'package:ivugurura_app/widget/audio_player_widget.dart';
 import 'package:ivugurura_app/core/extensions/string_cap_extension.dart';
 
 const DOWNLOADER_PORT_NAME = 'downloader_send_port';
-final assetsAudioPlayer = AssetsAudioPlayer();
+
+class DownloadClass {
+  @pragma('vm:entry-point')
+  static void callback(String id, DownloadTaskStatus status, int progress) {
+    final SendPort? sendPort =
+    IsolateNameServer.lookupPortByName(DOWNLOADER_PORT_NAME);
+    sendPort!.send([id, status, progress]);
+  }
+
+  static void unbindBackgroundIsolate() {
+    IsolateNameServer.removePortNameMapping(DOWNLOADER_PORT_NAME);
+  }
+}
 
 class OfflineDownloads extends StatefulWidget {
   OfflineDownloads({Key? key}) : super(key: key);
@@ -37,7 +48,7 @@ class _OfflineDownloads extends State<OfflineDownloads> {
 
   @override
   void dispose() {
-    _unbindBackgroundIsolate();
+    DownloadClass.unbindBackgroundIsolate();
     super.dispose();
   }
 
@@ -198,7 +209,7 @@ class _OfflineDownloads extends State<OfflineDownloads> {
     bool isSuccess = IsolateNameServer.registerPortWithName(
         _port.sendPort, DOWNLOADER_PORT_NAME);
     if (!isSuccess) {
-      _unbindBackgroundIsolate();
+      DownloadClass.unbindBackgroundIsolate();
       _bindBackgroundIsolate();
       return;
     }
@@ -218,10 +229,6 @@ class _OfflineDownloads extends State<OfflineDownloads> {
     });
   }
 
-  void _unbindBackgroundIsolate() {
-    IsolateNameServer.removePortNameMapping(DOWNLOADER_PORT_NAME);
-  }
-
   Future loadAllTask() async {
     List<DownloadTask>? allTasks = await FlutterDownloader.loadTasks();
     allTasks!.forEach((element) {
@@ -231,18 +238,10 @@ class _OfflineDownloads extends State<OfflineDownloads> {
       task['id'] = element.taskId;
       task['filename'] = element.filename;
       task['savedDirectory'] = element.savedDir;
+
       downloadsListMap.add(task);
-      if (element.status == DownloadTaskStatus.complete) {
-        downloaded.add(theAudio.Audio(
-            title: element.filename,
-            mediaLink: ''));
-      }
     });
-    setState(() {
-      if (downloaded.length > 0) {
-        currentAudio = downloaded[0];
-      }
-    });
+    setState(() {});
   }
 
   Widget _buttons(DownloadTaskStatus _status, String _id, int index) {

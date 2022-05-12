@@ -58,7 +58,7 @@ dependencies:
   path_provider: ^2.0.8
   permission_handler: ^7.2.0
   android_path_provider: ^0.3.0
-  device_info_plus: ^3.2.3
+#  device_info_plus: ^3.2.3
 
 dev_dependencies:
   flutter_test:

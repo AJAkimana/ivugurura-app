@@ -1,12 +1,10 @@
 import 'dart:io';
-import 'dart:isolate';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_translate/flutter_translate.dart';
-import 'package:device_info_plus/device_info_plus.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:ivugurura_app/core/data/repository.dart';
 import 'package:ivugurura_app/core/models/audio.dart';
@@ -25,15 +23,6 @@ import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:android_path_provider/android_path_provider.dart';
 import 'package:ivugurura_app/core/extensions/string_cap_extension.dart';
-
-class _DownloadClass {
-  @pragma('vm:entry-point')
-  static void callback(String id, DownloadTaskStatus status, int progress) {
-    final SendPort? sendPort =
-    IsolateNameServer.lookupPortByName(DOWNLOADER_PORT_NAME);
-    sendPort!.send([id, status, progress]);
-  }
-}
 
 class AudioListView extends StatefulWidget with WidgetsBindingObserver {
   final Repository repository;
@@ -55,7 +44,6 @@ class _AudioListViewState extends State<AudioListView> {
   int _currentIndex = 0;
   int _totalDownLoads = 0;
   late String _localPath;
-  late bool _permissionReady;
 
   final pagingController = PagingController<int, Audio>(firstPageKey: 1);
 
@@ -85,17 +73,16 @@ class _AudioListViewState extends State<AudioListView> {
   void initState() {
     super.initState();
 
-    FlutterDownloader.registerCallback(_DownloadClass.callback);
+    FlutterDownloader.registerCallback(DownloadClass.callback);
     _countDownloads();
     pagingController.addPageRequestListener((pageKey) {
       fetchPage(pageKey);
     });
-    _permissionReady = false;
-    _prepare();
   }
 
   @override
   void dispose() {
+    DownloadClass.unbindBackgroundIsolate();
     pagingController.dispose();
     super.dispose();
   }
@@ -296,10 +283,12 @@ class _AudioListViewState extends State<AudioListView> {
   }
 
   Future<void> _addToDownload(Audio audio) async {
-    if(_permissionReady){
+    final status = await Permission.storage.request();
+    if(status.isGranted){
       await _prepareSaveDir();
       String mediaUrl = "$AUDIO_PATH/${(audio.mediaLink?? '')}";
-      String title = '${audio.title!.trim().toLowerCase().capitalizeFirstOfEach}.mp3';
+      final splitedTitle = audio.title!.trim().toLowerCase().capitalizeFirstOfEach.split(' ');
+      final title = '${splitedTitle.join('_')}.mp3';
 
       List<DownloadTask>? tasks = await FlutterDownloader.loadTasks();
       bool exist = tasks!.map((el) => el.filename).contains(title);
@@ -309,11 +298,11 @@ class _AudioListViewState extends State<AudioListView> {
         });
         await FlutterDownloader.enqueue(
             url: Uri.encodeFull(mediaUrl),
+            headers: {"auth": "test_for_sql_encoding"},
             fileName: title,
             savedDir: _localPath,
             showNotification: true,
-            openFileFromNotification: true,
-          headers: {"auth": "test_for_sql_encoding"},
+            openFileFromNotification: true
         );
       }else{
         final snackBar = SnackBar(
@@ -356,41 +345,14 @@ class _AudioListViewState extends State<AudioListView> {
   }
 
   Future<void> _prepareSaveDir() async {
-    _localPath = (await _findLocalPath())!;
-    final savedDir = Directory(_localPath);
+    final localPath = await _findLocalPath();
+    final savedDir = Directory(localPath!);
     bool hasExisted = await savedDir.exists();
     if (!hasExisted) {
-      savedDir.create();
+      await savedDir.create();
     }
-  }
-
-  Future<bool> _checkPermission() async {
-    if (Platform.isIOS) return true;
-
-    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
-    AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
-    if (widget.platform == TargetPlatform.android &&
-        androidInfo.version.sdkInt! <= 28) {
-      final status = await Permission.storage.status;
-      if (status != PermissionStatus.granted) {
-        final result = await Permission.storage.request();
-        if (result == PermissionStatus.granted) {
-          return true;
-        }
-      } else {
-        return true;
-      }
-    } else {
-      return true;
-    }
-    return false;
-  }
-
-  Future<Null> _prepare() async {
-    _permissionReady = await _checkPermission();
-
-    if (_permissionReady) {
-      await _prepareSaveDir();
-    }
+    setState(() {
+      _localPath = localPath;
+    });
   }
 }
