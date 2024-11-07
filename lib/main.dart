@@ -48,24 +48,40 @@ class MyApp extends StatelessWidget {
     } else {
       homeScreen = OnBoardingPage();
     }
-    return LocalizationProvider(
-      state: LocalizationProvider.of(context).state,
-      child: MaterialApp(
-        title: translate('app.title'),
-        debugShowCheckedModeBanner: false,
-        localizationsDelegates: [
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          localizationDelegate
-        ],
-        supportedLocales: localizationDelegate.supportedLocales,
-        locale: localizationDelegate.currentLocale,
-        theme: ThemeData(
-            scaffoldBackgroundColor: Colors.grey.shade300,
-            primarySwatch: Colors.indigo),
-        home: homeScreen,
-        routes: {'home': (_) => homeScreen},
-      ),
+    return MaterialApp(
+      title: translate('app.title'),
+      debugShowCheckedModeBanner: false,
+      localizationsDelegates: [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: [Locale('kn'), Locale('en'), Locale('sw'), Locale('fr')],
+      locale: localizationDelegate.currentLocale,
+      theme: ThemeData(
+          scaffoldBackgroundColor: Colors.grey.shade300,
+          primarySwatch: Colors.indigo),
+      home: homeScreen,
+      routes: {'home': (_) => homeScreen},
     );
+    // return LocalizationProvider(
+    //   state: LocalizationProvider.of(context).state,
+    //   child: MaterialApp(
+    //     title: translate('app.title'),
+    //     debugShowCheckedModeBanner: false,
+    //     localizationsDelegates: [
+    //       GlobalMaterialLocalizations.delegate,
+    //       GlobalWidgetsLocalizations.delegate,
+    //       localizationDelegate
+    //     ],
+    //     supportedLocales: localizationDelegate.supportedLocales,
+    //     locale: localizationDelegate.currentLocale,
+    //     theme: ThemeData(
+    //         scaffoldBackgroundColor: Colors.grey.shade300,
+    //         primarySwatch: Colors.indigo),
+    //     home: homeScreen,
+    //     routes: {'home': (_) => homeScreen},
+    //   ),
+    // );
   }
 }
