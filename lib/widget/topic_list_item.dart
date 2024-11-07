@@ -63,7 +63,7 @@ class TopicListItem extends StatelessWidget {
                             )),
                         Text(DateFormat('MMM d yyyy').format(dateTime),
                             style: TextStyle(
-                                color: Theme.of(context).backgroundColor))
+                                color: Theme.of(context).colorScheme.surface))
                       ],
                     ),
                   )),

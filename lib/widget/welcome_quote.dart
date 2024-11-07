@@ -33,7 +33,7 @@ class WelcomeQuote extends StatelessWidget{
             },
             child: Text(
               translate('lesson.mathew24_14_book'),
-              style: Theme.of(context).textTheme.headline4!.copyWith(
+              style: Theme.of(context).textTheme.headlineMedium!.copyWith(
                 color: Colors.grey.shade800
               ),
             ),
@@ -50,7 +50,7 @@ class WelcomeQuote extends StatelessWidget{
             },
             child: Text(
               translate('lesson.mathew24_14'),
-              style: Theme.of(context).textTheme.subtitle2!.copyWith(
+              style: Theme.of(context).textTheme.titleSmall!.copyWith(
                 color: Colors.white54,
                 fontSize: 20.0
               ),
