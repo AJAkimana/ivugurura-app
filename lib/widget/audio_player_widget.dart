@@ -65,9 +65,8 @@ class _AudioPlayerWidgetState extends State<AudioPlayerWidget> {
           padding: const EdgeInsets.all(8.0),
           child: ElevatedButton(
             style: ElevatedButton.styleFrom(
-              shape: CircleBorder(),
+              shape: CircleBorder(), backgroundColor: Theme.of(context).primaryColor,
               padding: EdgeInsets.all(14),
-              primary: Theme.of(context).primaryColor,
             ),
             onPressed: widget.onPlay,
             child: Icon(

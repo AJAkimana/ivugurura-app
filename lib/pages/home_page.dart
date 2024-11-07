@@ -215,7 +215,7 @@ class MostReadTopics extends StatelessWidget {
                                 flex: 3,
                                 child: Text(
                                   topic.title,
-                                  style: Theme.of(context).textTheme.bodyText1,
+                                  style: Theme.of(context).textTheme.bodyLarge,
                                 ),
                               ),
                               const SizedBox(width: 10.0),

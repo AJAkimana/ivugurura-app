@@ -103,7 +103,7 @@ class OneTopicViewPageState extends State<OneTopicViewPage> {
                           ],
                         ),
                         Text(title,
-                            style: Theme.of(context).textTheme.headline6),
+                            style: Theme.of(context).textTheme.titleLarge),
                         Divider(),
                         SizedBox(height: 10.0),
                         Html(data: topic.content),

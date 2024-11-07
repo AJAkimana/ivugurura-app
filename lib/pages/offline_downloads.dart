@@ -17,7 +17,11 @@ class DownloadClass {
   static void callback(String id, DownloadTaskStatus status, int progress) {
     final SendPort? sendPort =
     IsolateNameServer.lookupPortByName(DOWNLOADER_PORT_NAME);
-    sendPort!.send([id, status, progress]);
+    if (sendPort != null) {
+      sendPort.send([id, status, progress]);
+    } else {
+      print("SendPort is null. Port name might not have been registered.");
+    }
   }
 
   static void unbindBackgroundIsolate() {

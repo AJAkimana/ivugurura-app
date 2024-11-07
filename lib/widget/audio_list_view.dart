@@ -73,7 +73,7 @@ class _AudioListViewState extends State<AudioListView> {
   void initState() {
     super.initState();
 
-    FlutterDownloader.registerCallback(DownloadClass.callback);
+    FlutterDownloader.registerCallback(DownloadClass.callback as DownloadCallback);
     _countDownloads();
     pagingController.addPageRequestListener((pageKey) {
       fetchPage(pageKey);
