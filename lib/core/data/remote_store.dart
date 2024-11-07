@@ -26,8 +26,8 @@ class RemoteStore {
       return ListPage<Topic>(
           itemList: topicsData, grandTotalCount: result['totalItems']);
     } catch (error) {
-      if (error is DioError && error.error is SocketException) {
-        throw error.error;
+      if (error is DioException && error.error is SocketException) {
+        throw error.error ?? SocketException('Unknown socket error');
       }
 
       throw error;
@@ -46,8 +46,8 @@ class RemoteStore {
       return ListPage<Audio>(
           itemList: audiosData, grandTotalCount: result['totalItems']);
     } catch (error) {
-      if (error is DioError && error.error is SocketException) {
-        throw error.error;
+      if (error is DioException && error.error is SocketException) {
+        throw error.error ?? SocketException('Unknown socket error');
       }
 
       throw error;
