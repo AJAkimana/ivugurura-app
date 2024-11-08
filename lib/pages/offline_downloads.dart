@@ -14,7 +14,7 @@ const DOWNLOADER_PORT_NAME = 'downloader_send_port';
 
 class DownloadClass {
   @pragma('vm:entry-point')
-  static void callback(String id, DownloadTaskStatus status, int progress) {
+  static void callback(String id, int status, int progress) {
     final SendPort? sendPort =
     IsolateNameServer.lookupPortByName(DOWNLOADER_PORT_NAME);
     if (sendPort != null) {
