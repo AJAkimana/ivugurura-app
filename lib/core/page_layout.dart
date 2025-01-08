@@ -5,6 +5,7 @@ import 'package:ivugurura_app/core/data/dependencies_provider.dart';
 import 'package:ivugurura_app/core/keep_alive.dart';
 import 'package:ivugurura_app/core/redux/base_state.dart';
 import 'package:ivugurura_app/core/redux/store.dart';
+import 'package:ivugurura_app/core/res/helpers.dart';
 import 'package:ivugurura_app/core/utils/constants.dart';
 import 'package:ivugurura_app/pages/about_us.dart';
 import 'package:ivugurura_app/pages/offline_downloads.dart';
@@ -48,7 +49,11 @@ class _PageLayoutState extends State<PageLayout> {
         child: Scaffold(
       key: _key,
       appBar: AppBar(
+        flexibleSpace: Container(
+          decoration: gradientBoxDecoration(),
+        ),
         title: Text(widget.title),
+        elevation: 0,
         automaticallyImplyLeading: false,
         leading: IconButton(
           icon: Icon(Icons.menu),
