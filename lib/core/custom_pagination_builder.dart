@@ -13,9 +13,9 @@ class CustomPaginationBuilder extends SwiperPlugin {
       {this.key,
       this.activeColor,
       this.color,
-      this.activeSize: const Size(10.0, 2.0),
-      this.size: const Size(10.0, 2.0),
-      this.space: 3.0});
+      this.activeSize = const Size(10.0, 2.0),
+      this.size = const Size(10.0, 2.0),
+      this.space = 3.0});
 
   @override
   Widget build(BuildContext context, SwiperPluginConfig config) {
