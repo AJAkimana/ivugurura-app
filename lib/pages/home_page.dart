@@ -175,7 +175,7 @@ class MostReadTopics extends StatelessWidget {
     return RoundedContainer(
         height: 270,
         borderRadius: BorderRadius.circular(0),
-        color: Colors.indigo,
+        color: Colors.indigo.shade400,
         child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
@@ -215,7 +215,7 @@ class MostReadTopics extends StatelessWidget {
                                 flex: 3,
                                 child: Text(
                                   topic.title,
-                                  style: Theme.of(context).textTheme.bodyText1,
+                                  style: Theme.of(context).textTheme.bodyLarge,
                                 ),
                               ),
                               const SizedBox(width: 10.0),

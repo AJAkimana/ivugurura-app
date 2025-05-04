@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:ivugurura_app/core/models/language.dart';
 import 'package:ivugurura_app/core/models/setting.dart';

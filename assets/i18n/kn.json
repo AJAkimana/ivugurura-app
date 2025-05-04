@@ -1,5 +1,6 @@
 {
   "app": {
+    "app": "Ivugurura n'Ubugorozi",
     "title": "Reformation/Ubugorozi",
     "home": "Ahabanza",
     "topics": "Ibyigisho",
@@ -15,14 +16,34 @@
     "try_btn": "Ongera ugerageze",
     "no_data": "Nta info zihari"
   },
+  "topic": {
+    "createdAt": "Cyateguwe kuri "
+  },
   "title": {
     "setting": "Igenamikorere",
     "audio": "Ama audio",
     "radio": "Umva radio",
-    "contact_us": "Twandikire"
+    "contact_us": "Twandikire",
+    "about_us": "Abo turibo",
+    "downloads": "Downloads"
   },
   "lesson": {
     "mathew24_14_book": "Matayo 24:14",
     "mathew24_14": "Kandi ubu butumwa bwiza bw'ubwami buzigishwa amahanga yose nibwo imperuka izaherako ize"
+  },
+  "about_us": {
+    "about_us_title": "Abo turibo",
+    "about_us_description": "Abagorozi bakora umurimo w'ivugurura n'ubugorozi",
+    "about_us_visit_web": "Sura urubuga rwacu uboneho ibyigisho byinshi kandi byiza",
+    "about_us_youtube": "Channel ya Youtube yacu",
+    "about_us_youtube_desc": "Sura Youtube channel yacu ubone ibyigisho byinshi bitandukanye mu buryo bw'amashusho",
+    "about_us_contact": "Twandikire"
+  },
+  "downloads": {
+    "download_title": "Indirimbo n ibyigisho",
+    "download_exist": "Indirimbo {song_title} irahari",
+    "delete_download": "Urashaka gusiba {song_title}?",
+    "download_no_data": "Nta ndirimbo cyangwa ikigisho bihari",
+    "songs_and_preachings": "Indirimbo n ibyigisho"
   }
 }

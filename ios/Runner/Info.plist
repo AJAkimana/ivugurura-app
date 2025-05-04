@@ -43,5 +43,17 @@
 		<false/>
 		<key>UIStatusBarHidden</key>
 		<false/>
-	</dict>
+		<key>NSAppTransportSecurity</key>
+		<dict>
+			<key>NSAllowsArbitraryLoads</key>
+			<true/>
+		</dict>
+		<!-- changes this number to configure the maximum number of concurrent tasks -->
+		<key>FDMaximumConcurrentTasks</key>
+		<integer>5</integer>
+		<key>CADisableMinimumFrameDurationOnPhone</key>
+	<true/>
+	<key>UIApplicationSupportsIndirectInputEvents</key>
+	<true/>
+</dict>
 </plist>

@@ -1,5 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:flutter_translate/flutter_translate.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:ivugurura_app/core/data/repository.dart';
 import 'package:ivugurura_app/core/models/audio.dart';
@@ -7,16 +11,25 @@ import 'package:ivugurura_app/core/redux/actions/audio_actions.dart';
 import 'package:ivugurura_app/core/redux/base_state.dart';
 import 'package:ivugurura_app/core/redux/store.dart';
 import 'package:ivugurura_app/core/utils/constants.dart';
+import 'package:ivugurura_app/pages/offline_downloads.dart';
 import 'package:ivugurura_app/widget/audio_item.dart';
 import 'package:ivugurura_app/widget/audio_player_widget.dart';
+import 'package:ivugurura_app/widget/badge.dart';
 import 'package:ivugurura_app/widget/display_error.dart';
 import 'package:ivugurura_app/widget/no_display_data.dart';
+import 'package:ivugurura_app/widget/player_controls.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:android_path_provider/android_path_provider.dart';
+import 'package:ivugurura_app/core/extensions/string_cap_extension.dart';
 
-class AudioListView extends StatefulWidget {
+class AudioListView extends StatefulWidget with WidgetsBindingObserver {
   final Repository repository;
+  final TargetPlatform? platform;
   const AudioListView({
     Key? key,
     required this.repository,
+    this.platform
   }) : super(key: key);
 
   _AudioListViewState createState() => _AudioListViewState();
@@ -28,6 +41,8 @@ class _AudioListViewState extends State<AudioListView> {
   Audio currentAudio = Audio();
   bool _play = false;
   int _currentIndex = 0;
+  int _totalDownLoads = 0;
+  late String _localPath;
 
   final pagingController = PagingController<int, Audio>(firstPageKey: 1);
 
@@ -55,14 +70,18 @@ class _AudioListViewState extends State<AudioListView> {
 
   @override
   void initState() {
+    super.initState();
+
+    FlutterDownloader.registerCallback(DownloadClass.callback);
+    _countDownloads();
     pagingController.addPageRequestListener((pageKey) {
       fetchPage(pageKey);
     });
-    super.initState();
   }
 
   @override
   void dispose() {
+    DownloadClass.unbindBackgroundIsolate();
     pagingController.dispose();
     super.dispose();
   }
@@ -82,6 +101,13 @@ class _AudioListViewState extends State<AudioListView> {
             appBar: AppBar(
               title: Text('Audio'),
               actions: <Widget>[
+                BadgeIcon(
+                    child: IconButton(
+                        onPressed: _goToDownloadScreen,
+                        icon: Icon(Icons.download)
+                    ),
+                    value: '$_totalDownLoads'
+                )
                 // IconButton(onPressed: () {}, icon: Icon(Icons.share))
               ],
             ),
@@ -116,11 +142,7 @@ class _AudioListViewState extends State<AudioListView> {
                                   gradient: LinearGradient(
                                       begin: Alignment.topLeft,
                                       end: Alignment.bottomRight,
-                                      stops: [
-                                    0,
-                                    0.5,
-                                    1
-                                  ],
+                                      stops: [0, 0.5, 1],
                                       colors: [
                                     Color(0xFF014F82),
                                     Color(0xff00395f),
@@ -162,6 +184,7 @@ class _AudioListViewState extends State<AudioListView> {
                                                     });
                                                   },
                                                   currentAudio: theAudio,
+                                                  onDownloadCurrent: _addToDownload,
                                                 );
                                               },
                                               firstPageErrorIndicatorBuilder:
@@ -182,7 +205,8 @@ class _AudioListViewState extends State<AudioListView> {
                                     ),
                                   ))
                                 ],
-                              ))
+                              )
+                          )
                         ],
                       ),
                       Positioned(
@@ -190,7 +214,20 @@ class _AudioListViewState extends State<AudioListView> {
                         top: topHeight - 35,
                         child: FractionalTranslation(
                           translation: Offset(0, 0.5),
-                          child: playerWidget(),
+                          child: PlayControls(
+                            isPlaying: _play,
+                            prevEnableFeedback: _currentIndex != 0,
+                            nextEnableFeedback: pagingController.itemList != null
+                                ? _currentIndex != pagingController.itemList!.length - 1
+                                : false,
+                            onSetPrev: () {
+                              onSetNextOrPrev(action: 'prev');
+                            },
+                            onSetPlay: onSetPlay,
+                            onSetNext: () {
+                              onSetNextOrPrev();
+                            },
+                          ),
                         ),
                       )
                     ],
@@ -206,62 +243,6 @@ class _AudioListViewState extends State<AudioListView> {
     });
   }
 
-  playerWidget() {
-    return Stack(
-      clipBehavior: Clip.none,
-      children: <Widget>[
-        Container(
-          alignment: Alignment.topCenter,
-          height: 35,
-          width: MediaQuery.of(context).size.width * 0.7,
-          margin: EdgeInsets.only(bottom: 6),
-          decoration: BoxDecoration(
-              boxShadow: [BoxShadow(blurRadius: 5)],
-              borderRadius: BorderRadius.circular(50),
-              color: Colors.blue),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              IconButton(
-                icon: Icon(
-                  Icons.skip_previous,
-                  color: Colors.white,
-                ),
-                enableFeedback: _currentIndex != 0,
-                onPressed: () {
-                  onSetNextOrPrev(action: 'prev');
-                },
-              ),
-              IconButton(
-                icon: _play
-                    ? Icon(
-                        Icons.pause,
-                        color: Colors.white,
-                      )
-                    : Icon(
-                        Icons.play_circle,
-                        color: Colors.white,
-                      ),
-                onPressed: onSetPlay,
-              ),
-              IconButton(
-                icon: Icon(
-                  Icons.skip_next,
-                  color: Colors.white,
-                ),
-                enableFeedback: pagingController.itemList != null
-                    ? _currentIndex != pagingController.itemList!.length - 1
-                    : false,
-                onPressed: () {
-                  onSetNextOrPrev();
-                },
-              ),
-            ],
-          ),
-        )
-      ],
-    );
-  }
 
   void setCurrent(Audio _audio) {
     setCurrentAudio(_audio);
@@ -283,6 +264,94 @@ class _AudioListViewState extends State<AudioListView> {
     setState(() {
       _currentIndex = nextIndex;
       _play = true;
+    });
+  }
+
+  Future _countDownloads() async {
+    List<DownloadTask>? allTasks = await FlutterDownloader.loadTasks();
+    setState(() {
+      _totalDownLoads = allTasks!.length;
+    });
+  }
+
+  void _goToDownloadScreen(){
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (_) => OfflineDownloads()));
+  }
+
+  Future<void> _addToDownload(Audio audio) async {
+    final status = await Permission.storage.request();
+    if(status.isGranted){
+      await _prepareSaveDir();
+      String mediaUrl = "$AUDIO_PATH/${(audio.mediaLink?? '')}";
+      final splitedTitle = audio.title!.trim().toLowerCase().capitalizeFirstOfEach.split(' ');
+      final title = '${splitedTitle.join('_')}.mp3';
+
+      List<DownloadTask>? tasks = await FlutterDownloader.loadTasks();
+      bool exist = tasks!.map((el) => el.filename).contains(title);
+      if (exist==false) {
+        setState(() {
+          _totalDownLoads = tasks.length + 1;
+        });
+        await FlutterDownloader.enqueue(
+            url: Uri.encodeFull(mediaUrl),
+            headers: {"auth": "test_for_sql_encoding"},
+            fileName: title,
+            savedDir: _localPath,
+            showNotification: true,
+            openFileFromNotification: true
+        );
+      }else{
+        final snackBar = SnackBar(
+          content: Text(translate('downloads.download_exist', args: {'song_title':audio.title})),
+          action: SnackBarAction(
+            label: 'Downloads',
+            onPressed: _goToDownloadScreen,
+          ),
+        );
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      }
+    }else{
+      final snackBar = SnackBar(
+        content: Text('Need permission'),
+        action: SnackBarAction(
+          label: 'Enable permission',
+          onPressed: () async {
+            await openAppSettings();
+          },
+        ),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    }
+  }
+
+  Future<String?> _findLocalPath() async {
+    var externalStorageDirPath;
+    if (Platform.isAndroid) {
+      try {
+        externalStorageDirPath = await AndroidPathProvider.downloadsPath;
+      } catch (e) {
+        final directory = await getExternalStorageDirectory();
+        externalStorageDirPath = directory?.path;
+      }
+    } else if (Platform.isIOS) {
+      externalStorageDirPath =
+          (await getApplicationDocumentsDirectory()).absolute.path;
+    }
+    return externalStorageDirPath;
+  }
+
+  Future<void> _prepareSaveDir() async {
+    final localPath = await _findLocalPath();
+    final savedDir = Directory(localPath!);
+    bool hasExisted = await savedDir.exists();
+    if (!hasExisted) {
+      await savedDir.create();
+    }
+    setState(() {
+      _localPath = localPath;
     });
   }
 }

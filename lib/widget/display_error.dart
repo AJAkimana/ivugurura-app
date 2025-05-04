@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_translate/flutter_translate.dart';
-import 'package:ivugurura_app/core/rounded_container.dart';
 import 'package:ivugurura_app/widget/error_indicator.dart';
 
 class DisplayError extends StatelessWidget {

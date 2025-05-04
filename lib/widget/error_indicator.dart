@@ -26,7 +26,7 @@ class ErrorIndicator extends StatelessWidget {
             const SizedBox(height: 32),
             Text(title,
                 textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.headline6),
+                style: Theme.of(context).textTheme.titleLarge),
             if (message != null) ...[
               const SizedBox(height: 16),
               Text(message!, textAlign: TextAlign.center)

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_swiper_null_safety/flutter_swiper_null_safety.dart';
 import 'package:flutter_translate/flutter_translate.dart';
@@ -87,7 +86,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
     return Container(
       width: double.infinity,
       margin: const EdgeInsets.fromLTRB(16.0, 50.0, 16.0, 40.0),
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 0.0),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(30.0),
         color: Colors.blue,

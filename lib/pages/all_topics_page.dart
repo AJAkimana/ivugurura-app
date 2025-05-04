@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_translate/flutter_translate.dart';
 import 'package:ivugurura_app/core/data/repository.dart';
 import 'package:ivugurura_app/core/models/category.dart';
+import 'package:ivugurura_app/core/res/helpers.dart';
 import 'package:ivugurura_app/widget/topic_list_view.dart';
 import 'package:provider/provider.dart';
 
@@ -25,6 +26,9 @@ class _AllTopicsPageState extends State<AllTopicsPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(title),
+        flexibleSpace: Container(
+          decoration: gradientBoxDecoration(),
+        ),
         actions: <Widget>[IconButton(onPressed: () {}, icon: Icon(Icons.tune))],
       ),
       body: TopicListView(

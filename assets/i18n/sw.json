@@ -1,5 +1,6 @@
 {
   "app": {
+    "app": "Ivugurura n Ubugorozi",
     "title": "Reformation/Ubugorozi",
     "home": "Utangurizi",
     "topics": "Nakala",
@@ -15,14 +16,34 @@
     "try_btn": "Bonyeza tena",
     "no_data": "Hakuna data ya kuonyesha"
   },
+  "topic": {
+    "createdAt": "ilitengenezwa "
+  },
   "title": {
     "setting": "Mipangilio",
     "audio": "Audio",
     "radio": "Sikiliza radio",
-    "contact_us": "Tuandikie"
+    "contact_us": "Tuandikie",
+    "about_us": "Kuhusu sisi",
+    "downloads": "Downloads"
   },
   "lesson": {
     "mathew24_14_book": "Mathayo 24:14",
     "mathew24_14": "Tena habari njema ya ufalme itahubiriwa katika ulimwengu wote, kuwa ushuhuda kwa mataifa yote hapo ndipo ule mwisho utakapokuja"
+  },
+  "about_us": {
+    "about_us_title": "Kuhusu sisi",
+    "about_us_description": "Wanamatengenezo ambao kazi yao ni Uhuisho na matengenezo",
+    "about_us_visit_web": "Tembelea tovuti yetu kwa habari zaidi kuhusu injili",
+    "about_us_youtube": "Chaneli yetu ya Youtube",
+    "about_us_youtube_desc": "Tembelea chaneli yetu ya Youtube kwa video zaidi kuhusu injili",
+    "about_us_contact": "Wasiliana nasi"
+  },
+  "downloads": {
+    "download_title": "Sauti zilizopakuliwa",
+    "download_exist": "Wimbo {song_title} uko kwenye orodha ya upakuaji",
+    "delete_download": "Ungependa kufuta {song_title}?",
+    "download_no_data": "Bado hakuna Vipakuliwa",
+    "songs_and_preachings": "Nyimbo na mahubiri"
   }
 }

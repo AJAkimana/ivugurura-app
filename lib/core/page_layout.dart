@@ -5,7 +5,10 @@ import 'package:ivugurura_app/core/data/dependencies_provider.dart';
 import 'package:ivugurura_app/core/keep_alive.dart';
 import 'package:ivugurura_app/core/redux/base_state.dart';
 import 'package:ivugurura_app/core/redux/store.dart';
+import 'package:ivugurura_app/core/res/helpers.dart';
 import 'package:ivugurura_app/core/utils/constants.dart';
+import 'package:ivugurura_app/pages/about_us.dart';
+import 'package:ivugurura_app/pages/offline_downloads.dart';
 import 'package:ivugurura_app/pages/radiolize_page.dart';
 import 'package:ivugurura_app/pages/all_topics_page.dart';
 import 'package:ivugurura_app/pages/audio_player_page.dart';
@@ -32,7 +35,7 @@ class PageLayout extends StatefulWidget {
 
 class _PageLayoutState extends State<PageLayout> {
   final GlobalKey<ScaffoldState> _key = GlobalKey<ScaffoldState>();
-  String _menuValue = '';
+  String menuValue = '';
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +49,11 @@ class _PageLayoutState extends State<PageLayout> {
         child: Scaffold(
       key: _key,
       appBar: AppBar(
+        flexibleSpace: Container(
+          decoration: gradientBoxDecoration(),
+        ),
         title: Text(widget.title),
+        elevation: 0,
         automaticallyImplyLeading: false,
         leading: IconButton(
           icon: Icon(Icons.menu),
@@ -55,17 +62,6 @@ class _PageLayoutState extends State<PageLayout> {
           },
         ),
         actions: <Widget>[
-          // IconButton(
-          //   icon: Icon(Icons.radio),
-          //   onPressed: () {
-          //     onGoToPage(RadiolizePage(audio: audioRadiolize),
-          //         translate('title.radio'));
-          //   },
-          // ),
-          // IconButton(
-          //   icon: Icon(Icons.share),
-          //   onPressed: () {},
-          // ),
           PopupMenuButton<String>(
             icon: Icon(Icons.more_vert),
             itemBuilder: (BuildContext context) {
@@ -95,7 +91,7 @@ class _PageLayoutState extends State<PageLayout> {
             },
             onSelected: (value) {
               setState(() {
-                _menuValue = value;
+                menuValue = value;
               });
             },
           )
@@ -139,9 +135,14 @@ class _PageLayoutState extends State<PageLayout> {
                   // _buildRow(HomePage(), Icons.contact_mail,
                   //     translate('title.contact_us')),
                   // _buildDivider(),
+                  _buildRow(OfflineDownloads(), Icons.download,
+                      translate('title.downloads')),
+                  _buildDivider(),
                   _buildRow(SettingPage(), Icons.settings,
                       translate('title.setting')),
                   _buildDivider(),
+                  _buildRow(About(), Icons.people,
+                      translate('title.about_us')),
                 ],
               ),
             ),

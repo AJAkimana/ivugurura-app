@@ -7,6 +7,7 @@ import 'package:ivugurura_app/core/models/topic.dart';
 import 'package:ivugurura_app/core/redux/actions/topic_actions.dart';
 import 'package:ivugurura_app/core/redux/base_state.dart';
 import 'package:ivugurura_app/core/redux/store.dart';
+import 'package:ivugurura_app/core/res/helpers.dart';
 import 'package:ivugurura_app/core/utils/constants.dart';
 import 'package:ivugurura_app/widget/display_error.dart';
 import 'package:ivugurura_app/widget/network_image.dart';
@@ -62,6 +63,7 @@ class OneTopicViewPageState extends State<OneTopicViewPage> {
                   SliverAppBar(
                     expandedHeight: 150.0,
                     pinned: true,
+                    shadowColor: Colors.blueAccent,
                     flexibleSpace: FlexibleSpaceBar(
                       title: Text(title),
                       background: PNetworkImage(
@@ -75,7 +77,7 @@ class OneTopicViewPageState extends State<OneTopicViewPage> {
                   ),
                   SliverToBoxAdapter(
                     child: Container(
-                      color: Colors.indigoAccent,
+                      decoration: gradientBoxDecoration(),
                       child: Padding(
                         padding: EdgeInsets.all(8.0),
                         child: Row(
@@ -97,13 +99,13 @@ class OneTopicViewPageState extends State<OneTopicViewPage> {
                           children: <Widget>[
                             Expanded(
                                 child: Text(
-                                    'Published at ${DateFormat('dd-MM-yyyy').format(dateTime)}')),
+                                    '${translate('topic.createdAt')} ${DateFormat('dd-MM-yyyy').format(dateTime)}')),
                             IconButton(
                                 onPressed: () {}, icon: Icon(Icons.access_time))
                           ],
                         ),
                         Text(title,
-                            style: Theme.of(context).textTheme.headline4),
+                            style: Theme.of(context).textTheme.titleLarge),
                         Divider(),
                         SizedBox(height: 10.0),
                         Html(data: topic.content),
@@ -114,7 +116,7 @@ class OneTopicViewPageState extends State<OneTopicViewPage> {
                   SliverToBoxAdapter(
                     child: Container(
                         padding: EdgeInsets.all(20.0),
-                        color: Colors.indigoAccent,
+                        decoration: gradientBoxDecoration(),
                         child: Text(translate('app.related_topics'),
                             style: TextStyle(
                                 color: Colors.white,

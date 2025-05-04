@@ -4,14 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:ivugurura_app/core/models/audio.dart';
 import 'package:ivugurura_app/core/models/list_page.dart';
 import 'package:ivugurura_app/core/models/topic.dart';
-import 'package:ivugurura_app/core/utils/constants.dart';
 
-final options = BaseOptions(
-  baseUrl: API_APP_URL,
-  connectTimeout: 5000,
-  receiveTimeout: 3000,
-);
-Dio dio = Dio(options);
 
 class RemoteStore {
   final Dio dio;
@@ -33,8 +26,8 @@ class RemoteStore {
       return ListPage<Topic>(
           itemList: topicsData, grandTotalCount: result['totalItems']);
     } catch (error) {
-      if (error is DioError && error.error is SocketException) {
-        throw error.error;
+      if (error is DioException && error.error is SocketException) {
+        throw error.error ?? SocketException('Unknown socket error');
       }
 
       throw error;
@@ -42,8 +35,8 @@ class RemoteStore {
   }
 
   Future<ListPage<Audio>> getAudiosList(int pageNumber, int pageSize) async {
+    String params = 'page=$pageNumber&pageSize=$pageSize';
     try {
-      String params = 'page=$pageNumber&pageSize=$pageSize';
       final response = await dio.get('/albums/medias/audio?$params');
       final result = response.data;
 
@@ -53,8 +46,8 @@ class RemoteStore {
       return ListPage<Audio>(
           itemList: audiosData, grandTotalCount: result['totalItems']);
     } catch (error) {
-      if (error is DioError && error.error is SocketException) {
-        throw error.error;
+      if (error is DioException && error.error is SocketException) {
+        throw error.error ?? SocketException('Unknown socket error');
       }
 
       throw error;
